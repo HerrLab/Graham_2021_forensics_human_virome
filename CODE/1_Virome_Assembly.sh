@@ -5,9 +5,14 @@
 ############################################
 
 #Input Notes:
-#This is the first step of this pipeline is starting using fastq data files that were obtained post sequencing. 
+#This is the second step of this pipeline and is starting using fastq data files that were organized into folders using the 1_Obtain_Virome_Data.sh
 #All fastq data files that correspond to samples with index ending in 23 and 25 as indicated in metadata file are control reads and should be put in a directory ./Raw_Control_Reads
+ #Within the Raw_Control_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
+ #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_25 reads it would be ./Raw_Control_Reads/HV_001_25/HV_001_25_forward.fq and ./Raw_Control_Reads/HV_001_25/HV_001_25_reverse.fq
 #All other fastq data files that are not control reads were put in a different directory ./Raw_Reads
+ #Within the Raw_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
+ #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01/HV_001_01_reverse.fq
+
 
 #Output Notes:
 #This pipeline will generate a fasta file containing virome contigs (unmapped_1000_contigs.fa)
@@ -31,6 +36,7 @@
 #Fastq data files were initially quality checked using FastQC 
 #FastQC is available at https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 
+for i in 001; do j in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 18 19 20 21 22 27; do fastqc Raw_Reads/HV_$i_$j/HV_$i_$j_forward.fq
 fastqc Raw_Reads/forward.fq
 fastqc Raw_Reads/reverse.fq
 
