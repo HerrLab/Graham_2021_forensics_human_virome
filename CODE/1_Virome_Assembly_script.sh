@@ -5,7 +5,7 @@
 ############################################
 
 #Input Notes:
-#This is the first step of this pipeline is starting from after assembly has been preformed. 
+#This is the first step of this pipeline is starting using fastq data files that were obtained post sequencing. 
 #Some of my file locations may differ from yours so this needs to be changed accordingly. 
 #All fastq data files that correspond to samples with index ending in 23 and 25 as indicated in metadata file are control reads and should be put in a directory ./Raw_Control_Reads
 #All other fastq data files that are not control reads were put in a different directory ./Raw_Reads
