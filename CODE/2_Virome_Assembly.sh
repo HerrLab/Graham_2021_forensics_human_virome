@@ -13,7 +13,6 @@
  #Within the Raw_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
  #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01_reverse.fq
 
-
 #Output Notes:
 #This pipeline will generate a fasta file containing virome contigs (unmapped_1000_contigs.fa)
 #The next step in this pipeline is The next step in pipeline is 3. Contig Mapping (3_Virome_Contig_Mapping.sh)
@@ -176,8 +175,8 @@ perl removesmalls.pl 1000 MEGAHIT_OUTPUT_ALL/ALL_CONTIGS.fa  > ./ALL_1000_CONTIG
 
 mkdir Controls/
 
-cat Raw_Control_Reads/*R1.fq > ./Controls/control_forward.fq
-cat Raw_Control_Reads/*R2.fq > ./Controls/control_reverse.fq
+cat Raw_Control_Reads/*forward.fq > ./Controls/control_forward.fq
+cat Raw_Control_Reads/*reverse.fq > ./Controls/control_reverse.fq
 
 megahit -1 ./Controls/control_forward.fq -2 ./Controls/control_reverse.fq.gz  -o CON_MEGAHIT_OUTPUT -t 36 --presets meta-large
 
