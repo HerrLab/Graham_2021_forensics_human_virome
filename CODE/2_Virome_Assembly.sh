@@ -7,10 +7,8 @@
 #Input Notes:
 #This is the second step of this pipeline and is starting using fastq data files that were organized into folders using the 1_Obtain_Virome_Data.sh
 #All fastq data files that correspond to samples with index ending in 23 and 25 as indicated in metadata file are control reads and should be put in a directory ./Raw_Control_Reads
- #Within the Raw_Control_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
  #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_25 reads it would be ./Raw_Control_Reads/HV_001_25_forward.fq and ./Raw_Control_Reads/HV_001_25_reverse.fq
 #All other fastq data files that are not control reads were put in a different directory ./Raw_Reads
- #Within the Raw_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
  #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01_reverse.fq
 
 #Output Notes:
