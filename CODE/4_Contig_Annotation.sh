@@ -30,9 +30,10 @@
 checkv end_to_end unmapped_1000_contigs.fa ./CHECKV_OUTPUT -t 8
 
 #From the output file of CHECKV_OUTPUT/quality_summary.tsv all contigs that had "no viral genes detected" were removed and all others were retained. 
-#This resulted in 1400 contigs with 1298 non-pro-viral contings containing at least one viral gene. 
+#This resulted in 1400 contigs containing at least one viral gene. The names of the contigs were put into a file checkv_contig_list.txt
 
-#A fasta file was then made containing only the viral gene containing contigs as identifed in checkV and was renamed as vir_fin.fa
+#A fasta file was then made containing only the viral gene containing contigs ( as identifed in checkV and was renamed as vir_fin.fa
+grep -A 1 -w -f checkv_contig_list.txt unmapped_1000_contigs.fa >> vir_fin.fa
 
 ############################################
 ## -------------------------------------- ##
@@ -111,4 +112,5 @@ rm trembl_ublast.viral.u.contigID.txt
 
 #Each contig was run through Blast using the BlastN algartium. Only hits with >10% coverage were considered true results. The top his was recorded in an excel sheet manually
 
-#All annotation outputs were recorded in an excel file and the best annotation for each contig was determined as explained in the materials in methods. This resulted in the vc_tax.csv file. 
+#All annotation outputs were recorded in an excel file and the best annotation for each contig was determined as explained in the materials in methods. This resulted in the vc_tax.csv file.
+#Contigs that had 100% syntenty to the human or animal genomes and any proviral genomes were removed from the 1400 set of contigs thus resulting in a final set of 1298 contigs. 
