@@ -15,7 +15,7 @@
 #General Notes:
 #This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool comands may differ depending on installation of the tool. Please refer to the listed githubs for each tool used as mentioned in script for further information if issues arise 
 #Some file locations may differ from yours so this needs to be changed accordingly. This script is designed to be run all in one folder
-#This script is designed to be used post the first step of the pipeline, however any contig assembly fasta file can be used with this script
+#This script is designed to be used post the first and second steps of the pipeline, however any contig assembly fasta file can be used with this script
 
 ############################################
 ## -------------------------------------- ##
