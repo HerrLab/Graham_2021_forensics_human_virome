@@ -8,15 +8,15 @@
 #This is the second step of this pipeline and is starting using fastq data files that were organized into folders using the 1_Obtain_Virome_Data.sh
 #All fastq data files that correspond to samples with index ending in 23 and 25 as indicated in metadata file are control reads and should be put in a directory ./Raw_Control_Reads
  #Within the Raw_Control_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
- #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_25 reads it would be ./Raw_Control_Reads/HV_001_25/HV_001_25_forward.fq and ./Raw_Control_Reads/HV_001_25/HV_001_25_reverse.fq
+ #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_25 reads it would be ./Raw_Control_Reads/HV_001_25_forward.fq and ./Raw_Control_Reads/HV_001_25_reverse.fq
 #All other fastq data files that are not control reads were put in a different directory ./Raw_Reads
  #Within the Raw_Reads directory each fastq forward and corresponding reverse read was placed in a folder labed with its SampleID
- #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01/HV_001_01_reverse.fq
+ #Sample file names were changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01_reverse.fq
 
 
 #Output Notes:
 #This pipeline will generate a fasta file containing virome contigs (unmapped_1000_contigs.fa)
-#The next step in this pipeline is The next step in pipeline is 2. Contig Mapping (2_Virome_Contig_Mapping.sh)
+#The next step in this pipeline is The next step in pipeline is 3. Contig Mapping (3_Virome_Contig_Mapping.sh)
 
 #General Notes:
 #This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool comands may differ depending on installation of the tool. Please refer to the listed githubs for each tool used as mentioned in script for further information if issues arise 
@@ -29,6 +29,8 @@
 ## ----------------------------------------------------------------- ##
 #######################################################################
 
+#This pipeline should be preformed on all samples in Raw_Reads directory generated using the 1_Obtain_Virome_Data.sh script. Here we will use one sample (HV_001_01) as an example. Please repeat each step for all samples.  
+
 ## --------------------------------------
 ## --------- Quality Evaluation ---------
 ## --------------------------------------
@@ -36,9 +38,8 @@
 #Fastq data files were initially quality checked using FastQC 
 #FastQC is available at https://www.bioinformatics.babraham.ac.uk/projects/fastqc/
 
-for i in 001; do j in 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 18 19 20 21 22 27; do fastqc Raw_Reads/HV_$i_$j/HV_$i_$j_forward.fq
-fastqc Raw_Reads/forward.fq
-fastqc Raw_Reads/reverse.fq
+fastqc Raw_Reads/HV_001_01_forward.fq
+fastqc Raw_Reads/HV_001_01_reverse.fq
 
 ## ---------------------------------------
 ## ------------ Phi X removal ------------
@@ -48,8 +49,10 @@ fastqc Raw_Reads/reverse.fq
 #BBmap can be found at: https://github.com/BioInfoTools/BBMap
 #BBmap guide is avalible at https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/ 
 
-bbduk.sh in=Raw_Reads/forward.fq out=filt_forward.fq k=31 ref=artifacts,phix ordered cardinality
-bbduk.sh in=Raw_Reads/reverse.fq out=filt_reverse.fq k=31 ref=artifacts,phix ordered cardinality
+mkdir Phi_Remove_Trimmed/
+
+bbduk.sh in=Raw_Reads/HV_001_01_forward.fq out=Phi_Remove/HV_001_01_filt_forward.fq k=31 ref=artifacts,phix ordered cardinality
+bbduk.sh in=Raw_Reads/HV_001_01_reverse.fq out=Phi_Remove/HV_001_01_filt_reverse.fq k=31 ref=artifacts,phix ordered cardinality
 
 ## --------------------------------------
 ## ---------- Quality trimming ----------
@@ -58,7 +61,9 @@ bbduk.sh in=Raw_Reads/reverse.fq out=filt_reverse.fq k=31 ref=artifacts,phix ord
 #Phix removed data files were trimmed to remove low quality reads and short reads and return matching paired end reads using the Sickle
 #Sickle is avalible at https://github.com/najoshi/sickle
 
-sickle pe -t sanger -f filt_forward.fq -r filt_reverse.fq -o S4_trimmed_pair_R1.fastq -p S4_trimmed_pair_R2.fastq -s S4_trimmed_single.fastq -q 30 -l 75
+mkdir Phi_Remove/
+
+sickle pe -t sanger -f Phi_Remove/HV_001_01_filt_forward.fq -r Phi_Remove/HV_001_01_filt_reverse.fq -o Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R1.fastq -p Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R2.fastq -s Phi_Remove_Trimmed/HV_001_01_S4_trimmed_single.fastq -q 30 -l 75
 
 ## -----------------------------------------------
 ## - Bacterial 16S rDNA contamination evaluation -
@@ -66,17 +71,19 @@ sickle pe -t sanger -f filt_forward.fq -r filt_reverse.fq -o S4_trimmed_pair_R1.
 
 #16S reads were obtained from the SILVA database v.138.1 to be used as a reference
 
-mkdir 16S
+mkdir 16S_Ref/
+mkdir 16S_Mapped/
+
 wget https://ftp.arb-silva.de/release_138.1/Exports/SILVA_138.1_SSURef_tax_silva.fasta.gz ./16S/
 
 #BBmap was used to make a reference using the 16S rDNA reads obtained 
 
-bbmap.sh ref=./16S/SILVA_138.1_SSURef_tax_silva.fasta.gz -Xmx23g
+bbmap.sh ref=./16S_Ref/SILVA_138.1_SSURef_tax_silva.fasta.gz -Xmx23g
 
 #Trimmed Data files were mapped to the 16S rDNA reference using BBMap and flags and parameters described for high precision mapping of contamination detection as suggested in the BBMap Guide; percentages of mapped reads were determined
 
-bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast path=./16S/ qtrim=rl trimq=10 untrim -Xmx23g in=S4_trimmed_pair_R1.fastq outm=16S.R1.fq
-bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast path=./16S/ qtrim=rl trimq=10 untrim -Xmx23g in=S4_trimmed_pair_R2.fastq outm=16S.R2.fq
+bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast path=./16S_Ref/ qtrim=rl trimq=10 untrim -Xmx23g in=Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R1.fastq outm=16S_Mapped/HV_001_01_16S_R1.fq
+bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast path=./16S_Ref/ qtrim=rl trimq=10 untrim -Xmx23g in=Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R2.fastq outm=16S_Mapped/HV_001_01_16S_R2.fq
 
 
 ## ----------------------------------------
@@ -85,18 +92,20 @@ bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast path=./16S/ qtrim=
 
 #The hg19 human genome was retreived and indexed using BBmap
 
-mkdir Human
-wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz ./Human/
-tar zvfx ./Human/chromFa.tar.gz
-cat ./Human/*.fa > ./Human/hg19.fa
-rm ./Human/chr*.fa
+mkdir Human_Ref/
+mkdir Human_Remove/
 
-bbmap.sh ref=./Human/hg19.fa -Xmx23g
+wget http://hgdownload.cse.ucsc.edu/goldenPath/hg19/bigZips/chromFa.tar.gz ./Human_Ref/
+tar zvfx ./Human_Ref/chromFa.tar.gz
+cat ./Human_Ref/*.fa > ./Human_Ref/hg19.fa
+rm ./Human_Ref/chr*.fa
+
+bbmap.sh ref=./Human_Ref/hg19.fa -Xmx23g
 
 #Trimmed Data files were mapped to the hg19 human indexed genome using with standard operational flags for high precision mapping with low sensitivity in order to lower the risk of false positive mapping as suggested in the BBMap Guide
 
-bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast minhits=2 path=./Human qtrim=rl trimq=10 untrim -Xmx23g in=S4_trimmed_pair_R1.fastq outu=clean.R1.fq outm=human.R1.fq
-bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast minhits=2 path=./Human qtrim=rl trimq=10 untrim -Xmx23g in=S4_trimmed_pair_R2.fastq outu=clean.R2.fq outm=human.R2.fq
+bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast minhits=2 path=./Human_Ref qtrim=rl trimq=10 untrim -Xmx23g in=Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R1.fastq outu=Human_Remove/HV_001_01_clean_R1.fq outm=Human_Remove/HV_001_01_human_R1.fq
+bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast minhits=2 path=./Human_Ref qtrim=rl trimq=10 untrim -Xmx23g in=Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R2.fastq outu=Human_Remove/HV_001_01_clean_R2.fq outm=Human_Remove/HV_001_01_human_R2.fq
 
 ## --------------------------------------
 ## --------- Quality Trimming 2 ---------
@@ -104,7 +113,9 @@ bbmap.sh minid=0.95 maxindel=3 bwr=0.16 bw=12 quickmatch fast minhits=2 path=./H
 
 # Trimming was prefored on human contamination removed reads to make paired end reads the same length
 
-sickle pe -t sanger -f clean.R1.fq -r clean.R2.fq -o final_R1.fastq -p final_R2.fastq -s final_single.fastq
+mkdir Human_Remove_Trimmed/ 
+
+sickle pe -t sanger -f Human_Remove/HV_001_01_clean.R1.fq -r Human_Remove/HV_001_01_clean.R2.fq -o Human_Remove_Trimmed/HV_001_01_final_R1.fastq -p Human_Remove_Trimmed/HV_001_01_final_R2.fastq -s Human_Remove_Trimmed/HV_001_01_final_single.fastq
 
 ###########################################
 ## ------------------------------------- ##
@@ -120,8 +131,8 @@ sickle pe -t sanger -f clean.R1.fq -r clean.R2.fq -o final_R1.fastq -p final_R2.
 
 #combine all forward reads and reverse reads for an overall virome assembly (for all non-control samples)
 
-cat *final_R1.fastq > forward_overall.fastq
-cat *final_R2.fastq > reverse_overall.fastq
+cat Human_Remove_Trimmed/*_final_R1.fastq > forward_overall.fastq
+cat Human_Remove_Trimmed/*_final_R2.fastq > reverse_overall.fastq
 
 #Megahit v.1.2.8 was used for denovo assembly and can be found at https://github.com/voutcn/megahit
 
@@ -163,7 +174,8 @@ perl removesmalls.pl 1000 MEGAHIT_OUTPUT_ALL/ALL_CONTIGS.fa  > ./ALL_1000_CONTIG
 
 #cp all control raw reads (all samples with index ending in 23 and 25 as indicated in metadata file) into a folder and combine all forward and reverse reads
 
-mkdir Controls
+mkdir Controls/
+
 cat Raw_Control_Reads/*R1.fq > ./Controls/control_forward.fq
 cat Raw_Control_Reads/*R2.fq > ./Controls/control_reverse.fq
 
@@ -212,5 +224,5 @@ samtools fasta unmapped_1000_contigs.bam > unmapped_1000_contigs.fa
 samtools view -c -f 4 ALL_1000_CONTIGS.sorted.bam >> num_unmapped_reads_all_1000.txt
 
 #### The output of unmapped_1000_contigs.fa will be used for downstream processing ####
-#### The next step in pipeline is 2. Contig Mapping (2_Virome_Contig_Mapping.sh) ####
+#### The next step in pipeline is 3. Contig Mapping (3_Virome_Contig_Mapping.sh) ####
 
