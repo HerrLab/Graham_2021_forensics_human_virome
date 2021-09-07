@@ -4,7 +4,15 @@
 ## -------------------------------------- ##
 ############################################
 
+#Output Notes:
+#All fastq data files that correspond to samples with index ending in 23 and 25 as indicated in metadata file are control reads and will be put in a directory ./Raw_Control_Reads
+ #Sample file names will be changed to be "SampleID"_forward.fq (e.g. for sample HV_001_25 reads it would be ./Raw_Control_Reads/HV_001_25_forward.fq and ./Raw_Control_Reads/HV_001_25_reverse.fq)
+#All other fastq data files that are not control reads will be put in a different directory ./Raw_Reads
+ #Sample file names will be changed to be "SampleID"_forward.fq (e.g. for sample HV_001_01 reads it would be ./Raw_Reads/HV_001_01_forward.fq and ./Raw_Reads/HV_001_01_reverse.fq)
+#The next step in this pipeline is The next step in pipeline is 2. Virome Assembly (2_Virome_Assembly.sh)
+
 #General Notes:
+#This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool comands may differ depending on installation of the tool. Please refer to the listed githubs for each tool used as mentioned in script for further information if issues arise 
 #This script is to help organize all files so that they are in an easier format to process through the pipeline. 
 #Warning: Files need to be downloaded from the SRA website (Bioproject PRJNA754140) which is >4TB worth of data and will take some time to download.  
 
