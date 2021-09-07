@@ -1,0 +1,653 @@
+﻿SampleID,Raw_seq_name,File_Name,Subject,Time_Collected,Time_Week,Location,Index_Used,Control,DNase_trt,Month_Sampled,Day_Sampled,Year_Sampled,Date_Sampled,Gender,Seven_Day_Travel_Local,Seven_Day_Travel_Foreign,Time_Since_Last_Washed_Hands,Antibacterial_Soap_Used,Gel_Sanitizer_Use,Time_Since_Gel_Sanitizer,Hand_Lotion_Use,Time_Since_Lotion,Time_Since_Hair_Wash,Swam_in_Chlorine_Pool,Time_Since_Swim,Tanning_Bed_Use,Time_Since_tanning,Animal_Contact,Animal_Type,Additional notes
+HV_001_01,01-LH-1,EG_Sflab_241_1,P01,T_0,0,left,1,N,N,may,7,2018,5/7/18,male,N,N,that morning,Y,Y,24 hours ago,N,NA,yesterday afternoon,N,NA,N,NA,NA,NA,NA
+HV_001_02,01-RH-1,EG_Sflab_241_2,P01,T_0,0,right,2,N,N,may,7,2018,5/7/18,male,N,N,that morning,Y,Y,24 hours ago,N,NA,yesterday afternoon,N,NA,N,NA,NA,NA,
+HV_001_03,01-SC-1,EG_Sflab_241_3,P01,T_0,0,scalp,3,N,N,may,7,2018,5/7/18,male,N,N,that morning,Y,Y,24 hours ago,N,NA,yesterday afternoon,N,NA,N,NA,NA,NA,
+HV_001_04,02-LH-1,EG_Sflab_241_4,P02,T_0,0,left,4,N,N,may,7,2018,5/7/18,female,N,N,5 hours ,N,Rarely,more than 72 hours,Y,45 min ago,16 hours ago,N,NA,N,NA,NA,NA,
+HV_001_05,02-RH-1,EG_Sflab_241_5,P02,T_0,0,right,5,N,N,may,7,2018,5/7/18,female,N,N,5 hours ,N,Rarely,more than 72 hours,Y,45 min ago,16 hours,N,NA,N,NA,NA,NA,
+HV_001_06,02-SC-1,EG_Sflab_241_6,P02,T_0,0,scalp,6,N,N,may,7,2018,5/7/18,female,N,N,5 hours ,N,Rarely,more than 72 hours,Y,45 min ago,16 hours,N,NA,N,NA,NA,NA,
+HV_001_07,03-LH-1,EG_Sflab_241_7,P03,T_0,0,left,7,N,N,may,8,2018,5/8/18,male,N,N,1.5 hours,Y,N,NA,Face lotion,that morning ,5.5 hours,N,NA,N,NA,NA,NA,sunburn to neck and forearms
+HV_001_08,03-RH-1,EG_Sflab_241_8,P03,T_0,0,right,8,N,N,may,8,2018,5/8/18,male,N,N,1.5 hours,Y,N,NA,Face lotion,that morning ,5.5 hours,N,NA,N,NA,NA,NA,sunburn to neck and forearms
+HV_001_09,03-SC-1,EG_Sflab_241_9,P03,T_0,0,scalp,9,N,N,may,8,2018,5/8/18,male,N,N,1.5 hours,Y,N,NA,Face lotion,that morning ,5.5 hours,N,NA,N,NA,NA,NA,sunburn to neck and forearms
+HV_001_10,04-LH-1,EG_Sflab_241_10,P04,T_0,0,left,10,N,N,may,8,2018,5/8/18,female,N,N,that morning (11am),N,N,NA,Y,that morning (10am),15 days,N,NA,N,NA,NA,NA,
+HV_001_11,04-RH-1,EG_Sflab_241_11,P04,T_0,0,right,11,N,N,may,8,2018,5/8/18,female,N,N,that morning (11am),N,N,NA,Y,that morning (10am),15 days,N,NA,N,NA,NA,NA,
+HV_001_12,04-SC-1,EG_Sflab_241_12,P04,T_0,0,scalp,12,N,N,may,8,2018,5/8/18,female,N,N,that morning (11am),N,N,NA,Y,that morning (10am),15 days,N,NA,N,NA,NA,NA,
+HV_001_13,05-LH-1,EG_Sflab_241_13,P05,T_0,0,left,13,N,N,may,9,2018,5/9/18,female,Omaha (3days),N,4 hours,Dish Soap,N,NA,Y,24-48 hours,48 hours,N,NA,N,NA,Y,dogs,"gardening a lot, has 3 dogs"
+HV_001_14,05-RH-1,EG_Sflab_241_14,P05,T_0,0,right,14,N,N,may,9,2018,5/9/18,female,Omaha (3days),N,4 hours,Dish Soap,N,NA,Y,24-48 hours,48 hours,N,NA,N,NA,Y,dogs,"gardening a lot, has 3 dogs"
+HV_001_15,05-SC-1,EG_Sflab_241_15,P05,T_0,0,scalp,15,N,N,may,9,2018,5/9/18,female,Omaha (3days),N,4 hours,Dish Soap,N,NA,Y,24-48 hours,48 hours,N,NA,N,NA,Y,dogs,"gardening a lot, has 3 dogs"
+HV_001_16,06-LH-1,EG_Sflab_241_16,P06,T_0,0,left,16,N,N,may,14,2018,5/14/18,male,N,N,40 min,NA,Y,less than 24 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_001_18,06-RH-1,EG_Sflab_241_18,P06,T_0,0,right,18,N,N,may,14,2018,5/14/18,male,N,N,40 min,NA,Y,less than 24 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_001_19,06-SC-1,EG_Sflab_241_19,P06,T_0,0,scalp,19,N,N,may,14,2018,5/14/18,male,N,N,40 min,NA,Y,less than 24 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_001_20,07-LH-1,EG_Sflab_241_20,P07,T_0,0,left,20,N,N,may,14,2018,5/14/18,female,N,N,3 hours,Y,Y,3 days,Y,midnight,12 hours,N,NA,N,NA,NA,NA,
+HV_001_21,07-RH-1,EG_Sflab_241_21,P07,T_0,0,right,21,N,N,may,14,2018,5/14/18,female,N,N,3 hours,Y,Y,3 days,Y,midnight,12 hours,N,NA,N,NA,NA,NA,
+HV_001_22,07-SC-1,EG_Sflab_241_22,P07,T_0,0,scalp,22,N,N,may,14,2018,5/14/18,female,N,N,3 hours,Y,Y,3 days,Y,midnight,12 hours,N,NA,N,NA,NA,NA,
+HV_001_27,01-RL-1,EG_Sflab_241_27,P01,T_0,0,left,27,N,N,may,7,2018,5/7/18,male,N,N,that morning,Y,Y,24 hours ago,N,NA,yesterday afternoon,N,NA,N,NA,NA,NA,
+HV_002_01,01-LH-2,HV002_1,P01,2_week,2,left,1,N,N,may,24,2018,5/24/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_002_02,01-RH-2,HV002_2,P01,2_week,2,right,2,N,N,may,24,2018,5/24/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_002_03,01-SC-2,HV002_3,P01,2_week,2,scalp,3,N,N,may,24,2018,5/24/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_002_04,02-LH-2,HV002_4,P02,2_week,2,left,4,N,N,may,21,2018,5/21/18,female,N,N,7 hours,NA,Rarely,more than 72 hours,N,NA,16 hours,N,NA,N,NA,NA,NA,spilled  100% EtOH on left wrist and hand 2 hours ago 
+HV_002_05,02-RH-2,HV002_5,P02,2_week,2,right,5,N,N,may,21,2018,5/21/18,female,N,N,7 hours,NA,Rarely,more than 72 hours,N,NA,16 hours,N,NA,N,NA,NA,NA,spilled  100% EtOH on left wrist and hand 2 hours ago 
+HV_002_06,02-SC-2,HV002_6,P02,2_week,2,scalp,6,N,N,may,21,2018,5/21/18,female,N,N,7 hours,NA,Rarely,more than 72 hours,N,NA,16 hours,N,NA,N,NA,NA,NA,spilled  100% EtOH on left wrist and hand 2 hours ago 
+HV_002_07,03-LH-2,HV002_7,P03,2_week,2,left,7,N,N,june,14,2018,6/14/18,male,N,N,0.5 hours,Y,N,NA,N,NA,36 hours,Y,4 days,N,NA,NA,NA,
+HV_002_08,03-RH-2,HV002_8,P03,2_week,2,right,8,N,N,june,14,2018,6/14/18,male,N,N,0.5 hours,Y,N,NA,N,NA,36 hours,Y,4 days,N,NA,NA,NA,
+HV_002_09,03-SC-2,HV002_9,P03,2_week,2,scalp,9,N,N,june,14,2018,6/14/18,male,N,N,0.5 hours,Y,N,NA,N,NA,36 hours,Y,4 days,N,NA,NA,NA,
+HV_002_10,04-LH-2,HV002_10,P04,2_week,2,left,10,N,N,may,22,2018,5/22/18,female,N,N,2pm that day,N,N,NA,Y,2pm that day,1 day,N,NA,N,NA,NA,NA,
+HV_002_11,04-RH-2,HV002_11,P04,2_week,2,right,11,N,N,may,22,2018,5/22/18,female,N,N,2pm that day,N,N,NA,Y,2pm that day,1 day,N,NA,N,NA,NA,NA,
+HV_002_12,04-SC-2,HV002_12,P04,2_week,2,scalp,12,N,N,may,22,2018,5/22/18,female,N,N,2pm that day,N,N,NA,Y,2pm that day,1 day,N,NA,N,NA,NA,NA,
+HV_002_13,05-LH-2,HV002_13,P05,2_week,2,left,13,N,N,may,23,2018,5/23/18,female,"Aimes, Iowa (4days, last week)",N,5 hours,Dish Soap,N,NA,sunscreen ,2 hours,1 day,Y,7 days,N,NA,NA,NA,
+HV_002_14,05-RH-2,HV002_14,P05,2_week,2,right,14,N,N,may,23,2018,5/23/18,female,"Aimes, Iowa (4days, last week)",N,5 hours,Dish Soap,N,NA,sunscreen ,2 hours,1 day,Y,7 days,N,NA,NA,NA,
+HV_002_15,05-SC-2,HV002_15,P05,2_week,2,scalp,15,N,N,may,23,2018,5/23/18,female,"Aimes, Iowa (4days, last week)",N,5 hours,Dish Soap,N,NA,sunscreen ,2 hours,1 day,Y,7 days,N,NA,NA,NA,
+HV_002_18,06-RH-2,HV002_18,P06,2_week,2,right,18,N,N,may,30,2018,5/30/18,male,Oklahoma and Texas,N,more than 1 hour,Y,Y,more than 24 hours,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_002_19,06-SC-2,HV002_19,P06,2_week,2,scalp,19,N,N,may,30,2018,5/30/18,male,Oklahoma and Texas,N,more than 1 hour,Y,Y,more than 24 hours,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_002_20,07-LH-2,HV002_20,P07,2_week,2,left,20,N,N,may,30,2018,5/30/18,female,"Appleton City, Missouri",N,8:00 AM,Y,Y,48 hours,Y,12 hours,12 hours,Y,4 days,N,NA,NA,NA,"went to Southern Missouri (Appleton City) in the forest/wooded areas. Also, went to Oceans/Worlds of Fun on Sat Math 26th. Recently been around a lot of mosquitos and ticks. "
+HV_002_21,07-RH-2,HV002_21,P07,2_week,2,right,21,N,N,may,30,2018,5/30/18,female,"Appleton City, Missouri",N,8:00 AM,Y,Y,48 hours,Y,12 hours,12 hours,Y,4 days,N,NA,NA,NA,"went to Southern Missouri (Appleton City) in the forest/wooded areas. Also, went to Oceans/Worlds of Fun on Sat Math 26th. Recently been around a lot of mosquitos and ticks. "
+HV_002_22,07-SC-2,HV002_22,P07,2_week,2,scalp,22,N,N,may,30,2018,5/30/18,female,"Appleton City, Missouri",N,8:00 AM,Y,Y,48 hours,Y,12 hours,12 hours,Y,4 days,N,NA,NA,NA,"went to Southern Missouri (Appleton City) in the forest/wooded areas. Also, went to Oceans/Worlds of Fun on Sat Math 26th. Recently been around a lot of mosquitos and ticks. "
+HV_003_01,01-LH-3,HV003_1,P01,1_month,4,left,1,N,N,june,7,2018,6/7/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA ,
+HV_003_02,01-RH-3,HV003_2,P01,1_month,4,right,2,N,N,june,7,2018,6/7/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_003_03,01-SC-3,HV003_3,P01,1_month,4,scalp,3,N,N,june,7,2018,6/7/18,male,N,N,that morning,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_003_04,02-LH-3,HV003_4,P02,1_month,4,left,4,N,N,june,7,2018,6/7/18,female,goat farm,N,2 hours,Lab hand cleaner fisherbrand,Rarely,more than 72 hours,N,NA,18 hours,N,NA,N,NA,Y,goat,went to goat farm 5 days ago and had direct contact with goats for 4 hours. 
+HV_003_05,02-RH-3,HV003_5,P02,1_month,4,right,5,N,N,june,7,2018,6/7/18,female,goat farm,N,2 hours,Lab hand cleaner fisherbrand,Rarely,more than 72 hours,N,NA,18 hours,N,NA,N,NA,Y,goat,went to goat farm 5 days ago and had direct contact with goats for 4 hours. 
+HV_003_06,02-SC-3,HV003_6,P02,1_month,4,scalp,6,N,N,june,7,2018,6/7/18,female,goat farm,N,2 hours,Lab hand cleaner fisherbrand,Rarely,more than 72 hours,N,NA,18 hours,N,NA,N,NA,Y,goat,went to goat farm 5 days ago and had direct contact with goats for 4 hours. 
+HV_003_07,03-LH-3,HV003_7,P03,1_month,4,left,7,N,N,may,31,2018,5/31/18,male,Yosemite ND via plane,N,1.5 hours,Y,N,NA,N,NA,5.5 hours,Y,3 days,N,NA,NA,NA,had cold 8-9 days ago
+HV_003_08,03-RH-3,HV003_8,P03,1_month,4,right,8,N,N,may,31,2018,5/31/18,male,Yosemite ND via plane,N,1.5 hours,Y,N,NA,N,NA,5.5 hours,Y,3 days,N,NA,NA,NA,had cold 8-9 days ago
+HV_003_09,03-SC-3,HV003_9,P03,1_month,4,scalp,9,N,N,may,31,2018,5/31/18,male,Yosemite ND via plane,N,1.5 hours,Y,N,NA,N,NA,5.5 hours,Y,3 days,N,NA,NA,NA,had cold 8-9 days ago
+HV_003_10,04-LH-3,HV003_10,P04,1_month,4,left,10,N,N,june,8,2018,6/8/18,female,N,N,1 hour,N,N,NA,Y,2 hours,7 days,N,NA,N,NA,NA,NA,
+HV_003_11,04-RH-3,HV003_11,P04,1_month,4,right,11,N,N,june,8,2018,6/8/18,female,N,N,1 hour,N,N,NA,Y,2 hours,7 days,N,NA,N,NA,NA,NA,
+HV_003_12,04-SC-3,HV003_12,P04,1_month,4,scalp,12,N,N,june,8,2018,6/8/18,female,N,N,1 hour,N,N,NA,Y,2 hours,7 days,N,NA,N,NA,NA,NA,
+HV_003_13,05-LH-3,HV003_13,P05,1_month,4,left,13,N,N,june,12,2018,6/12/18,female,N,N,2 hours,Y,N,NA,Y,24 hours,2 hours,Y,3 days,N,NA,NA,NA,
+HV_003_14,05-RH-3,HV003_14,P05,1_month,4,right,14,N,N,june,12,2018,6/12/18,female,N,N,2 hours,Y,N,NA,Y,24 hours,2 hours,Y,3 days,N,NA,NA,NA,
+HV_003_15,05-SC-3,HV003_15,P05,1_month,4,scalp,15,N,N,june,12,2018,6/12/18,female,N,N,2 hours,Y,N,NA,Y,24 hours,2 hours,Y,3 days,N,NA,NA,NA,
+HV_003_16,06-LH-3,HV003_16,P06,1_month,4,left,16,N,N,june ,14,2018,6/14/18,male,N,N,less than 1 hour ,Y,Y,more than 24 hours ,N,NA,more than 12 hours ,N,NA,N,NA,NA,NA,
+HV_003_18,06-RH-3,HV003_18,P06,1_month,4,right,18,N,N,june,14,2018,6/14/18,male,N,N,less than 1 hour ,Y,Y,more than 24 hours ,N,NA,more than 12 hours ,N,NA,N,NA,NA,NA,
+HV_003_19,06-SC-3,HV003_19,P06,1_month,4,scalp,19,N,N,june,14,2018,6/14/18,male,N,N,less than 1 hour ,Y,Y,more than 24 hours ,N,NA,more than 12 hours ,N,NA,N,NA,NA,NA,
+HV_003_20,07-LH-3,HV003_20,P07,1_month,4,left,20,N,N,june,13,2018,6/13/18,female,"Chippewa Falls, Wisconsin",N,4 hours,Y,Y,not recently ,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,"visited north central wisconsin (Chippewa Falls) Thursday, June 7th through Sunday June 10th. "
+HV_003_21,07-RH-3,HV003_21,P07,1_month,4,right,21,N,N,june,13,2018,6/13/18,female,"Chippewa Falls, Wisconsin",N,4 hours,Y,Y,not recently ,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,"visited north central wisconsin (Chippewa Falls) Thursday, June 7th through Sunday June 10th. "
+HV_003_22,07-SC-3,HV003_22,P07,1_month,4,scalp,22,N,N,june,13,2018,6/13/18,female,"Chippewa Falls, Wisconsin",N,4 hours,Y,Y,not recently ,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,"visited north central wisconsin (Chippewa Falls) Thursday, June 7th through Sunday June 10th. "
+HV_004_01,01-LH-4,HV004_1,P01,3_month,12,left,1,N,N,august,7,2018,8/7/18,male,"Montgomery Village, MD",N,that morning,Y,N,NA,N,NA,that morning (3:15),N,NA,N,NA,NA,NA,
+HV_004_02,01-RH-4,HV004_2,P01,3_month,12,right,2,N,N,august,7,2018,8/7/18,male,"Montgomery Village, MD",N,that morning,Y,N,NA,N,NA,that morning (3:15),N,NA,N,NA,NA,NA,
+HV_004_03,01-SC-4,HV004_3,P01,3_month,12,scalp,3,N,N,august,7,2018,8/7/18,male,"Montgomery Village, MD",N,that morning,Y,N,NA,N,NA,that morning (3:15),N,NA,N,NA,NA,NA,
+HV_004_04,02-LH-4,HV004_4,P02,3_month,12,left,4,N,N,august,7,2018,8/7/18,female,Children's Zoo,N,1 hour,N,Rarely,more than 72 hours,Y,more than 72 hours,8 hours,Y,36 hours,N,NA,Y,Zoo,went to lincoln childrens zoo 48 hours ago
+HV_004_05,02-RH-4,HV004_5,P02,3_month,12,right,5,N,N,august,7,2018,8/7/18,female,Children's Zoo,N,1 hour,N,Rarely,more than 72 hours,Y,more than 72 hours,8 hours,Y,36 hours,N,NA,Y,Zoo,went to lincoln childrens zoo 48 hours ago
+HV_004_06,02-SC-4,HV004_6,P02,3_month,12,scalp,6,N,N,august,7,2018,8/7/18,female,Children's Zoo,N,1 hour,N,Rarely,more than 72 hours,Y,more than 72 hours,8 hours,Y,36 hours,N,NA,Y,Zoo,went to lincoln childrens zoo 48 hours ago
+HV_004_07,03-LH-4,HV004_7,P03,3_month,12,left,7,N,N,august,8,2018,8/8/18,male,N,Vancouver Canada (1 week),less than 0.5 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,returned from vancouver 08/02/18
+HV_004_08,03-RH-4,HV004_8,P03,3_month,12,right,8,N,N,august,8,2018,8/8/18,male,N,Vancouver Canada (1 week),less than 0.5 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,returned from vancouver 08/02/18
+HV_004_09,03-SC-4,HV004_9,P03,3_month,12,scalp,9,N,N,august,8,2018,8/8/18,male,N,Vancouver Canada (1 week),less than 0.5 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,returned from vancouver 08/02/18
+HV_004_10,04-LH-4,HV004_10,P04,3_month,12,left,10,N,N,august,8,2018,8/8/18,female,N,N,4 hours,N,N,NA,Y,5 hours,3 days,N,NA,N,NA,NA,NA,
+HV_004_11,04-RH-4,HV004_11,P04,3_month,12,right,11,N,N,august,8,2018,8/8/18,female,N,N,4 hours,N,N,NA,Y,5 hours,3 days,N,NA,N,NA,NA,NA,
+HV_004_12,04-SC-4,HV004_12,P04,3_month,12,scalp,12,N,N,august,8,2018,8/8/18,female,N,N,4 hours,N,N,NA,Y,5 hours,3 days,N,NA,N,NA,NA,NA,
+HV_004_13,05-LH-4,HV004_13,P05,3_month,12,left,13,N,N,august,9,2018,8/9/18,female,N,N,3 hours,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_004_14,05-RH-4,HV004_14,P05,3_month,12,right,14,N,N,august,9,2018,8/9/18,female,N,N,3 hours,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_004_15,05-SC-4,HV004_15,P05,3_month,12,scalp,15,N,N,august,9,2018,8/9/18,female,N,N,3 hours,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_004_16,06-LH-4,HV004_16,P06,3_month,12,left,16,N,N,august,14,2018,8/14/18,male,N,N,15 min,Y,Y,more than 24 hours ,N,NA,more than 24 hours ,N,NA,N,NA,NA,NA,
+HV_004_18,06-RH-4,HV004_18,P06,3_month,12,right,18,N,N,august,14,2018,8/14/18,male,N,N,15 min,Y,Y,more than 24 hours ,N,NA,more than 24 hours ,N,NA,N,NA,NA,NA,
+HV_004_19,06-SC-4,HV004_19,P06,3_month,12,scalp,19,N,N,august,14,2018,8/14/18,male,N,N,15 min,Y,Y,more than 24 hours ,N,NA,more than 24 hours ,N,NA,N,NA,NA,NA,
+HV_004_20,07-LH-4,HV004_20,P07,3_month,12,left,20,N,N,august,13,2018,8/13/18,female,N,N,1 hour,N,Y,several days,Y,24 hours,36 hours ,N,NA,N,NA,NA,NA,
+HV_004_21,07-RH-4,HV004_21,P07,3_month,12,right,21,N,N,august,13,2018,8/13/18,female,N,N,1 hour,N,Y,several days,Y,24 hours,36 hours ,N,NA,N,NA,NA,NA,
+HV_004_22,07-SC-4,HV004_22,P07,3_month,12,scalp,22,N,N,august,13,2018,8/13/18,female,N,N,1 hour,N,Y,several days,Y,24 hours,36 hours ,N,NA,N,NA,NA,NA,
+HV_004_27,01-RL-4,HV004_27,P01,3_month,12,left,27,N,N,august,7,2018,8/7/18,male,"Montgomery Village, MD",N,last night,Y,N,NA,N,NA,that morning (3:15),N,NA,N,NA,NA,NA,
+HV_005_01,01-LH-5,HV005_1,P01,6_month,24,left,1,N,N,november,7,2018,11/7/18,male,N,N,last night,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_005_03,01-SC-5,HV005_3,P01,6_month,24,scalp,3,N,N,november,7,2018,11/7/18,male,N,N,last night,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_005_04,02-LH-5,HV005_4,P02,6_month,24,left,4,N,N,november,9,2018,11/9/18,female,"Pittsburgh, PA",N,30 min,N,Rarely,more than 72 hours,Rarely,more than 72 hours,14 hours,N,NA,N,NA,NA,NA,went to AICHE Conference returned Nov 2
+HV_005_05,02-RH-5,HV005_5,P02,6_month,24,right,5,N,N,november,9,2018,11/9/18,female,"Pittsburgh, PA",N,30 min,N,Rarely,more than 72 hours,Rarely,more than 72 hours,14 hours,N,NA,N,NA,NA,NA,went to AICHE Conference returned Nov 2
+HV_005_06,02-SC-5,HV005_6,P02,6_month,24,scalp,6,N,N,november,9,2018,11/9/18,female,"Pittsburgh, PA",N,30 min,N,Rarely,more than 72 hours,Rarely,more than 72 hours,14 hours,N,NA,N,NA,NA,NA,went to AICHE Conference returned Nov 2
+HV_005_07,03-LH-5,HV005_7,P03,6_month,24,left,7,N,N,november,9,2018,11/9/18,male,NW Missouri,N,less than 1 hour,N,N,NA,N,NA,2 hours,N,NA,N,NA,NA,NA,spent 3 evenings at local lakes and 6 hours in a marsh in NW MO this past sunday
+HV_005_08,03-RH-5,HV005_8,P03,6_month,24,right,8,N,N,november,9,2018,11/9/18,male,NW Missouri,N,less than 1 hour,N,N,NA,N,NA,2 hours,N,NA,N,NA,NA,NA,spent 3 evenings at local lakes and 6 hours in a marsh in NW MO this past sunday
+HV_005_09,03-SC-5,HV005_9,P03,6_month,24,scalp,9,N,N,november,9,2018,11/9/18,male,NW Missouri,N,less than 1 hour,N,N,NA,N,NA,2 hours,N,NA,N,NA,NA,NA,spent 3 evenings at local lakes and 6 hours in a marsh in NW MO this past sunday
+HV_005_10,04-LH-5,HV005_10,P04,6_month,24,left,10,N,N,november,9,2018,11/9/18,female,N,N,2 hours,N,N,NA,Y,1.5 hours,5 days,N,NA,N,NA,NA,NA,
+HV_005_11,04-RH-5,HV005_11,P04,6_month,24,right,11,N,N,november,9,2018,11/9/18,female,N,N,2 hours,N,N,NA,Y,1.5 hours,5 days,N,NA,N,NA,NA,NA,
+HV_005_12,04-SC-5,HV005_12,P04,6_month,24,scalp,12,N,N,november,9,2018,11/9/18,female,N,N,2 hours,N,N,NA,Y,1.5 hours,5 days,N,NA,N,NA,NA,NA,
+HV_005_13,05-LH-5,HV005_13,P05,6_month,24,left,13,N,N,november,12,2018,11/12/18,female,N,N,4 hours,N,N,NA,N,NA,1.5 days ,N,NA,N,NA,NA,NA,
+HV_005_14,05-RH-5,HV005_14,P05,6_month,24,right,14,N,N,november,12,2018,11/12/18,female,N,N,4 hours,N,N,NA,N,NA,1.5 days ,N,NA,N,NA,NA,NA,
+HV_005_15,05-SC-5,HV005_15,P05,6_month,24,scalp,15,N,N,november,12,2018,11/12/18,female,N,N,4 hours,N,N,NA,N,NA,1.5 days ,N,NA,N,NA,NA,NA,
+HV_005_16,06-LH-5,HV005_16,P06,6_month,24,left,16,N,N,november,14,2018,11/14/18,male,N,N,more than 1 hour,Y,Y,more than 1 hour,Y,more than 1 hour ,more than 36 hours,N,NA,N,NA,NA,NA,
+HV_005_18,06-RH-5,HV005_18,P06,6_month,24,right,18,N,N,november,14,2018,11/14/18,male,N,N,more than 1 hour,Y,Y,more than 1 hour,Y,more than 1 hour ,more than 36 hours,N,NA,N,NA,NA,NA,
+HV_005_19,06-SC-5,HV005_19,P06,6_month,24,scalp,19,N,N,november,14,2018,11/14/18,male,N,N,more than 1 hour,Y,Y,more than 1 hour,Y,more than 1 hour ,more than 36 hours,N,NA,N,NA,NA,NA,
+HV_005_20,07-LH-5,HV005_20,P07,6_month,24,left,20,N,N,november,14,2018,11/14/18,female,N,N,2.5 hours,N,Y,12 hours,Y,12 hours,8 hours,N,NA,N,NA,NA,NA,8 weeks pregnant
+HV_005_22,07-SC-5,HV005_22,P07,6_month,24,scalp,22,N,N,november,14,2018,11/14/18,female,N,N,2.5 hours,N,Y,12 hours,Y,12 hours,8 hours,N,NA,N,NA,NA,NA,8 weeks pregnant
+HV_005_27,01-RL-5,HV005_27,P01,6_month,24,left,27,N,N,november,7,2018,11/7/18,male ,N,N,last night,Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_006_01,08-LH-1,HV_006_1,P08,T_0,0,left,1,N,N,may,15,2018,5/15/18,male,Arkansas ,N,1 hour,N,Y,1 hour,N,NA,yesterday evening,Salt based pool,Unspecified ,N,NA,Y,horse,went to a horse farm in Arkansas
+HV_006_02,08-RH-1,HV_006_2,P08,T_0,0,right,2,N,N,may,15,2018,5/15/18,male,Arkansas ,N,1 hour,N,Y,1 hour,N,NA,yesterday evening,Salt based pool,Unspecified ,N,NA,Y,horse,went to a horse farm in Arkansas
+HV_006_03,08-SC-1,HV_006_3,P08,T_0,0,scalp,3,N,N,may,15,2018,5/15/18,male,Arkansas ,N,1 hour,N,Y,1 hour,N,NA,yesterday evening,Salt based pool,Unspecified ,N,NA,Y,horse,went to a horse farm in Arkansas
+HV_006_04,09-LH-1,HV_006_4,P09,T_0,0,left,4,N,N,may,16,2018,5/16/18,female,N,N,1-2 hours,N,N,NA,Y,12-14 hours,1 hour,N,NA,N,NA,NA,NA,applied body lotion to body 1 hour ago
+HV_006_05,09-RH-1,HV_006_5,P09,T_0,0,right,5,N,N,may,16,2018,5/16/18,female,N,N,1-2 hours,N,N,NA,Y,12-14 hours,1 hour,N,NA,N,NA,NA,NA,applied body lotion to body 1 hour ago
+HV_006_06,09-SC-1,HV_006_6,P09,T_0,0,scalp,6,N,N,may,16,2018,5/16/18,female,N,N,1-2 hours,N,N,NA,Y,12-14 hours,1 hour,N,NA,N,NA,NA,NA,applied body lotion to body 1 hour ago
+HV_006_07,10-LH-1,HV_006_7,P10,T_0,0,left,7,N,N,may,16,2018,5/16/18,male,N,N,2 hours,Y,N,NA,Y,2 hours,3 days,N,NA,N,NA,NA,NA,
+HV_006_08,10-RH-1,HV_006_8,P10,T_0,0,right,8,N,N,may,16,2018,5/16/18,male,N,N,2 hours,Y,N,NA,Y,2 hours,3 days,N,NA,N,NA,NA,NA,
+HV_006_09,10-SC-1,HV_006_9,P10,T_0,0,scalp,9,N,N,may,16,2018,5/16/18,male,N,N,2 hours,Y,N,NA,Y,2 hours,3 days,N,NA,N,NA,NA,NA,
+HV_006_10,11-LH-1,HV_006_10,P11,T_0,0,left,10,N,N,may,17,2018,5/17/18,female,N,N,1.5 hours,NA,N,NA,Y,7 hours,8 hours,N,NA,N,NA,NA,NA,"""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_006_11,11-RH-1,HV_006_11,P11,T_0,0,right,11,N,N,may,17,2018,5/17/18,female,N,N,1.5 hours,NA,N,NA,Y,7 hours,8 hours,N,NA,N,NA,NA,NA,"""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_006_12,11-SC-1,HV_006_12,P11,T_0,0,scalp,12,N,N,may,17,2018,5/17/18,female,N,N,1.5 hours,NA,N,NA,Y,7 hours,8 hours,N,NA,N,NA,NA,NA,"""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_006_13,12-LH-1,HV_006_13,P12,T_0,0,left,13,N,N,may,22,2018,5/22/18,male,N,N,1 hour,N,N,NA,Y,NA,that morning,N,NA,N,NA,NA,NA,
+HV_006_14,12-RH-1,HV_006_14,P12,T_0,0,right,14,N,N,may,22,2018,5/22/18,male,N,N,1 hour,N,N,NA,Y,NA,that morning,N,NA,N,NA,NA,NA,
+HV_006_15,12-SC-1,HV_006_15,P12,T_0,0,scalp,15,N,N,may,22,2018,5/22/18,male,N,N,1 hour,N,N,NA,Y,NA,that morning,N,NA,N,NA,NA,NA,
+HV_006_16,13-LH-1,HV_006_16,P13,T_0,0,left,17,N,N,may,31,2018,5/31/18,male,N,N,0.5 hours,Y,N,NA,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_006_18,13-RH-1,HV_006_18,P13,T_0,0,right,18,N,N,may,31,2018,5/31/18,male,N,N,0.5 hours,Y,N,NA,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_006_19,13-SC-1,HV_006_19,P13,T_0,0,scalp,19,N,N,may,31,2018,5/31/18,male,N,N,0.5 hours,Y,N,NA,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_006_20,14-LH-1,HV_006_20,P14,T_0,0,left,20,N,N,june,7,2018,6/7/18,female,N,N,1 hour,N,N,NA,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_006_21,14-RH-1,HV_006_21,P14,T_0,0,right,21,N,N,june,7,2018,6/7/18,female,N,N,1 hour,N,N,NA,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_006_22,14-SC-1,HV_006_22,P14,T_0,0,scalp,22,N,N,june,7,2018,6/7/18,female,N,N,1 hour,N,N,NA,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_006_27,08-RL-1,HV_006_27,P08,2_week,2,left,27,N,N,may,15,2018,5/15/18,male,Arkansas ,N,1 hour,N,Y,1 hour,N,NA,yesterday evening,Salt based pool,Unspecified ,N,NA,Y,horse,went to a horse farm in Arkansas
+HV_007_01,08-LH-2,HV_007_1,P08,2_week,2,left,1,N,N,june,1,2018,6/1/18,male,N,N,1 hour,NA,Y,1.5 hours,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_007_02,08-RH-2,HV_007_2,P08,2_week,2,right,2,N,N,june,1,2018,6/1/18,male,N,N,1 hour,NA,Y,1.5 hours,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_007_03,08-SC-2,HV_007_3,P08,2_week,2,scalp,3,N,N,june,1,2018,6/1/18,male,N,N,1 hour,NA,Y,1.5 hours,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_007_04,09-LH-2,HV_007_4,P09,2_week,2,left,4,N,N,may,30,2018,5/30/18,female,N,N,1 hour,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_007_05,09-RH-2,HV_007_5,P09,2_week,2,right,5,N,N,may,30,2018,5/30/18,female,N,N,1 hour,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_007_06,09-SC-2,HV_007_6,P09,2_week,2,scalp,6,N,N,may,30,2018,5/30/18,female,N,N,1 hour,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_007_07,10-LH-2,HV_007_7,P10,2_week,2,left,7,N,N,june,4,2018,6/4/18,male,N,N,0.5 hour ,Y,N,NA,Y,1 day,2 days,N,NA,N,NA,NA,NA,
+HV_007_08,10-RH-2,HV_007_8,P10,2_week,2,right,8,N,N,june,4,2018,6/4/18,male,N,N,0.5 hour ,Y,N,NA,Y,1 day,2 days,N,NA,N,NA,NA,NA,
+HV_007_09,10-SC-2,HV_007_9,P10,2_week,2,scalp,9,N,N,june,4,2018,6/4/18,male,N,N,0.5 hour ,Y,N,NA,Y,1 day,2 days,N,NA,N,NA,NA,NA,
+HV_007_10,11-LH-2,HV_007_10,P11,2_week,2,left,10,N,N,july,3,2018,7/3/18,female,"Springfield, Missouri",N,1.5 hours ago,N,N,NA,Y,2 hours,2 hours,unknown,unknown,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". The ""yes-about for days ago"" for the pool and or tanning was not specified if it was in regards to pool or tanning. "
+HV_007_11,11-RH-2,HV_007_11,P11,2_week,2,right,11,N,N,july,3,2018,7/3/18,female,"Springfield, Missouri",N,1.5 hours ago,N,N,NA,Y,2 hours,2 hours,unknown,unknown,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". The ""yes-about for days ago"" for the pool and or tanning was not specified if it was in regards to pool or tanning. "
+HV_007_12,11-SC-2,HV_007_12,P11,2_week,2,scalp,12,N,N,july,3,2018,7/3/18,female,"Springfield, Missouri",N,1.5 hours ago,N,N,NA,Y,2 hours,2 hours,unknown,unknown,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". The ""yes-about for days ago"" for the pool and or tanning was not specified if it was in regards to pool or tanning. "
+HV_007_13,12-LH-2,HV_007_13,P12,2_week,2,left,13,N,N,june,5,2018,6/5/18,male,N,N,at noon,Y,N,NA,Y,that morning,that morning,N,NA,N,NA,NA,NA,was using UV protective lotion on face
+HV_007_14,12-RH-2,HV_007_14,P12,2_week,2,right,14,N,N,june,5,2018,6/5/18,male,N,N,at noon,Y,N,NA,Y,that morning,that morning,N,NA,N,NA,NA,NA,was using UV protective lotion on face
+HV_007_15,12-SC-2,HV_007_15,P12,2_week,2,scalp,15,N,N,june,5,2018,6/5/18,male,N,N,at noon,Y,N,NA,Y,that morning,that morning,N,NA,N,NA,NA,NA,was using UV protective lotion on face
+HV_007_16,13-LH-2,HV_007_16,P13,2_week,2,left,16,N,N,june,15,2018,6/15/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_007_18,13-RH-2,HV_007_18,P13,2_week,2,right,18,N,N,june,15,2018,6/15/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_007_19,13-SC-2,HV_007_19,P13,2_week,2,scalp,19,N,N,june,15,2018,6/15/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_007_20,14-LH-2,HV_007_20,P14,2_week,2,left,20,N,N,june,21,2018,6/21/18,female,N,N,1 hour,N,N,NA,N,NA,48 hours,N,NA,N,NA,NA,NA,
+HV_007_21,14-RH-2,HV_007_21,P14,2_week,2,right,21,N,N,june,21,2018,6/21/18,female,N,N,1 hour,N,N,NA,N,NA,48 hours,N,NA,N,NA,NA,NA,
+HV_007_22,14-SC-2,HV_007_22,P14,2_week,2,scalp,22,N,N,june,21,2018,6/21/18,female,N,N,1 hour,N,N,NA,N,NA,48 hours,N,NA,N,NA,NA,NA,
+HV_007_27,08-RL-2,HV_007_27,P08,2_week,2,left,27,N,N,june,1,2018,6/1/18,male,N,N,1 hour,NA,Y,1.5 hours,N,NA,24 hours,N,NA,N,NA,NA,NA,
+HV_008_01,08-LH-3,HV_008_1,P08,1_month,4,left,1,N,N,june,15,2018,6/15/18,male,N,N,1.5 hours ,N,Y,3 hours,Y,18 hours,1 day,N,NA,N,NA,NA,NA,
+HV_008_02,08-RH-3,HV_008_2,P08,1_month,4,right,2,N,N,june,15,2018,6/15/18,male,N,N,1.5 hours ,N,Y,3 hours,Y,18 hours,1 day,N,NA,N,NA,NA,NA,
+HV_008_03,08-SC-3,HV_008_3,P08,1_month,4,scalp,3,N,N,june,15,2018,6/15/18,male,N,N,1.5 hours ,N,Y,3 hours,Y,18 hours,1 day,N,NA,N,NA,NA,NA,
+HV_008_04,09-LH-3,HV_008_4,P09,1_month,4,left,4,N,N,june,18,2018,6/18/18,female,N,N,1.5 hours,N,N,NA,Y,1 hour,48 hours,N,NA,N,NA,NA,NA,applied lotion and sunscreen an hour ago
+HV_008_05,09-RH-3,HV_008_5,P09,1_month,4,right,5,N,N,june,18,2018,6/18/18,female,N,N,1.5 hours,N,N,NA,Y,1 hour,48 hours,N,NA,N,NA,NA,NA,applied lotion and sunscreen an hour ago
+HV_008_06,09-SC-3,HV_008_6,P09,1_month,4,scalp,6,N,N,june,18,2018,6/18/18,female,N,N,1.5 hours,N,N,NA,Y,1 hour,48 hours,N,NA,N,NA,NA,NA,applied lotion and sunscreen an hour ago
+HV_008_07,10-LH-3,HV_008_7,P10,1_month,4,left,7,N,N,july,10,2018,7/10/18,male,N,"Colombia, South America",12 hours,Y,N,NA,Y,10 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_008_08,10-RH-3,HV_008_8,P10,1_month,4,right,8,N,N,july,10,2018,7/10/18,male,N,"Colombia, South America",12 hours,Y,N,NA,Y,10 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_008_09,10-SC-3,HV_008_9,P10,1_month,4,scalp,9,N,N,july,10,2018,7/10/18,male,N,"Colombia, South America",12 hours,Y,N,NA,Y,10 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_008_10,11-LH-3,HV_008_10,P11,1_month,4,left,10,N,N,june,19,2018,6/19/18,female,"San Francisco, several farms","Cartagena, Colombia",1 hour,N,N,NA,Y,2 hours,2 hours,N,NA,N,NA,Y,farm,"Traveled to Cartagena, Colombia from June 4-9. San Francisco from May 30-4, several farms, dairies, and feedlots from Thus June 15-18. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". "
+HV_008_11,11-RH-3,HV_008_11,P11,1_month,4,right,11,N,N,june,19,2018,6/19/18,female,"San Francisco, several farms","Cartagena, Colombia",1 hour,N,N,NA,Y,2 hours,2 hours,N,NA,N,NA,Y,farm,"Traveled to Cartagena, Colombia from June 4-9. San Francisco from May 30-4, several farms, dairies, and feedlots from Thus June 15-18. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". "
+HV_008_12,11-SC-3,HV_008_12,P11,1_month,4,scalp,12,N,N,june,19,2018,6/19/18,female,"San Francisco, several farms","Cartagena, Colombia",1 hour,N,N,NA,Y,2 hours,2 hours,N,NA,N,NA,Y,farm,"Traveled to Cartagena, Colombia from June 4-9. San Francisco from May 30-4, several farms, dairies, and feedlots from Thus June 15-18. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"". "
+HV_008_13,12-LH-3,HV_008_13,P12,1_month,4,left,13,N,N,june,21,2018,6/21/18,male,N,N,that morning,Y,N,NA,Y,that morning,yesterday,N,NA,N,NA,NA,NA,
+HV_008_14,12-RH-3,HV_008_14,P12,1_month,4,right,14,N,N,june,21,2018,6/21/18,male,N,N,that morning,Y,N,NA,Y,that morning,yesterday,N,NA,N,NA,NA,NA,
+HV_008_15,12-SC-3,HV_008_15,P12,1_month,4,scalp,15,N,N,june,21,2018,6/21/18,male,N,N,that morning,Y,N,NA,Y,that morning,yesterday,N,NA,N,NA,NA,NA,
+HV_008_16,13-LH-3,HV_008_16,P13,1_month,4,left,16,N,N,july,6,2018,7/6/18,male,N,N,0.5 hours,NA,N,NA,N,NA,0.5 hours,Y,4 days,N,NA,NA,NA,
+HV_008_18,13-RH-3,HV_008_18,P13,1_month,4,right,18,N,N,july,6,2018,7/6/18,male,N,N,0.5 hours,NA,N,NA,N,NA,0.5 hours,Y,4 days,N,NA,NA,NA,
+HV_008_19,13-SC-3,HV_008_19,P13,1_month,4,scalp,19,N,N,july,6,2018,7/6/18,male,N,N,0.5 hours,NA,N,NA,N,NA,0.5 hours,Y,4 days,N,NA,NA,NA,
+HV_008_20,14-LH-3,HV_008_20,P14,1_month,4,left,20,N,N,july,6,2018,7/6/18,female,N,N,15 min,N,N,NA,N,NA,less than 24 hours,N,NA,N,NA,NA,NA,
+HV_008_21,14-RH-3,HV_008_21,P14,1_month,4,right,21,N,N,july,6,2018,7/6/18,female,N,N,15 min,N,N,NA,N,NA,less than 24 hours,N,NA,N,NA,NA,NA,
+HV_008_22,14-SC-3,HV_008_22,P14,1_month,4,scalp,22,N,N,july,6,2018,7/6/18,female,N,N,15 min,N,N,NA,N,NA,less than 24 hours,N,NA,N,NA,NA,NA,
+HV_008_27,08-RL-3,HV_008_27,P08,1_month,4,left,27,N,N,june,15,2018,6/15/18,male,N,N,1.5 hours ,N,Y,3 hours,Y,18 hours,1 day,N,NA,N,NA,NA,NA,
+HV_009_01,08-LH-4,HV_009_1,P08,3_month,12,left,1,N,N,august,15,2018,8/15/18,male,Kentucky,N,2 hours,N,Y,4 hours,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_009_03,08-SC-4,HV_009_3,P08,3_month,12,scalp,3,N,N,august,15,2018,8/15/18,male,Kentucky,N,2 hours,N,Y,4 hours,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_009_04,09-LH-4,HV_009_4,P09,3_month,12,left,4,N,N,august,15,2018,8/15/18,female,N,Guatemala (3 weeks ago),0.5 hours,N,N,NA,Y,1 hour,1 hour,unknown,unknown,unknown,unknown,NA,NA,"for pool or tanning question they did not specify if the ""yes, 10 days"" was in reference to the pool or tanning. "
+HV_009_05,09-RH-4,HV_009_5,P09,3_month,12,right,5,N,N,august,15,2018,8/15/18,female,N,Guatemala (3 weeks ago),0.5 hours,N,N,NA,Y,1 hour,1 hour,unknown,unknown,unknown,unknown,NA,NA,"for pool or tanning question they did not specify if the ""yes, 10 days"" was in reference to the pool or tanning. "
+HV_009_06,09-SC-4,HV_009_6,P09,3_month,12,scalp,6,N,N,august,15,2018,8/15/18,female,N,Guatemala (3 weeks ago),0.5 hours,N,N,NA,Y,1 hour,1 hour,unknown,unknown,unknown,unknown,NA,NA,"for pool or tanning question they did not specify if the ""yes, 10 days"" was in reference to the pool or tanning. "
+HV_009_07,10-LH-4,HV_009_7,P10,3_month,12,left,7,N,N,august,23,2018,8/23/18,male,N,N,12 hours,N,N,NA,Y,15 hours,1 week,N,NA,N,NA,NA,NA,
+HV_009_08,10-RH-4,HV_009_8,P10,3_month,12,right,8,N,N,august,23,2018,8/23/18,male,N,N,12 hours,N,N,NA,Y,15 hours,1 week,N,NA,N,NA,NA,NA,
+HV_009_09,10-SC-4,HV_009_9,P10,3_month,12,scalp,9,N,N,august,23,2018,8/23/18,male,N,N,12 hours,N,N,NA,Y,15 hours,1 week,N,NA,N,NA,NA,NA,
+HV_009_10,11-LH-4,HV_009_10,P11,3_month,12,left,10,N,N,august,17,2018,8/17/18,female,N,Rwanda,2.5 hours,N,N,NA,Y,Unknown ,13-14 hours,N,NA,N,NA,NA,NA,"Traveled to Rwanda over a week ago. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_009_11,11-RH-4,HV_009_11,P11,3_month,12,right,11,N,N,august,17,2018,8/17/18,female,N,Rwanda,2.5 hours,N,N,NA,Y,Unknown ,13-14 hours,N,NA,N,NA,NA,NA,"Traveled to Rwanda over a week ago. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_009_12,11-SC-4,HV_009_12,P11,3_month,12,scalp,12,N,N,august,17,2018,8/17/18,female,N,Rwanda,2.5 hours,N,N,NA,Y,Unknown ,13-14 hours,N,NA,N,NA,NA,NA,"Traveled to Rwanda over a week ago. From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_009_13,12-LH-4,HV_009_13,P12,3_month,12,left,13,N,N,august,22,2018,8/22/18,male,"Elsmere, Kentucky",N,1 hour,Y,N,NA,Y,1 hour,yesterday,N,NA,N,NA,NA,NA,
+HV_009_14,12-RH-4,HV_009_14,P12,3_month,12,right,14,N,N,august,22,2018,8/22/18,male,"Elsmere, Kentucky",N,1 hour,Y,N,NA,Y,1 hour,yesterday,N,NA,N,NA,NA,NA,
+HV_009_15,12-SC-4,HV_009_15,P12,3_month,12,scalp,15,N,N,august,22,2018,8/22/18,male,"Elsmere, Kentucky",N,1 hour,Y,N,NA,Y,1 hour,yesterday,N,NA,N,NA,NA,NA,
+HV_009_16,13-LH-4,HV_009_16,P13,3_month,12,left,16,N,N,august,31,2018,8/31/18,male,N,N,1 hour,Y,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_009_18,13-RH-4,HV_009_18,P13,3_month,12,right,18,N,N,august,31,2018,8/31/18,male,N,N,1 hour,Y,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_009_19,13-SC-4,HV_009_19,P13,3_month,12,scalp,19,N,N,august,31,2018,8/31/18,male,N,N,1 hour,Y,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_009_20,14-LH-4,HV_009_20,P14,3_month,12,left,20,N,N,september,7,2018,9/7/18,female,N,N,15 min,N,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_009_21,14-RH-4,HV_009_21,P14,3_month,12,right,21,N,N,september,7,2018,9/7/18,female,N,N,15 min,N,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_009_22,14-SC-4,HV_009_22,P14,3_month,12,scalp,22,N,N,september,7,2018,9/7/18,female,N,N,15 min,N,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_009_27,08-RL-4,HV_009_27,P08,3_month,12,left,27,N,N,august,15,2018,8/15/18,male,Kentucky,N,2 hours,N,Y,4 hours,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_010_01,08-LH-5,HV_010_1,P08,6_month,24,left,1,N,N,november,14,2018,11/14/18,male,N,N,3 hours,N,Y,5 hours,Y,6 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_010_02,08-RH-5,HV_010_2,P08,6_month,24,right,2,N,N,november,14,2018,11/14/18,male,N,N,3 hours,N,Y,5 hours,Y,6 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_010_03,08-SC-5,HV_010_3,P08,6_month,24,scalp,3,N,N,november,14,2018,11/14/18,male,N,N,3 hours,N,Y,5 hours,Y,6 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_010_04,09-LH-5,HV_010_4,P09,6_month,24,left,4,N,N,november,16,2018,11/16/18,female,N,N,1 hour,N,N,NA,Y,1 hour,24 hours,N,NA,N,NA,NA,NA,
+HV_010_05,09-RH-5,HV_010_5,P09,6_month,24,right,5,N,N,november,16,2018,11/16/18,female,N,N,1 hour,N,N,NA,Y,1 hour,24 hours,N,NA,N,NA,NA,NA,
+HV_010_06,09-SC-5,HV_010_6,P09,6_month,24,scalp,6,N,N,november,16,2018,11/16/18,female,N,N,1 hour,N,N,NA,Y,1 hour,24 hours,N,NA,N,NA,NA,NA,
+HV_010_07,10-LH-5,HV_010_7,P10,6_month,24,left,7,N,N,november,20,2018,11/20/18,male,N,N,2 hours,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_010_08,10-RH-5,HV_010_8,P10,6_month,24,right,8,N,N,november,20,2018,11/20/18,male,N,N,2 hours,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_010_09,10-SC-5,HV_010_9,P10,6_month,24,scalp,9,N,N,november,20,2018,11/20/18,male,N,N,2 hours,N,N,NA,Y,1 hour,3 days,N,NA,N,NA,NA,NA,
+HV_010_10,11-LH-5,HV_010_10,P11,6_month,24,left,10,N,N,november,16,2018,11/16/18,female,N,N,2 hours,N,N,NA,Sometimes,NA,15 hours,N,NA,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_010_11,11-RH-5,HV_010_11,P11,6_month,24,right,11,N,N,november,16,2018,11/16/18,female,N,N,2 hours,N,N,NA,Sometimes,NA,15 hours,N,NA,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_010_12,11-SC-5,HV_010_12,P11,6_month,24,scalp,12,N,N,november,16,2018,11/16/18,female,N,N,2 hours,N,N,NA,Sometimes,NA,15 hours,N,NA,N,NA,NA,NA,"From previous sheet: ""I am a gardner and frequently (make) contact with soil (almost every day)"""
+HV_010_13,12-LH-5,HV_010_13,P12,6_month,24,left,13,N,N,november,26,2018,11/26/18,male,N,N,that morning,Y,N,NA,Y,after lunch,after lunch,N,NA,N,NA,NA,NA,
+HV_010_14,12-RH-5,HV_010_14,P12,6_month,24,right,14,N,N,november,26,2018,11/26/18,male,N,N,that morning,Y,N,NA,Y,after lunch,after lunch,N,NA,N,NA,NA,NA,
+HV_010_15,12-SC-5,HV_010_15,P12,6_month,24,scalp,15,N,N,november,26,2018,11/26/18,male,N,N,that morning,Y,N,NA,Y,after lunch,after lunch,N,NA,N,NA,NA,NA,
+HV_010_16,13-LH-5,HV_010_16,P13,6_month,24,left,16,N,N,november,30,2018,11/30/18,male,N,N,0.5 hours,NA,N,NA,Y,0.5 hours,1 hour,N,NA,N,NA,NA,NA,
+HV_010_18,13-RH-5,HV_010_18,P13,6_month,24,right,18,N,N,november,30,2018,11/30/18,male,N,N,0.5 hours,NA,N,NA,Y,0.5 hours,1 hour,N,NA,N,NA,NA,NA,
+HV_010_19,13-SC-5,HV_010_19,P13,6_month,24,scalp,19,N,N,november,30,2018,11/30/18,male,N,N,0.5 hours,NA,N,NA,Y,0.5 hours,1 hour,N,NA,N,NA,NA,NA,
+HV_010_20,14-LH-5,HV_010_20,P14,6_month,24,left,20,N,N,december,7,2018,12/7/18,female,N,N,right before,NA,N,NA,N,NA,36 hours,N,NA,N,NA,NA,NA,
+HV_010_21,14-RH-5,HV_010_21,P14,6_month,24,right,21,N,N,december,7,2018,12/7/18,female,N,N,right before,NA,N,NA,N,NA,36 hours,N,NA,N,NA,NA,NA,
+HV_010_22,14-SC-5,HV_010_22,P14,6_month,24,scalp,22,N,N,december,7,2018,12/7/18,female,N,N,right before,NA,N,NA,N,NA,36 hours,N,NA,N,NA,NA,NA,
+HV_010_27,08-RL-5,HV_010_27,P08,6_month,24,left,27,N,N,november,14,2018,11/14/18,male,N,N,3 hours,N,Y,5 hours,Y,6 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_011_01,15-LH-1,HV_011_1,P15,T_0,0,left,1,N,N,july,11,2018,7/11/18,female,N,N,4 hours,Y,Y,1.5 weeks,Y,3 weeks,3 days,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes - 1.5 months ago"" not sure which one this is in reference to"
+HV_011_02,15-RH-1,HV_011_2,P15,T_0,0,right,2,N,N,july,11,2018,7/11/18,female,N,N,4 hours,Y,Y,1.5 weeks,Y,3 weeks,3 days,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes - 1.5 months ago"" not sure which one this is in reference to"
+HV_011_03,15-SC-1,HV_011_3,P15,T_0,0,scalp,3,N,N,july,11,2018,7/11/18,female,N,N,4 hours,Y,Y,1.5 weeks,Y,3 weeks,3 days,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes - 1.5 months ago"" not sure which one this is in reference to"
+HV_011_04,16-LH-1,HV_011_4,P16,T_0,0,left,4,N,N,july,11,2018,7/11/18,female,South Dakota,N,3 hours,N,Rarely,last night,Y,last night,unknown,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes, one week"" not sure which one this is in reference to"
+HV_011_05,16-RH-1,HV_011_5,P16,T_0,0,right,5,N,N,july,11,2018,7/11/18,female,South Dakota,N,3 hours,N,Rarely,last night,Y,last night,unknown,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes, one week"" not sure which one this is in reference to"
+HV_011_06,16-SC-1,HV_011_6,P16,T_0,0,scalp,6,N,N,july,11,2018,7/11/18,female,South Dakota,N,3 hours,N,Rarely,last night,Y,last night,unknown,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes, one week"" not sure which one this is in reference to"
+HV_011_07,17-LH-1,HV_011_7,P17,T_0,0,left,7,N,N,july,11,2018,7/11/18,female,"Ceresco, NE",N,2 hours,N,Rarely,2 weeks,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_011_08,17-RH-1,HV_011_8,P17,T_0,0,right,8,N,N,july,11,2018,7/11/18,female,"Ceresco, NE",N,2 hours,N,Rarely,2 weeks,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_011_09,17-SC-1,HV_011_9,P17,T_0,0,scalp,9,N,N,july,11,2018,7/11/18,female,"Ceresco, NE",N,2 hours,N,Rarely,2 weeks,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_011_10,18-LH-1,HV_011_10,P18,T_0,0,left,10,N,N,july,11,2018,7/11/18,female,Wyoming,N,2 hours,N,N,NA,Y,that morning,24 hours,N,NA,N,NA,NA,NA,"""I use essential oils and wear them on my bracelet on my wrist"""
+HV_011_11,18-RH-1,HV_011_11,P18,T_0,0,right,11,N,N,july,11,2018,7/11/18,female,Wyoming,N,2 hours,N,N,NA,Y,that morning,24 hours,N,NA,N,NA,NA,NA,"""I use essential oils and wear them on my bracelet on my wrist"""
+HV_011_12,18-SC-1,HV_011_12,P18,T_0,0,scalp,12,N,N,july,11,2018,7/11/18,female,Wyoming,N,2 hours,N,N,NA,Y,that morning,24 hours,N,NA,N,NA,NA,NA,"""I use essential oils and wear them on my bracelet on my wrist"""
+HV_011_13,19-LH-1,HV_011_13,P19,T_0,0,left,13,N,N,july,11,2018,7/11/18,male,N,N,45 min,N,N,NA,N,NA,5 hours,N,NA,N,NA,NA,NA,
+HV_011_14,19-RH-1,HV_011_14,P19,T_0,0,right,14,N,N,july,11,2018,7/11/18,male,N,N,45 min,N,N,NA,N,NA,5 hours,N,NA,N,NA,NA,NA,
+HV_011_15,19-SC-1,HV_011_15,P19,T_0,0,scalp,15,N,N,july,11,2018,7/11/18,male,N,N,45 min,N,N,NA,N,NA,5 hours,N,NA,N,NA,NA,NA,
+HV_011_16,20-LH-1,HV_011_16,P20,T_0,0,left,16,N,N,july,11,2018,7/11/18,male,N,N,2 hours,N,N,NA,N,NA,5 hours,N,mid-may,N,NA,NA,NA,
+HV_011_18,20-RH-1,HV_011_18,P20,T_0,0,right,18,N,N,july,11,2018,7/11/18,male,N,N,2 hours,N,N,NA,N,NA,5 hours,N,mid-may,N,NA,NA,N,
+HV_011_19,20-SC-1,HV_011_19,P20,T_0,0,scalp,19,N,N,july,11,2018,7/11/18,male,N,N,2 hours,N,N,NA,N,NA,5 hours,N,mid-may,N,NA,NA,N,
+HV_011_20,21-LH-1,HV_011_20,P21,T_0,0,left,20,N,N,july,17,2018,7/17/18,female,"Des Moines, NE",N,2 hours,N,Y,1 week,Y,last night,3 hours,Y,2 days,NA,NA,NA,NA,
+HV_011_21,21-RH-1,HV_011_21,P21,T_0,0,right,21,N,N,july,17,2018,7/17/18,female,"Des Moines, NE",N,2 hours,N,Y,1 week,Y,last night,3 hours,Y,2 days,NA,NA,NA,NA,
+HV_011_22,21-SC-1,HV_011_22,P21,T_0,0,scalp,22,N,N,july,17,2018,7/17/18,female,"Des Moines, NE",N,2 hours,N,Y,1 week,Y,last night,3 hours,Y,2 days,NA,NA,NA,NA,
+HV_011_27,15-RL-1,HV_011_27,P15,T_0,0,left,27,N,N,july,11,2018,7/11/18,female,N,N,4 hours,Y,Y,1.5 weeks,Y,3 weeks,3 days,unknown,unknown,unknown,unknown,NA,NA,"for pool and or tanning question all that was put was ""yes - 1.5 months ago"" not sure which one this is in reference to"
+HV_012_01,15-LH-2,HV012_1,P15,2_week,2,left,1,N,N,july,25,2018,7/25/18,female,"Branson, MO",N,4 hours,Y,N,NA,Y,yesterday,4 hours,N,NA,N,NA,NA,NA,
+HV_012_02,15-RH-2,HV012_2,P15,2_week,2,right,2,N,N,july,25,2018,7/25/18,female,"Branson, MO",N,4 hours,Y,N,NA,Y,yesterday,4 hours,N,NA,N,NA,NA,NA,
+HV_012_03,15-SC-2,HV012_3,P15,2_week,2,scalp,3,N,N,july,25,2018,7/25/18,female,"Branson, MO",N,4 hours,Y,N,NA,Y,yesterday,4 hours,N,NA,N,NA,NA,NA,
+HV_012_04,16-LH-2,HV012_4,P16,2_week,2,left,4,N,N,july,24,2018,7/24/18,female,N,N,that morning,N,N,2 weeks,Y,that morning,sunday night,N,NA,N,NA,NA,NA,
+HV_012_05,16-RH-2,HV012_5,P16,2_week,2,right,5,N,N,july,24,2018,7/24/18,female,N,N,that morning,N,N,2 weeks,Y,that morning,sunday night,N,NA,N,NA,NA,NA,
+HV_012_06,16-SC-2,HV012_6,P16,2_week,2,scalp,6,N,N,july,24,2018,7/24/18,female,N,N,that morning,N,N,2 weeks,Y,that morning,sunday night,N,NA,N,NA,NA,NA,
+HV_012_07,17-LH-2,HV012_7,P17,2_week,2,left,7,N,N,july,24,2018,7/24/18,female,"Heborn and Deschler, NE",N,35 min,N,Rarely,not in the last 7 days,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_012_08,17-RH-2,HV012_8,P17,2_week,2,right,8,N,N,july,24,2018,7/24/18,female,"Heborn and Deschler, NE",N,35 min,N,Rarely,not in the last 7 days,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_012_09,17-SC-2,HV012_9,P17,2_week,2,scalp,9,N,N,july,24,2018,7/24/18,female,"Heborn and Deschler, NE",N,35 min,N,Rarely,not in the last 7 days,Y,that morning,that morning,N,NA,N,NA,NA,NA,
+HV_012_10,18-LH-2,HV012_10,P18,2_week,2,left,10,N,N,july,24,2018,7/24/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,"""I am in the process of moving to a new house"""
+HV_012_11,18-RH-2,HV012_11,P18,2_week,2,right,11,N,N,july,24,2018,7/24/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,"""I am in the process of moving to a new house"""
+HV_012_12,18-SC-2,HV012_12,P18,2_week,2,scalp,12,N,N,july,24,2018,7/24/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,"""I am in the process of moving to a new house"""
+HV_012_13,19-LH-2,HV012_13,P19,2_week,2,left,13,N,N,july,25,2018,7/25/18,male,"Branson, MO",N,1.5 hours,Y,N,NA,N,NA,14 hours,N,NA,N,NA,NA,NA,
+HV_012_14,19-RH-2,HV012_14,P19,2_week,2,right,14,N,N,july,25,2018,7/25/18,male,"Branson, MO",N,1.5 hours,Y,N,NA,N,NA,14 hours,N,NA,N,NA,NA,NA,
+HV_012_15,19-SC-2,HV012_15,P19,2_week,2,scalp,15,N,N,july,25,2018,7/25/18,male,"Branson, MO",N,1.5 hours,Y,N,NA,N,NA,14 hours,N,NA,N,NA,NA,NA,
+HV_012_16,20-LH-2,HV012_16,P20,2_week,2,left,16,N,N,july,25,2018,7/25/18,male,N,N,2 hours,Y,Y,1 week,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_012_18,20-RH-2,HV012_18,P20,2_week,2,right,18,N,N,july,25,2018,7/25/18,male,N,N,2 hours,Y,Y,1 week,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_012_19,20-SC-2,HV012_19,P20,2_week,2,scalp,19,N,N,july,25,2018,7/25/18,male,N,N,2 hours,Y,Y,1 week,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_012_20,21-LH-2,HV012_20,P21,2_week,2,left,20,N,N,july,21,2018,7/21/18,female,N,N,2.5 hours,N,Rarely,weeks,Y,yesterday morning,36 hours,N,NA,N,NA,NA,NA,dry shampoo
+HV_012_21,21-RH-2,HV012_21,P21,2_week,2,right,21,N,N,july,21,2018,7/21/18,female,N,N,2.5 hours,N,Rarely,weeks,Y,yesterday morning,36 hours,N,NA,N,NA,NA,NA,dry shampoo
+HV_012_22,21-SC-2,HV012_22,P21,2_week,2,scalp,22,N,N,july,21,2018,7/21/18,female,N,N,2.5 hours,N,Rarely,weeks,Y,yesterday morning,36 hours,N,NA,N,NA,NA,NA,dry shampoo
+HV_012_27,15-RL-2,HV012_27,P15,2_week,2,left,27,N,N,july,25,2018,7/25/18,female,"Branson, MO",N,4 hours,Y,N,NA,Y,yesterday,4 hours,N,NA,N,NA,NA,NA,
+HV_013_01,15-LH-3,HV013_1,P15,1_month,4,left,1,N,N,august,6,2018,8/6/18,female,N,N,12 hours,NA,N,NA,N,NA,3 days,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, 4 days ago"". not sure if this is in reference to the swimming or tanning. "
+HV_013_02,15-RH-3,HV013_2,P15,1_month,4,right,2,N,N,august,6,2018,8/6/18,female,N,N,12 hours,NA,N,NA,N,NA,3 days,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, 4 days ago"". not sure if this is in reference to the swimming or tanning. "
+HV_013_03,15-SC-3,HV013_3,P15,1_month,4,scalp,3,N,N,august,6,2018,8/6/18,female,N,N,12 hours,NA,N,NA,N,NA,3 days,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, 4 days ago"". not sure if this is in reference to the swimming or tanning. "
+HV_013_04,16-LH-3,HV013_4,P16,1_month,4,left,4,N,N,august,7,2018,8/7/18,female,Bassett,N,5 min,N,Rarely,2 weeks,Y,last night,last night,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, last thursday night (8/2)"". not sure if this is in reference to the swimming or tanning. "
+HV_013_05,16-RH-3,HV013_5,P16,1_month,4,right,5,N,N,august,7,2018,8/7/18,female,Bassett,N,5 min,N,Rarely,2 weeks,Y,last night,last night,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, last thursday night (8/2)"". not sure if this is in reference to the swimming or tanning. "
+HV_013_07,17-LH-3,HV013_7,P17,1_month,4,left,7,N,N,august,7,2018,8/7/18,female,N,N,10 min,N,Sometimes,unspecified,Y,3 hours,3.5 hours,N,NA,N,NA,NA,NA,
+HV_013_08,17-RH-3,HV013_8,P17,1_month,4,right,8,N,N,august,7,2018,8/7/18,female,N,N,10 min,N,Sometimes,unspecified,Y,3 hours,3.5 hours,N,NA,N,NA,NA,NA,
+HV_013_09,17-SC-3,HV013_9,P17,1_month,4,scalp,9,N,N,august,7,2018,8/7/18,female,N,N,10 min,N,Sometimes,unspecified,Y,3 hours,3.5 hours,N,NA,N,NA,NA,NA,
+HV_013_10,18-LH-3,HV013_10,P18,1_month,4,left,10,N,N,august,7,2018,8/7/18,female,N,N,3 hours,N,Y,yesterday,Y,3 hours,that morning,N,NA,N,NA,NA,NA,
+HV_013_11,18-RH-3,HV013_11,P18,1_month,4,right,11,N,N,august,7,2018,8/7/18,female,N,N,3 hours,N,Y,yesterday,Y,3 hours,that morning,N,NA,N,NA,NA,NA,
+HV_013_12,18-SC-3,HV013_12,P18,1_month,4,scalp,12,N,N,august,7,2018,8/7/18,female,N,N,3 hours,N,Y,yesterday,Y,3 hours,that morning,N,NA,N,NA,NA,NA,
+HV_013_13,19-LH-3,HV013_13,P19,1_month,4,left,13,N,N,august,8,2018,8/8/18,male,N,N,2 hours,Y,N,NA,N,NA,13 hours,N,NA,N,NA,NA,NA,
+HV_013_14,19-RH-3,HV013_14,P19,1_month,4,right,14,N,N,august,8,2018,8/8/18,male,N,N,2 hours,Y,N,NA,N,NA,13 hours,N,NA,N,NA,NA,NA,
+HV_013_15,19-SC-3,HV013_15,P19,1_month,4,scalp,15,N,N,august,8,2018,8/8/18,male,N,N,2 hours,Y,N,NA,N,NA,13 hours,N,NA,N,NA,NA,NA,
+HV_013_16,20-LH-3,HV013_16,P20,1_month,4,left,16,N,N,august,8,2018,8/8/18,male,N,N,0.5 hours,NA,Sometimes,3 weeks,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_013_18,20-RH-3,HV013_18,P20,1_month,4,right,18,N,N,august,8,2018,8/8/18,male,N,N,0.5 hours,NA,Sometimes,3 weeks,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_013_19,20-SC-3,HV013_19,P20,1_month,4,scalp,19,N,N,august,8,2018,8/8/18,male,N,N,0.5 hours,NA,Sometimes,3 weeks,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_013_20,21-LH-3,HV013_20,P21,1_month,4,left,20,N,N,august,16,2018,8/16/18,female,N,N,1 hour,N,Y,1 week,Y,yesterday,7 hours,Y,1 week,N,NA,NA,NA,
+HV_013_21,21-RH-3,HV013_21,P21,1_month,4,right,21,N,N,august,16,2018,8/16/18,female,N,N,1 hour,N,Y,1 week,Y,yesterday,7 hours,Y,1 week,N,NA,NA,NA,
+HV_013_22,21-SC-3,HV013_22,P21,1_month,4,scalp,22,N,N,august,16,2018,8/16/18,female,N,N,1 hour,N,Y,1 week,Y,yesterday,7 hours,Y,1 week,N,NA,NA,NA,
+HV_013_27,15-RL-3,HV013_27,P15,1_month,4,left,27,N,N,august,6,2018,8/6/18,female,N,N,12 hours,NA,N,NA,N,NA,3 days,unknown,unknown,unknown,unknown,NA,NA,"for the pool and or tanning question they answered with just "" yes, 4 days ago"". not sure if this is in reference to the swimming or tanning. "
+HV_014_01,15-LH-4,HV014_1,P15,3_month,12,left,1,N,N,october,9,2018,10/9/18,female,N,N,3 hours,NA,N,NA,Y,yesterday,1 day,N,NA,N,NA,NA,NA,
+HV_014_02,15-RH-4,HV014_2,P15,3_month,12,right,2,N,N,october,9,2018,10/9/18,female,N,N,3 hours,NA,N,NA,Y,yesterday,1 day,N,NA,N,NA,NA,NA,
+HV_014_03,15-SC-4,HV014_3,P15,3_month,12,scalp,3,N,N,october,9,2018,10/9/18,female,N,N,3 hours,NA,N,NA,Y,yesterday,1 day,N,NA,N,NA,NA,NA,
+HV_014_04,16-LH-4,HV014_4,P16,3_month,12,left,4,N,N,october,10,2018,10/10/18,female,Western Nebraska,N,that morning,N,Y,yesterday afternoon,Y,last night,last night,N,NA,N,NA,NA,NA,
+HV_014_05,16-RH-4,HV014_5,P16,3_month,12,right,5,N,N,october,10,2018,10/10/18,female,Western Nebraska,N,that morning,N,Y,yesterday afternoon,Y,last night,last night,N,NA,N,NA,NA,NA,
+HV_014_06,16-SC-4,HV014_6,P16,3_month,12,scalp,6,N,N,october,10,2018,10/10/18,female,Western Nebraska,N,that morning,N,Y,yesterday afternoon,Y,last night,last night,N,NA,N,NA,NA,NA,
+HV_014_07,17-LH-4,HV014_7,P17,3_month,12,left,7,N,N,october,10,2018,10/10/18,female,"Norfolk, NE",N,0.5 hours,N,Y,1 week,Y,48 hours,yesterday,N,NA,N,NA,NA,NA,
+HV_014_08,17-RH-4,HV014_8,P17,3_month,12,right,8,N,N,october,10,2018,10/10/18,female,"Norfolk, NE",N,0.5 hours,N,Y,1 week,Y,48 hours,yesterday,N,NA,N,NA,NA,NA,
+HV_014_09,17-SC-4,HV014_9,P17,3_month,12,scalp,9,N,N,october,10,2018,10/10/18,female,"Norfolk, NE",N,0.5 hours,N,Y,1 week,Y,48 hours,yesterday,N,NA,N,NA,NA,NA,
+HV_014_10,18-LH-4,HV014_10,P18,3_month,12,left,10,N,N,october,10,2018,10/10/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,
+HV_014_11,18-RH-4,HV014_11,P18,3_month,12,right,11,N,N,october,10,2018,10/10/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,
+HV_014_12,18-SC-4,HV014_12,P18,3_month,12,scalp,12,N,N,october,10,2018,10/10/18,female,N,N,2 hours,N,N,NA,Y,that morning,last night,N,NA,N,NA,NA,NA,
+HV_014_13,19-LH-4,HV014_13,P19,3_month,12,left,13,N,N,october,11,2018,10/11/18,male,N,N,2 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_014_14,19-RH-4,HV014_14,P19,3_month,12,right,14,N,N,october,11,2018,10/11/18,male,N,N,2 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_014_15,19-SC-4,HV014_15,P19,3_month,12,scalp,15,N,N,october,11,2018,10/11/18,male,N,N,2 hours,Y,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_014_16,20-LH-4,HV014_16,P20,3_month,12,left,16,N,N,october,11,2018,10/11/18,male,"Columbus, NE",N,1 hour,NA,Y,yesterday,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_014_18,20-RH-4,HV014_18,P20,3_month,12,right,18,N,N,october,11,2018,10/11/18,male,"Columbus, NE",N,1 hour,NA,Y,yesterday,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_014_19,20-SC-4,HV014_19,P20,3_month,12,scalp,19,N,N,october,11,2018,10/11/18,male,"Columbus, NE",N,1 hour,NA,Y,yesterday,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_014_20,21-LH-4,HV014_20,P21,3_month,12,left,20,N,N,october,17,2018,10/17/18,female,N,N,1 hour,N,Y,weeks,Y,yesterday,24 hours,N,NA,N,NA,NA,NA,dry shampoo and hair spray
+HV_014_21,21-RH-4,HV014_21,P21,3_month,12,right,21,N,N,october,17,2018,10/17/18,female,N,N,1 hour,N,Y,weeks,Y,yesterday,24 hours,N,NA,N,NA,NA,NA,dry shampoo and hair spray
+HV_014_22,21-SC-4,HV014_22,P21,3_month,12,scalp,22,N,N,october,17,2018,10/17/18,female,N,N,1 hour,N,Y,weeks,Y,yesterday,24 hours,N,NA,N,NA,NA,NA,dry shampoo and hair spray
+HV_014_27,15-RL-4,HV014_27,P15,3_month,12,left,27,N,N,october,9,2018,10/9/18,female,N,N,3 hours,NA,N,NA,Y,yesterday,1 day,N,NA,N,NA,NA,NA,
+HV_015_01,15-LH-5,HV015_1,P15,6_month,24,left,1,N,N,january,11,2019,1/11/19,female,N,N,4 hours,NA,Y,yesterday,Y,2 hours,2 days,unknown,unknown,unknown,unknown,NA,NA,"for question pool and or tanning they just put ""6 days"" not sure if this is in reference to tanning or pool. "
+HV_015_02,15-RH-5,HV015_2,P15,6_month,24,right,2,N,N,january,11,2019,1/11/19,female,N,N,4 hours,NA,Y,yesterday,Y,2 hours,2 days,unknown,unknown,unknown,unknown,NA,NA,"for question pool and or tanning they just put ""6 days"" not sure if this is in reference to tanning or pool. "
+HV_015_03,15-SC-5,HV015_3,P15,6_month,24,scalp,3,N,N,january,11,2019,1/11/19,female,N,N,4 hours,NA,Y,yesterday,Y,2 hours,2 days,unknown,unknown,unknown,unknown,NA,NA,"for question pool and or tanning they just put ""6 days"" not sure if this is in reference to tanning or pool. "
+HV_015_04,16-LH-5,HV015_4,P16,6_month,24,left,4,N,N,june,17,2019,6/17/19,female,Louisianna,N,that morning,N,Y,within last week,Y,that morning,last night,N,NA,N,NA,NA,NA,no pets
+HV_015_05,16-RH-5,HV015_5,P16,6_month,24,right,5,N,N,june,17,2019,6/17/19,female,Louisianna,N,that morning,N,Y,within last week,Y,that morning,last night,N,NA,N,NA,NA,NA,no pets
+HV_015_06,16-SC-5,HV015_6,P16,6_month,24,scalp,6,N,N,june,17,2019,6/17/19,female,Louisianna,N,that morning,N,Y,within last week,Y,that morning,last night,N,NA,N,NA,NA,NA,no pets
+HV_015_07,17-LH-5,HV015_7,P17,6_month,24,left,7,N,N,january,11,2019,1/11/19,female,"Salina, Kansas",N,1.5 hours,Y,Y,15 hours,Y,2 hours,2.5 hours,N,NA,N,NA,NA,NA,
+HV_015_08,17-RH-5,HV015_8,P17,6_month,24,right,8,N,N,january,11,2019,1/11/19,female,"Salina, Kansas",N,1.5 hours,Y,Y,15 hours,Y,2 hours,2.5 hours,N,NA,N,NA,NA,NA,
+HV_015_09,17-SC-5,HV015_9,P17,6_month,24,scalp,9,N,N,january,11,2019,1/11/19,female,"Salina, Kansas",N,1.5 hours,Y,Y,15 hours,Y,2 hours,2.5 hours,N,NA,N,NA,NA,NA,
+HV_015_10,18-LH-5,HV015_10,P18,6_month,24,left,10,N,N,january,11,2019,1/11/19,female,N,N,24 hours,N,N,NA,Y,12 hours,24 hours,N,NA,N,NA,NA,NA,"""I wear 2 rings all the time. One is leaving a mark on my finger"""
+HV_015_11,18-RH-5,HV015_11,P18,6_month,24,right,11,N,N,january,11,2019,1/11/19,female,N,N,24 hours,N,N,NA,Y,12 hours,24 hours,N,NA,N,NA,NA,NA,"""I wear 2 rings all the time. One is leaving a mark on my finger"""
+HV_015_12,18-SC-5,HV015_12,P18,6_month,24,scalp,12,N,N,january,11,2019,1/11/19,female,N,N,24 hours,N,N,NA,Y,12 hours,24 hours,N,NA,N,NA,NA,NA,"""I wear 2 rings all the time. One is leaving a mark on my finger"""
+HV_015_13,19-LH-5,HV015_13,P19,6_month,24,left,13,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,4 hours,Y,N,NA,N,NA,24 hours,unknown,unknown,unknown,unknown,Y,Hunting trip,"for question pool and or tanning they just put ""Yes, 5 days ago"" not sure if this is in reference to tanning or pool. "
+HV_015_14,19-RH-5,HV015_14,P19,6_month,24,right,14,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,4 hours,Y,N,NA,N,NA,24 hours,unknown,unknown,unknown,unknown,Y,Hunting trip,"for question pool and or tanning they just put ""Yes, 5 days ago"" not sure if this is in reference to tanning or pool. "
+HV_015_15,19-SC-5,HV015_15,P19,6_month,24,scalp,15,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,4 hours,Y,N,NA,N,NA,24 hours,unknown,unknown,unknown,unknown,Y,Hunting trip,"for question pool and or tanning they just put ""Yes, 5 days ago"" not sure if this is in reference to tanning or pool. "
+HV_015_16,20-LH-5,HV015_16,P20,6_month,24,left,16,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,that morning,N,Sometimes,7 days,N,NA,1 day,N,NA,N,NA,NA,NA,"""I have moved"""
+HV_015_18,20-RH-5,HV015_18,P20,6_month,24,right,18,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,that morning,N,Sometimes,7 days,N,NA,1 day,N,NA,N,NA,NA,NA,"""I have moved"""
+HV_015_19,20-SC-5,HV015_19,P20,6_month,24,scalp,19,N,N,january,10,2019,1/10/19,male,"Columbus, NE",N,that morning,N,Sometimes,7 days,N,NA,1 day,N,NA,N,NA,NA,NA,"""I have moved"""
+HV_015_20,EG-LH-1,HV015_20,EMA,T_0,NA,left,20,Y,N,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+HV_015_21,EG-RH-1,HV015_21,EMA,T_0,NA,right,21,Y,N,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,
+HV_015_27,15-RL-5,HV015_27,P15,6_month,24,left,27,N,N,january,11,2019,1/11/19,female,N,N,4 hours,NA,Y,yesterday,Y,2 hours,2 days,unknown,unknown,unknown,unknown,NA,NA,"for question pool and or tanning they just put ""6 days"" not sure if this is in reference to tanning or pool. "
+HV_016_01,22-SC-1,HV016_1,P22,T_0,0,scalp,1,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_016_02,23-SC-1,HV016_2,P23,T_0,0,scalp,2,N,N,july,26,2018,7/26/18,male,N,N,20 min ,Y,Y,couple of months,Y,couple of months,5 - 6 hours,Y,1 month,N,NA,NA,NA,
+HV_016_03,24-SC-1,HV016_3,P24,T_0,0,scalp,3,N,N,august,8,2018,8/8/18,female,N,N,1 hour,N,Y,2 weeks,Y,1 month,this morning,N,NA,N,NA,Y,Dog,
+HV_016_04,25-SC-1,HV016_4,P25,T_0,0,scalp,4,N,N,august,24,2018,8/24/18,female,N,N,this morning,Y,Y,earlier this month,Y,1 - 2 weeks,tuesday morning (8/21),N,NA,N,NA,NA,NA,
+HV_016_05,26-SC-1,HV016_5,P26,T_0,0,scalp,5,N,N,august,27,2018,8/27/18,female,N,N,11:50am today,Y,Y,2 months,Y,3 hours,6:30pm last night,Y,this summer but only once,N,NA,NA,NA,
+HV_016_06,27-SC-1,HV016_6,P27,T_0,0,scalp,6,N,N,august,31,2018,8/31/18,female,N,N,2 hours,N,N,NA,Y,12 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_016_07,28-SC-1,HV016_7,P28,T_0,0,scalp,7,N,N,august,31,2018,8/31/18,female,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Did not fill out the sheet
+HV_016_08,29-SC-1,HV016_8,P29,T_0,0,scalp,8,N,N,september,5,2018,9/5/18,female,N,N,10 minutes,Y,Y,1 week,Y,1 month,1 day,Y,few times in may - july,N,NA,NA,NA,
+HV_016_09,30-SC-1,HV016_9,P30,T_0,0,scalp,9,N,N,september,5,2018,9/5/18,female,N,N,today,Y,N,NA,Y,7 days,2 days,N,NA,N,NA,NA,NA,
+HV_016_10,31-SC-1,HV016_10,P31,T_0,0,scalp,10,N,N,september,5,2018,9/5/18,female,N,N,1 - 2 hours,NA,Y,1 week,Y,1 week,24 hours,N,NA,N,NA,NA,NA,
+HV_016_11,32-SC-1,HV016_11,P32,T_0,0,scalp,11,N,N,september,6,2018,9/6/18,female,North Dakota,N,less than 1 hour,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_016_12,34-SC-1,HV016_12,P34,T_0,0,scalp,12,N,N,september,12,2018,9/12/18,female,N,N,2 hours,Y,Y,1 hour,Y,1 hour,2 hours,N,NA,N,NA,NA,NA,
+HV_016_13,35-SC-1,HV016_13,P35,T_0,0,scalp,13,N,N,september,19,2018,9/19/18,female,N,N,1 hour,NA,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_016_14,36-SC-1,HV016_14,P36,T_0,0,scalp,14,N,N,september,19,2018,9/19/18,female,N,N,30 minutes,NA,N,NA,N,NA,18 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_016_15,37-SC-1,HV016_15,P37,T_0,0,scalp,15,N,N,september,19,2018,9/19/18,female,N,N,3 hours,NA,Y,1 week,Y,4 hours,1.5 days,Y,30 days,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_016_16,38-SC-1,HV016_16,P38,T_0,0,scalp,16,N,N,september,27,2018,9/27/18,female,N,N,couple of hours,N,N,NA,Y,12 hours,2 days,N,NA,N,NA,NA,NA,
+HV_016_18,39-SC-1,HV016_18,P39,T_0,0,scalp,18,N,N,october,12,2018,10/12/18,male,N,N,45 minutes,NA,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_016_19,40-SC-1,HV016_19,P40,T_0,0,scalp,19,N,N,october,12,2018,10/12/18,female,N,N,5 hours,Y,Y,yesterday at 3pm,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_016_20,41-SC-1,HV016_20,P41,T_0,0,scalp,20,N,N,october,18,2018,10/18/18,female,N,N,today (2pm),Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_016_21,42-SC-1,HV016_21,P42,T_0,0,scalp,21,N,N,november,12,2018,11/12/18,male,N,N,3 - 4 hours,N,Y,more than a week,Y,48 hours,4 days,N,NA,N,NA,Y,dogs,
+HV_016_22,43-SC-1,HV016_22,P43,T_0,0,scalp,22,N,N,january,9,2019,1/9/19,female,N,N,7:30am this morning,Y,Y,yesterday,Y,2 days,2 days,N,NA,N,NA,NA,NA,
+HV_016_27,22-RS-1,HV016_27,P22,T_0,0,scalp,27,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_017_01,22-SC-2,HV017_1,P22,2_week,2,scalp,1,N,N,august,3,2018,8/3/18,male,N,N,0.5 hour,N,N,NA,N,NA,0.5 hour,N,NA,N,NA,NA,NA,
+HV_017_02,23-SC-2,HV017_2,P23,2_week,2,scalp,2,N,N,august,8,2018,8/8/18,male,N,N,1 hour,Y,Y,1 day,Y,18-May,a few hours,Y,1 month,N,NA,NA,NA,
+HV_017_03,24-SC-2,HV017_3,P24,2_week,2,scalp,3,N,N,august,22,2018,8/22/18,female,N,N,this morning,N,Y,1 month,Y,couple of months,this morning,N,NA,N,NA,Y,Dog,
+HV_017_04,25-SC-2,HV017_4,P25,2_week,2,scalp,4,N,N,september,7,2018,9/7/18,female,N,N,this morning,Y,N,NA,Y,2 weeks,4 days,N,NA,N,NA,NA,NA,
+HV_017_05,26-SC-2,HV017_5,P26,2_week,2,scalp,5,N,N,september,10,2018,9/10/18,female,N,N,4 hours,Y,Y,12 hours,Y,4 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_017_06,27-SC-2,HV017_6,P27,2_week,2,scalp,6,N,N,september,14,2018,9/14/18,female,N,N,6 hours,NA,N,NA,N,NA,6 hours,N,NA,N,NA,NA,NA,
+HV_017_07,28-SC-2,HV017_7,P28,2_week,2,scalp,7,N,N,september,17,2018,9/17/18,female,N,N,this morning (8am),N,N,NA,N,NA,this morning (8am),Y,yesterday,N,NA,NA,NA,
+HV_017_08,29-SC-2,HV017_8,P29,2_week,2,scalp,8,N,N,september,19,2018,9/19/18,female,N,N,1 - 2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_017_09,30-SC-2,HV017_9,P30,2_week,2,scalp,9,N,N,september,19,2018,9/19/18,female,N,N,2 hours,Y,N,NA,Y,4 hours,7 hours,N,NA,N,NA,NA,NA,
+HV_017_10,31-SC-2,HV017_10,P31,2_week,2,scalp,10,N,N,september,19,2018,9/19/18,female,N,N,2 hours,NA,N,NA,Y,1 day,24 hours,N,NA,N,NA,NA,NA,
+HV_017_11,32-SC-2,HV017_11,P32,2_week,2,scalp,11,N,N,september,20,2018,9/20/18,female,N,N,4 hours,Y,Y,24 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_017_12,34-SC-2,HV017_12,P34,2_week,2,scalp,12,N,N,september,26,2018,9/26/18,female,N,N,1.5 hours,N,Y,12 hours,Y,less than 1 day,1.5 hours,N,NA,N,NA,NA,NA,
+HV_017_13,35-SC-2,HV017_13,P35,2_week,2,scalp,13,N,N,october,3,2018,10/3/18,female,N,N,3 hour,Y,N,NA,Y,12 hours,3 days,N,NA,N,NA,Y,cattle and dogs,
+HV_017_14,36-SC-2,HV017_14,P36,2_week,2,scalp,14,N,N,october,2,2018,10/2/18,female,N,N,45 minutes,N,Y,16 hours,N,NA,14 hours,N,NA,N,NA,Y,"cattle, dogs, and sheep",
+HV_017_15,37-SC-2,HV017_15,P37,2_week,2,scalp,15,N,N,october,3,2018,10/3/18,female,"Mead, NE",N,2 hours,Y,N,NA,Y,12 hours,1 day,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_017_16,38-SC-2,HV017_16,P38,2_week,2,scalp,16,N,N,october,12,2018,10/12/18,female,N,N,1 hour,N,N,NA,Y,2 days,2 days,N,NA,N,NA,NA,NA,
+HV_017_18,39-SC-2,HV017_18,P39,2_week,2,scalp,18,N,N,october,12,2018,10/12/18,male,N,N,45 minutes,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_017_19,40-SC-2,HV017_19,P40,2_week,2,scalp,19,N,N,october,26,2018,10/26/18,female,N,N,this morning (8am),N,Y,5 days,N,NA,midnight,N,NA,N,NA,NA,NA,
+HV_017_20,41-SC-2,HV017_20,P41,2_week,2,scalp,20,N,N,november,1,2018,11/1/18,female,N,N,this afternoon around 3pm,N,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_017_21,42-SC-2,HV017_21,P42,2_week,2,scalp,21,N,N,november,26,2018,11/26/18,male,N,N,1 hour,N,N,NA,Y,1 week,2 days,N,NA,N,NA,Y,dogs,
+HV_017_22,43-SC-2,HV017_22,P43,2_week,2,scalp,22,N,N,january,23,2019,1/23/19,female,N,N,3 hours,Y,Y,in days,Y,12 hours,2 days,N,NA,N,NA,NA,NA,
+HV_017_27,22-RS-2,HV017_27,P22,2_week,2,scalp,27,N,N,august,3,2018,8/3/18,male,N,N,0.5 hour,N,N,NA,N,NA,0.5 hour,N,NA,N,NA,NA,NA,
+HV_018_01,22-SC-3,HV018_1,P22,1_month,4,scalp,1,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_018_02,23-SC-3,HV018_2,P23,1_month,4,scalp,2,N,N,august,27,2018,8/27/18,male,N,N,3 hours,Y,Y,end of july first week of august,Y,may,5 hours,Y,may/june,N,NA,NA,NA,
+HV_018_03,24-SC-3,HV018_3,P24,1_month,4,scalp,3,N,N,may,6,2019,5/6/19,female,N,N,1 hour,Y,Y,1 week,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_018_04,25-SC-3,HV018_4,P25,1_month,4,scalp,4,N,N,september,24,2018,9/24/18,female,N,N,this morning,NA,Y,1 - 2 weeks,N,NA,5 days,N,NA,N,NA,NA,NA,
+HV_018_05,26-SC-3,HV018_5,P26,1_month,4,scalp,5,N,N,september,28,2018,9/28/18,female,N,N,4 hours,Y,Y,14 hours,Y,3 hours,13 hours,N,NA,N,NA,NA,NA,washing hands more often due to spread of germs
+HV_018_06,27-SC-3,HV018_6,P27,1_month,4,scalp,6,N,N,october,1,2018,10/1/18,female,N,N,5 hours,N,N,NA,Y,4 hours,5 hours,N,NA,N,NA,NA,NA,
+HV_018_07,28-SC-3,HV018_7,P28,1_month,4,scalp,7,N,N,september,28,2018,9/28/18,female,N,N,2 hours,NA,N,NA,N,NA,2 hours,Y,last weekend (saturday),N,NA,NA,NA,
+HV_018_08,29-SC-3,HV018_8,P29,1_month,4,scalp,8,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_018_09,30-SC-3,HV018_9,P30,1_month,4,scalp,9,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,Y,5 hours,72 hours,N,NA,N,NA,NA,NA,
+HV_018_10,31-SC-3,HV018_10,P31,1_month,4,scalp,10,N,N,october,5,2018,10/5/18,female,N,N,1 hour,NA,N,NA,N,NA,24 - 36 hours,N,NA,N,NA,NA,NA,
+HV_018_11,32-SC-3,HV018_11,P32,1_month,4,scalp,11,N,N,october,8,2018,10/8/18,female,N,N,30 minutes,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_018_12,34-SC-3,HV018_12,P34,1_month,4,scalp,12,N,N,october,11,2018,10/11/18,female,N,N,2 hours,NA,Y,3 hours,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_018_13,35-SC-3,HV018_13,P35,1_month,4,scalp,13,N,N,october,19,2018,10/19/18,female,N,N,12 hours,Y,N,NA,Y,5 days,5 days,N,NA,N,NA,Y,cattle and dogs,
+HV_018_14,36-SC-3,HV018_14,P36,1_month,4,scalp,14,N,N,october,19,2018,10/19/18,female,N,N,2 hours,Y,N,NA,N,NA,2 hours,N,NA,N,NA,Y,cattle and dogs,face wash with benzol peroxide
+HV_018_15,37-SC-3,HV018_15,P37,1_month,4,scalp,15,N,N,october,18,2018,10/18/18,female,N,N,this morning,N,N,NA,Y,3 hours,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab. recently dyed/colored hair
+HV_018_16,38-SC-3,HV018_16,P38,1_month,4,scalp,16,N,N,october,26,2018,10/26/18,female,N,N,1 hour,NA,N,NA,Y,48 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_018_18,39-SC-3,HV018_18,P39,1_month,4,scalp,18,N,N,november,15,2018,11/15/18,male,N,N,3 hours,NA,N,NA,N,NA,16 hours,N,NA,N,NA,NA,NA,
+HV_018_19,40-SC-3,HV018_19,P40,1_month,4,scalp,19,N,N,november,12,2018,11/12/18,female,N,N,11:30am today,NA,N,NA,N,NA,yesterday at noon,N,NA,N,NA,NA,NA,
+HV_018_20,41-SC-3,HV018_20,P41,1_month,4,scalp,20,N,N,november,19,2018,11/19/18,female,N,N,noon today,N,N,NA,N,NA,6 this morning,N,NA,N,NA,NA,NA,
+HV_018_21,42-SC-3,HV018_21,P42,1_month,4,scalp,21,N,N,december,17,2018,12/17/18,male,washinton DC and Chicago,N,4 hours,N,Y,2 weeks,Y,2 days,1 day,N,NA,N,NA,Y,dogs,
+HV_018_22,43-SC-3,HV018_22,P43,1_month,4,scalp,22,N,N,march,6,2019,3/6/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_018_27,22-RS-3,HV018_27,P22,1_month,4,scalp,27,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_019_01,22-SC-4,HV019_1,P22,3_month,12,scalp,1,N,N,november,2,2018,11/2/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_019_02,23-SC-4,HV019_2,P23,3_month,12,scalp,2,N,N,october,25,2018,10/25/18,male ,"Grand Island, NE",N,1 hour,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,cleaned a lot with clorox recently 
+HV_019_03,24-SC-5,HV019_3,P24,6_month,12,scalp,3,N,N,march,4,2019,3/4/19,female,N,N,2 hours,Y,Y,1 day,Y,this morning,this morning,N,NA,N,NA,Y,Dog,return from Ab hold. Will actually be collection 5
+HV_019_04,25-SC-4,HV019_4,P25,3_month,12,scalp,4,N,N,november,26,2018,11/26/18,female,N,N,1 hour,N,Y,1 week,Y,2 days,4 days,N,NA,N,NA,NA,NA,
+HV_019_05,26-SC-4,HV019_5,P26,3_month,12,scalp,5,N,N,november,28,2018,11/28/18,female,new grocery store,N,4 hours,NA,Y,2 weeks,Y,3.5 hours,14 hours,N,NA,N,NA,NA,NA,been applying more lotion to skin because of dry air
+HV_019_06,27-SC-4,HV019_6,P27,3_month,12,scalp,6,N,N,november,30,2018,11/30/18,female,N,N,4.75 hours,NA,N,NA,Y,4.5 hours,4.75 hours,N,NA,N,NA,NA,NA,
+HV_019_07,28-SC-4,HV019_7,P28,3_month,12,scalp,7,N,N,november,30,2018,11/30/18,female,N,N,this morning,N,N,NA,N,NA,this morning,N,NA,N,NA,NA,NA,
+HV_019_08,29-SC-4,HV019_8,P29,3_month,12,scalp,8,N,N,december,5,2018,12/5/18,female,N,N,2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_019_09,30-SC-4,HV019_9,P30,3_month,12,scalp,9,N,N,december,5,2018,12/5/18,female,N,N,2 hours,NA,N,NA,Y,7 hours,4 hours,N,NA,Y,1 hour,NA,NA,tanning bed - red light therapy (1 hour ago)
+HV_019_10,31-SC-4,HV019_10,P31,3_month,12,scalp,10,N,N,december,6,2018,12/6/18,female,N,N,10 minutes,NA,N,NA,Y,24 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_019_11,32-SC-4,HV019_11,P32,3_month,12,scalp,11,N,N,december,6,2018,12/6/18,female,N,N,30 minutes,Y,Y,4 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_019_12,34-SC-4,HV019_12,P34,3_month,12,scalp,12,N,N,december,12,2018,12/12/18,female,N,N,2 hours,NA,Y,less than 12 hours,Y,2 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_019_13,35-SC-4,HV019_13,P35,3_month,12,scalp,13,N,N,january,9,2019,1/9/19,female,N,N,30 minutes,Y,N,NA,Y,12 hours,24 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_019_14,36-SC-4,HV019_14,P36,3_month,12,scalp,14,N,N,december,17,2018,12/17/18,female,N,N,4 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_019_15,37-SC-4,HV019_15,P37,3_month,12,scalp,15,N,N,december,17,2018,12/17/18,female,N,N,5 hours,NA,N,NA,Y,7 hours,7 hours,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_019_16,38-SC-4,HV019_16,P38,3_month,12,scalp,16,N,N,january,9,2019,1/9/19,female,N,Mexico,1 hour,N,N,NA,Y,24 hours,2 days,Y,5 days,N,NA,NA,NA,
+HV_019_18,39-SC-4,HV019_18,P39,3_month,12,scalp,18,N,N,january,8,2019,1/8/19,male,N,N,45 minutes,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_019_19,40-SC-4,HV019_19,P40,3_month,12,scalp,19,N,N,january,10,2019,1/10/19,female,"Tucson, AZ",Costa Rica and Nicaragua,10:30,N,N,NA,Y,11 days,this morning (10am),Y,8 days,N,NA,NA,NA,
+HV_019_20,41-SC-4,HV019_20,P41,3_month,12,scalp,20,N,N,january,9,2019,1/9/19,female,N,N,noon today,N,N,NA,N,NA,yesterday (6pm),N,NA,N,NA,NA,NA,
+HV_019_21,42-SC-4,HV019_21,P42,3_month,12,scalp,21,N,N,feburary,15,2019,2/15/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,
+HV_019_22,43-SC-4,HV019_22,P43,3_month,12,scalp,22,N,N,april,8,2019,4/8/19,female,N,N,1 hour,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_019_27,22-RS-4,HV019_27,P22,3_month,12,scalp,27,N,N,august,30,2018,8/30/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_020_01,22-SC-5,HV020_1,P22,6_month,24,scalp,1,N,N,january,23,2019,1/23/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_020_02,23-SC-5,HV020_2,P23,6_month,24,scalp,2,N,N,january,28,2019,1/28/19,male,N,N,4 hours,Y,Y,a couple of weeks ago,Y,a few days ago,5 - 6 hours,N,NA,N,NA,NA,NA,
+HV_020_03,25-SC-5,HV020_3,P25,6_month,24,scalp,3,N,N,feburary,25,2019,2/25/19,female,N,N,this morning,N,Y,a couple of weeks ago,Y,a few days ago,last night,N,NA,N,NA,NA,NA,started immunosuppressant back on january 1st
+HV_020_04,26-SC-5,HV020_4,P26,6_month,24,scalp,4,N,N,march,6,2019,3/6/19,female,N,N,1.5 hours,Y,Y,1 week,Y,1 hour,10 hours,N,NA,N,NA,Y,livestock,been applying more lotion to hands because of dry air. have also been washing hands more often becuase I have been working with livestock. 
+HV_020_05,27-SC-5,HV020_5,P27,6_month,24,scalp,5,N,N,feburary,28,2019,2/28/19,female,"Springfield, MO",N,4 hours,NA,N,NA,Y,4 hours,4 hours,N,NA,N,NA,NA,NA,
+HV_020_06,28-SC-5,HV020_6,P28,6_month,24,scalp,6,N,N,november,30,2018,11/30/18,female,"Baltimore, MD",N,1 hour,N,N,NA,N,NA,7am this morning,Y,2 weeks,N,NA,NA,NA,
+HV_020_07,29-SC-5,HV020_7,P29,6_month,24,scalp,7,N,N,march,4,2019,3/4/19,female,N,N,0.5 hour,NA,N,NA,N,NA,1.5 days,N,NA,N,NA,NA,NA,
+HV_020_08,30-SC-5,HV020_8,P30,6_month,24,scalp,8,N,N,march,8,2019,3/8/19,female,N,N,2 hours,N,N,NA,Y,24 hours,3 days,N,NA,Y,48 hours,NA,NA,red light tanning and dyed hair 3 days ago
+HV_020_09,32-SC-5,HV020_9,P32,6_month,24,scalp,9,N,N,march,5,2019,3/5/19,female,N,N,30 minutes,Y,Y,1 day,N,NA,11 hours,N,NA,N,NA,NA,NA,
+HV_020_10,33-SC-1,HV020_10,P33,T_0,0,scalp,10,N,N,september,10,2018,9/10/18,female,campfire,N,3 hours,N,N,NA,Y,this morning,last evening (9pm),N,NA,N,NA,NA,NA,work in an anatomy lab with models that many people touch.
+HV_020_11,34-SC-5,HV020_11,P34,6_month,24,scalp,11,N,N,march,11,2019,3/11/19,female,N,N,2 hours,NA,Y,less than 12 hours,Y,12 hours,15 hours,N,NA,N,NA,NA,NA,
+HV_020_12,35-SC-5,HV020_12,P35,6_month,24,scalp,12,N,N,march,19,2019,3/19/19,female,N,N,2 hours,Y,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_020_13,36-SC-5,HV020_13,P36,6_month,24,scalp,13,N,N,march,20,2019,3/20/19,female,N,N,2 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_020_14,37-SC-5,HV020_14,P37,6_month,24,scalp,14,N,N,march,19,2019,3/19/19,female,N,N,1 hour,N,N,NA,Y,1 hour,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_020_15,38-SC-5,HV020_15,P38,6_month,24,scalp,15,N,N,march,28,2019,3/28/19,female,Missouri,N,20 minutes,N,N,NA,Y,24 hours,48 hours,N,NA,N,NA,NA,NA,
+HV_020_16,39-SC-5,HV020_16,P39,6_month,24,scalp,16,N,N,march,28,2019,3/28/19,male,N,N,2 hours,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_020_18,40-SC-5,HV020_18,P40,6_month,24,scalp,18,N,N,april,11,2019,4/11/19,female,N,N,4 hours,N,Y,18 hours,Y,the last day of trial testimony,4 hours,N,NA,N,NA,NA,NA,
+HV_020_19,41-SC-5,HV020_19,P41,6_month,24,scalp,19,N,N,april,18,2019,4/18/19,female,"Columbia, Missouri",N,2 hours,NA,N,NA,N,NA,yesterday morning,Y,2 days,N,NA,NA,NA,
+HV_020_20,42-SC-5,HV020_20,P42,6_month,24,scalp,20,N,N,may,13,2019,5/13/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,gardening with hands in soil
+HV_020_21,43-SC-5,HV020_21,P43,6_month,24,scalp,21,N,N,july,9,2019,7/9/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_020_22,44-SC-5,HV020_22,P44,6_month,24,scalp,22,N,N,july,12,2019,7/12/19,female,N,N,4 hours,N,N,NA,Y,this morning,2 days,N,NA,N,NA,NA,NA,no pets no tobacco
+HV_020_27,22-RS-5,HV020_27,P22,6_month,24,scalp,27,N,N,august,1,2019,8/1/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_021_01,24-SC-4,HV021_1,P24,3_month,12,scalp,1,N,N,august,7,2019,8/7/19,female,N,N,this morning,Y,Y,couple of weeks,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_021_02,22-LH-1,HV021_2,P22,T_0,0,left,2,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_021_03,23-LH-1,HV021_3,P23,T_0,0,left,3,N,N,july,26,2018,7/26/18,male,N,N,20 min ,Y,Y,couple of months,Y,couple of months,5 - 6 hours,Y,1 month,N,NA,NA,NA,
+HV_021_04,24-LH-1,HV021_4,P24,T_0,0,left,4,N,N,august,8,2018,8/8/18,female,N,N,1 hour,N,Y,2 weeks,Y,1 month,this morning,N,NA,N,NA,Y,Dog,
+HV_021_05,25-LH-1,HV021_5,P25,T_0,0,left,5,N,N,august,24,2018,8/24/18,female,N,N,this morning,Y,Y,earlier this month,Y,1 - 2 weeks,tuesday morning (8/21),N,NA,N,NA,NA,NA,
+HV_021_06,26-LH-1,HV021_6,P26,T_0,0,left,6,N,N,august,27,2018,8/27/18,female,N,N,11:50am today,Y,Y,2 months,Y,3 hours,6:30pm last night,Y,this summer but only once,N,NA,NA,NA,
+HV_021_07,27-LH-1,HV021_7,P27,T_0,0,left,7,N,N,august,31,2018,8/31/18,female,N,N,2 hours,N,N,NA,Y,12 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_021_08,28-LH-1,HV021_8,P28,T_0,0,left,8,N,N,august,31,2018,8/31/18,female,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Did not fill out the sheet
+HV_021_09,29-LH-1,HV021_9,P29,T_0,0,left,9,N,N,september,5,2018,9/5/18,female,N,N,10 minutes,Y,Y,1 week,Y,1 month,1 day,Y,few times in may - july,N,NA,NA,NA,
+HV_021_10,30-LH-1,HV021_10,P30,T_0,0,left,10,N,N,september,5,2018,9/5/18,female,N,N,today,Y,N,NA,Y,7 days,2 days,N,NA,N,NA,NA,NA,
+HV_021_11,31-LH-1,HV021_11,P31,T_0,0,left,11,N,N,september,5,2018,9/5/18,female,N,N,1 - 2 hours,NA,Y,1 week,Y,1 week,24 hours,N,NA,N,NA,NA,NA,
+HV_021_12,32-LH-1,HV021_12,P32,T_0,0,left,12,N,N,september,6,2018,9/6/18,female,North Dakota,N,less than 1 hour,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_021_13,33-LH-1,HV021_13,P33,T_0,0,left,13,N,N,september,10,2018,9/10/18,female,campfire,N,3 hours,N,N,NA,Y,this morning,last evening (9pm),N,NA,N,NA,NA,NA,work in an anatomy lab with models that many people touch.
+HV_021_14,34-LH-1,HV021_14,P34,T_0,0,left,14,N,N,september,12,2018,9/12/18,female,N,N,2 hours,Y,Y,1 hour,Y,1 hour,2 hours,N,NA,N,NA,NA,NA,
+HV_021_15,35-LH-1,HV021_15,P35,T_0,0,left,15,N,N,september,19,2018,9/19/18,female,N,N,1 hour,NA,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_021_16,36-LH-1,HV021_16,P36,T_0,0,left,16,N,N,september,19,2018,9/19/18,female,N,N,30 minutes,NA,N,NA,N,NA,18 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_021_18,37-LH-1,HV021_18,P37,T_0,0,left,18,N,N,september,19,2018,9/19/18,female,N,N,3 hours,NA,Y,1 week,Y,4 hours,1.5 days,Y,30 days,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_021_19,38-LH-1,HV021_19,P38,T_0,0,left,19,N,N,september,27,2018,9/27/18,female,N,N,couple of hours,N,N,NA,Y,12 hours,2 days,N,NA,N,NA,NA,NA,
+HV_021_20,39-LH-1,HV021_20,P39,T_0,0,left,20,N,N,september,27,2018,9/27/18,male,N,N,45 minutes,NA,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_021_21,40-LH-1,HV021_21,P40,T_0,0,left,21,N,N,october,12,2018,10/12/18,female,N,N,5 hours,Y,Y,yesterday at 3pm,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_021_22,41-LH-1,HV021_22,P41,T_0,0,left,22,N,N,october,18,2018,10/18/18,female,N,N,today (2pm),Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_021_27,22-RL-1,HV021_27,P22,T_0,0,left,27,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_022_01,22-LH-2,HV022_1,P22,2_week,2,left,1,N,N,august,3,2018,8/3/18,male,N,N,0.5 hour,N,N,NA,N,NA,0.5 hour,N,NA,N,NA,NA,NA,
+HV_022_02,23-LH-2,HV022_2,P23,2_week,2,left,2,N,N,august,8,2018,8/8/18,male,N,N,1 hour,Y,Y,1 day,Y,18-May,a few hours,Y,1 month,N,NA,NA,NA,
+HV_022_03,24-LH-2,HV022_3,P24,2_week,2,left,3,N,N,august,22,2018,8/22/18,female,N,N,this morning,N,Y,month,Y,couple of months,this morning,N,NA,N,NA,Y,Dog,
+HV_022_04,25-LH-2,HV022_4,P25,2_week,2,left,4,N,N,september,7,2018,9/7/18,female,N,N,this morning,Y,N,NA,Y,2 weeks,4 days,N,NA,N,NA,NA,NA,
+HV_022_05,26-LH-2,HV022_5,P26,2_week,2,left,5,N,N,september,10,2018,9/10/18,female,N,N,4 hours,Y,Y,12 hours,Y,4 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_022_06,27-LH-2,HV022_6,P27,2_week,2,left,6,N,N,september,14,2018,9/14/18,female,N,N,6 hours,NA,N,NA,N,NA,6 hours,N,NA,N,NA,NA,NA,
+HV_022_07,28-LH-2,HV022_7,P28,2_week,2,left,7,N,N,september,17,2018,9/17/18,female,N,N,this morning (8am),N,N,NA,N,NA,this morning (8am),Y,yesterday,N,NA,NA,NA,
+HV_022_08,29-LH-2,HV022_8,P29,2_week,2,left,8,N,N,september,19,2018,9/19/18,female,N,N,1 - 2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_022_09,30-LH-2,HV022_9,P30,2_week,2,left,9,N,N,september,19,2018,9/19/18,female,N,N,2 hours,Y,N,NA,Y,4 hours,7 hours,N,NA,N,NA,NA,NA,
+HV_022_10,31-LH-2,HV022_10,P31,2_week,2,left,10,N,N,september,19,2018,9/19/18,female,N,N,2 hours,NA,N,NA,Y,1 day,24 hours,N,NA,N,NA,NA,NA,
+HV_022_11,32-LH-2,HV022_11,P32,2_week,2,left,11,N,N,september,20,2018,9/20/18,female,N,N,4 hours,Y,Y,24 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_022_12,34-LH-2,HV022_12,P34,2_week,2,left,12,N,N,september,26,2018,9/26/18,female,N,N,1.5 hours,N,Y,12 hours,Y,less than 1 day,1.5 hours,N,NA,N,NA,NA,NA,
+HV_022_13,35-LH-2,HV022_13,P35,2_week,2,left,13,N,N,october,3,2018,10/3/18,female,N,N,3 hour,Y,N,NA,Y,12 hours,3 days,N,NA,N,NA,Y,cattle and dogs,
+HV_022_14,36-LH-2,HV022_14,P36,2_week,2,left,14,N,N,october,2,2018,10/2/18,female,N,N,45 minutes,N,Y,16 hours,N,NA,14 hours,N,NA,N,NA,Y,"cattle, dogs, and sheep",
+HV_022_15,37-LH-2,HV022_15,P37,2_week,2,left,15,N,N,october,3,2018,10/3/18,female,"Mead, NE",N,2 hours,Y,N,NA,Y,12 hours,1 day,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_022_16,38-LH-2,HV022_16,P38,2_week,2,left,16,N,N,october,12,2018,10/12/18,female,N,N,1 hour,N,N,NA,Y,2 days,2 days,N,NA,N,NA,NA,NA,
+HV_022_18,39-LH-2,HV022_18,P39,2_week,2,left,18,N,N,october,12,2018,10/12/18,male,N,N,45 minutes,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_022_19,40-LH-2,HV022_19,P40,2_week,2,left,19,N,N,october,26,2018,10/26/18,female,N,N,this morning (8am),N,Y,5 days,N,NA,midnight,N,NA,N,NA,NA,NA,
+HV_022_20,41-LH-2,HV022_20,P41,2_week,2,left,20,N,N,november,1,2018,11/1/18,female,N,N,this afternoon around 3pm,N,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_022_21,42-LH-2,HV022_21,P42,2_week,2,left,21,N,N,november,26,2018,11/26/18,male,N,N,1 hour,N,N,NA,Y,1 week,2 days,N,NA,N,NA,Y,dogs,
+HV_022_22,43-LH-2,HV022_22,P43,2_week,2,left,22,N,N,january,23,2019,1/23/19,female,N,N,3 hours,Y,Y,in days,Y,12 hours,2 days,N,NA,N,NA,NA,NA,
+HV_022_27,22-RL-2,HV022_27,P22,2_week,2,left,27,N,N,july,20,2018,7/20/18,male,N,N,0.5 hour,N,N,NA,N,NA,0.5 hour,N,NA,N,NA,NA,NA,
+HV_023_01,22-LH-3,HV023_1,P22,1_month,4,left,1,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_023_02,23-LH-3,HV023_2,P23,1_month,4,left,2,N,N,august,27,2018,8/27/18,male,N,N,3 hours,Y,Y,end of july first week of august,Y,may,5 hours,Y,may/june,N,NA,NA,NA,
+HV_023_03,24-LH-3,HV023_3,P24,1_month,4,left,3,N,N,may,6,2019,5/6/19,female,N,N,1 hour,Y,Y,1 week,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_023_04,25-LH-3,HV023_4,P25,1_month,4,left,4,N,N,september,24,2018,9/24/18,female,N,N,this morning,NA,Y,1 - 2 weeks,N,NA,5 days,N,NA,N,NA,NA,NA,
+HV_023_05,26-LH-3,HV023_5,P26,1_month,4,left,5,N,N,september,28,2018,9/28/18,female,N,N,4 hours,Y,Y,14 hours,Y,3 hours,13 hours,N,NA,N,NA,NA,NA,washing hands more often due to spread of germs
+HV_023_06,27-LH-3,HV023_6,P27,1_month,4,left,6,N,N,october,1,2018,10/1/19,female,N,N,5 hours,N,N,NA,Y,4 hours,5 hours,N,NA,N,NA,NA,NA,
+HV_023_07,28-LH-3,HV023_7,P28,1_month,4,left,7,N,N,september,28,2018,9/28/18,female,N,N,2 hours,NA,N,NA,N,NA,2 hours,Y,last weekend (saturday),N,NA,NA,NA,
+HV_023_08,29-LH-3,HV023_8,P29,1_month,4,left,8,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_023_09,30-LH-3,HV023_9,P30,1_month,4,left,9,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,Y,5 hours,72 hours,N,NA,N,NA,NA,NA,
+HV_023_10,31-LH-3,HV023_10,P31,1_month,4,left,10,N,N,october,5,2018,10/5/18,female,N,N,1 hour,NA,N,NA,N,NA,24 - 36 hours,N,NA,N,NA,NA,NA,
+HV_023_11,32-LH-3,HV023_11,P32,1_month,4,left,11,N,N,october,8,2018,10/8/18,female,N,N,30 minutes,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_023_12,34-LH-3,HV023_12,P34,1_month,4,left,12,N,N,october,11,2018,10/11/18,female,N,N,2 hours,NA,Y,3 hours,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_023_13,35-LH-3,HV023_13,P35,1_month,4,left,13,N,N,october,19,2018,10/19/18,female,N,N,12 hours,Y,N,NA,Y,5 days,5 days,N,NA,N,NA,Y,cattle and dogs,
+HV_023_14,36-LH-3,HV023_14,P36,1_month,4,left,14,N,N,october,19,2018,10/19/18,female,N,N,2 hours,Y,N,NA,N,NA,2 hours,N,NA,N,NA,Y,cattle and dogs,face wash with benzol peroxide
+HV_023_15,37-LH-3,HV023_15,P37,1_month,4,left,15,N,N,october,18,2018,10/18/18,female,N,N,this morning,N,N,NA,Y,3 hours,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab. recently dyed/colored hair
+HV_023_16,38-LH-3,HV023_16,P38,1_month,4,left,16,N,N,october,26,2018,10/26/18,female,N,N,1 hour,NA,N,NA,Y,48 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_023_18,39-LH-3,HV023_18,P39,1_month,4,left,18,N,N,november,15,2018,11/15/18,male,N,N,3 hours,NA,N,NA,N,NA,16 hours,N,NA,N,NA,NA,NA,
+HV_023_19,40-LH-3,HV023_19,P40,1_month,4,left,19,N,N,november,12,2018,11/12/18,female,N,N,11:30am today,NA,N,NA,N,NA,yesterday at noon,N,NA,N,NA,NA,NA,
+HV_023_20,41-LH-3,HV023_20,P41,1_month,4,left,20,N,N,november,19,2018,11/19/18,female,N,N,noon today,N,N,NA,N,NA,6 this morning,N,NA,N,NA,NA,NA,
+HV_023_21,42-LH-3,HV023_21,P42,1_month,4,left,21,N,N,december,17,2018,12/17/18,male,washinton DC and Chicago,N,4 hours,N,Y,2 weeks,Y,2 days,1 day,N,NA,N,NA,Y,dogs,
+HV_023_22,43-LH-3,HV023_22,P43,1_month,4,left,22,N,N,march,6,2019,3/6/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_023_27,22-RL-3,HV023_27,P22,1_month,4,left,27,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_024_01,22-LH-4,HV024_1,P22,3_month,12,left,1,N,N,november,2,2018,11/2/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_024_02,23-LH-4,HV024_2,P23,3_month,12,left,2,N,N,october,25,2018,10/25/18,male ,"Grand Island, NE",N,1 hour,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,cleaned a lot with clorox recently 
+HV_024_03,24-LH-4,HV024_3,P24,3_month,12,left,3,N,N,august,7,2019,8/7/19,female,N,N,this morning,Y,Y,couple of weeks,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_024_04,25-LH-4,HV024_4,P25,3_month,12,left,4,N,N,november,26,2018,11/26/18,female,N,N,1 hour,N,Y,1 week,Y,2 days,4 days,N,NA,N,NA,NA,NA,
+HV_024_05,26-LH-4,HV024_5,P26,3_month,12,left,5,N,N,november,28,2018,11/28/18,female,new grocery store,N,4 hours,NA,Y,2 weeks,Y,3.5 hours,14 hours,N,NA,N,NA,NA,NA,been applying more lotion to skin because of dry air
+HV_024_06,27-LH-4,HV024_6,P27,3_month,12,left,6,N,N,november,30,2018,11/30/18,female,N,N,4.75 hours,NA,N,NA,Y,4.5 hours,4.75 hours,N,NA,N,NA,NA,NA,
+HV_024_07,28-LH-4,HV024_7,P28,3_month,12,left,7,N,N,november,30,2018,11/30/18,female,N,N,this morning,N,N,NA,N,NA,this morning,N,NA,N,NA,NA,NA,
+HV_024_08,29-LH-4,HV024_8,P29,3_month,12,left,8,N,N,december,5,2018,12/5/18,female,N,N,2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_024_09,30-LH-4,HV024_9,P30,3_month,12,left,9,N,N,december,5,2018,12/5/18,female,N,N,2 hours,NA,N,NA,Y,7 hours,4 hours,N,NA,Y,1 hour,NA,NA,tanning bed - red light therapy (1 hour ago)
+HV_024_10,31-LH-4,HV024_10,P31,3_month,12,left,10,N,N,december,6,2018,12/6/18,female,N,N,10 minutes,NA,N,NA,Y,24 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_024_11,32-LH-4,HV024_11,P32,3_month,12,left,11,N,N,december,5,2018,12/5/18,female,N,N,30 minutes,Y,Y,4 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_024_12,34-LH-4,HV024_12,P34,3_month,12,left,12,N,N,december,12,2018,12/12/18,female,N,N,2 hours,NA,Y,less than 12 hours,Y,2 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_024_13,35-LH-4,HV024_13,P35,3_month,12,left,13,N,N,january,9,2019,1/9/19,female,N,N,30 minutes,Y,N,NA,Y,12 hours,24 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_024_14,36-LH-4,HV024_14,P36,3_month,12,left,14,N,N,december,17,2018,12/17/18,female,N,N,4 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_024_15,37-LH-4,HV024_15,P37,3_month,12,left,15,N,N,december,17,2018,12/17/18,female,N,N,5 hours,NA,N,NA,Y,7 hours,7 hours,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_024_16,38-LH-4,HV024_16,P38,3_month,12,left,16,N,N,january,9,2019,1/9/19,female,N,Mexico,1 hour,N,N,NA,Y,24 hours,2 days,Y,5 days,N,NA,NA,NA,
+HV_024_18,39-LH-4,HV024_18,P39,3_month,12,left,18,N,N,january,8,2019,1/8/19,male,N,N,45 minutes,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_024_19,40-LH-4,HV024_19,P40,3_month,12,left,19,N,N,january,10,2019,1/10/19,female,"Tucson, AZ",Costa Rica and Nicaragua,10:30,N,N,NA,Y,11 days,this morning (10am),Y,8 days,N,NA,NA,NA,
+HV_024_20,41-LH-4,HV024_20,P41,3_month,12,left,20,N,N,january,9,2019,1/9/19,female,N,N,noon today,N,N,NA,N,NA,yesterday (6pm),N,NA,N,NA,NA,NA,
+HV_024_21,42-LH-4,HV024_21,P42,3_month,12,left,21,N,N,feburary,15,2019,2/15/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,
+HV_024_22,43-LH-4,HV024_22,P43,3_month,12,left,22,N,N,april,8,2019,4/8/19,female,N,N,1 hour,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_024_27,22-RL-4,HV024_27,P22,3_month,12,left,27,N,N,november,2,2018,11/2/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_025_01,43-LH-1,HV025_1,P43,T_0,0,left,1,N,N,january,9,2019,1/9/19,female,N,N,7:30am this morning,Y,Y,yesterday,Y,2 days,2 days,N,NA,N,NA,NA,NA,
+HV_025_02,22-LH-5,HV025_2,P22,6_month,24,left,2,N,N,january,23,2019,1/23/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_025_03,23-LH-5,HV025_3,P23,6_month,24,left,3,N,N,january,28,2019,1/28/19,male,N,N,4 hours,Y,Y,a couple of weeks ago,Y,a few days ago,5 - 6 hours,N,NA,N,NA,NA,NA,
+HV_025_04,24-LH-5,HV025_4,P24,6_month,24,left,4,N,N,april,4,2019,4/4/19,female,N,N,2 hours,Y,Y,1 day,Y,this morning,this morning,N,NA,N,NA,Y,Dog,return from Ab hold. Will actually be collection 5
+HV_025_05,25-LH-5,HV025_5,P25,6_month,24,left,5,N,N,feburary,25,2019,2/25/19,female,N,N,this morning,N,Y,a couple of weeks ago,Y,a few days ago,last night,N,NA,N,NA,NA,NA,started immunosuppressant back on january 1st
+HV_025_06,26-LH-5,HV025_6,P26,6_month,24,left,6,N,N,march,6,2019,3/6/19,female,N,N,1.5 hours,Y,Y,1 week,Y,1 hour,10 hours,N,NA,N,NA,Y,livestock,been applying more lotion to hands because of dry air. have also been washing hands more often becuase I have been working with livestock. 
+HV_025_07,27-LH-5,HV025_7,P27,6_month,24,left,7,N,N,feburary,28,2019,2/28/19,female,"Springfield, MO",N,4 hours,NA,N,NA,Y,4 hours,4 hours,N,NA,N,NA,NA,NA,
+HV_025_08,28-LH-5,HV025_8,P28,6_month,24,left,8,N,N,march,1,2019,3/1/19,female,"Baltimore, MD",N,1 hour,N,N,NA,N,NA,7am this morning,Y,2 weeks,N,NA,NA,NA,
+HV_025_09,29-LH-5,HV025_9,P29,6_month,24,left,9,N,N,march,4,2019,3/4/19,female,N,N,0.5 hour,NA,N,NA,N,NA,1.5 days,N,NA,N,NA,NA,NA,
+HV_025_10,30-LH-5,HV025_10,P30,6_month,24,left,10,N,N,march,8,2019,3/8/19,female,N,N,2 hours,N,N,NA,Y,24 hours,3 days,N,NA,Y,48 hours,NA,NA,red light tanning and dyed hair 3 days ago
+HV_025_11,32-LH-5,HV025_11,P32,6_month,24,left,11,N,N,march,5,2019,3/5/19,female,N,N,30 minutes,Y,Y,1 day,N,NA,11 hours,N,NA,N,NA,NA,NA,
+HV_025_12,34-LH-5,HV025_12,P34,6_month,24,left,12,N,N,march,11,2019,3/11/19,female,N,N,2 hours,NA,Y,less than 12 hours,Y,12 hours,15 hours,N,NA,N,NA,NA,NA,
+HV_025_13,35-LH-5,HV025_13,P35,6_month,24,left,13,N,N,march,19,2019,3/19/19,female,N,N,2 hours,Y,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_025_14,36-LH-5,HV025_14,P36,6_month,24,left,14,N,N,march,20,2019,3/20/19,female,N,N,2 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_025_15,37-LH-5,HV025_15,P37,6_month,24,left,15,N,N,march,19,2019,3/19/19,female,N,N,1 hour,N,N,NA,Y,1 hour,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_025_16,38-LH-5,HV025_16,P38,6_month,24,left,16,N,N,march,28,2019,3/28/19,female,Missouri,N,20 minutes,N,N,NA,Y,24 hours,48 hours,N,NA,N,NA,NA,NA,
+HV_025_18,39-LH-5,HV025_18,P39,6_month,24,left,18,N,N,march,28,2019,3/28/19,male,N,N,2 hours,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_025_19,40-LH-5,HV025_19,P40,6_month,24,left,19,N,N,april,11,2019,4/11/19,female,N,N,4 hours,N,Y,18 hours,Y,the last day of trial testimony,4 hours,N,NA,N,NA,NA,NA,
+HV_025_20,41-LH-5,HV025_20,P41,6_month,24,left,20,N,N,april,18,2019,4/18/19,female,"Columbia, Missouri",N,2 hours,NA,N,NA,N,NA,yesterday morning,Y,2 days,N,NA,NA,NA,
+HV_025_21,42-LH-5,HV025_21,P42,6_month,24,left,21,N,N,may,13,2019,5/13/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,gardening with hands in soil
+HV_025_22,43-LH-5,HV025_22,P43,6_month,24,left,22,N,N,july,9,2019,7/9/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_025_27,22-RL-5,HV025_27,P22,6_month,24,left,27,N,N,january,23,2019,1/23/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_026_01,22-RH-1,HV026_1,P22,T_0,0,right,1,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_026_02,23-RH-1,HV026_2,P23,T_0,0,right,2,N,N,july,26,2018,7/26/18,male,N,N,20 min ,Y,Y,couple of months,Y,couple of months,5 - 6 hours,Y,1 month,N,NA,NA,NA,
+HV_026_03,24-RH-1,HV026_3,P24,T_0,0,right,3,N,N,august,8,2018,8/8/18,female,N,N,1 hour,N,Y,2 weeks,Y,1 month,this morning,N,NA,N,NA,Y,Dog,
+HV_026_04,25-RH-1,HV026_4,P25,T_0,0,right,4,N,N,august,24,2018,8/24/18,female,N,N,this morning,Y,Y,earlier this month,Y,1 - 2 weeks,tuesday morning (8/21),N,NA,N,NA,NA,NA,
+HV_026_05,26-RH-1,HV026_5,P26,T_0,0,right,5,N,N,august,27,2018,8/27/18,female,N,N,11:50am today,Y,Y,2 months,Y,3 hours,6:30pm last night,Y,this summer but only once,N,NA,NA,NA,
+HV_026_06,27-RH-1,HV026_6,P27,T_0,0,right,6,N,N,august,31,2018,8/31/18,female,N,N,2 hours,N,N,NA,Y,12 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_026_07,28-RH-1,HV026_7,P28,T_0,0,right,7,N,N,august,31,2018,8/31/18,female,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,Did not fill out the sheet
+HV_026_08,29-RH-1,HV026_8,P29,T_0,0,right,8,N,N,september,5,2018,9/5/18,female,N,N,10 minutes,Y,Y,1 week,Y,1 month,1 day,Y,few times in may - july,N,NA,NA,NA,
+HV_026_09,30-RH-1,HV026_9,P30,T_0,0,right,9,N,N,september,5,2018,9/5/18,female,N,N,today,Y,N,NA,Y,7 days,2 days,N,NA,N,NA,NA,NA,
+HV_026_10,31-RH-1,HV026_10,P31,T_0,0,right,10,N,N,september,5,2018,9/5/18,female,N,N,1 - 2 hours,NA,Y,1 week,Y,1 week,24 hours,N,NA,N,NA,NA,NA,
+HV_026_11,32-RH-1,HV026_11,P32,T_0,0,right,11,N,N,september,6,2018,9/6/18,female,North Dakota,N,less than 1 hour,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_026_12,34-RH-1,HV026_12,P34,T_0,0,right,12,N,N,september,12,2018,9/12/18,female,N,N,2 hours,Y,Y,1 hour,Y,1 hour,2 hours,N,NA,N,NA,NA,NA,
+HV_026_13,35-RH-1,HV026_13,P35,T_0,0,right,13,N,N,september,19,2018,9/19/18,female,N,N,1 hour,NA,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_026_14,36-RH-1,HV026_14,P36,T_0,0,right,14,N,N,september,19,2018,9/19/18,female,N,N,30 minutes,NA,N,NA,N,NA,18 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_026_15,37-RH-1,HV026_15,P37,T_0,0,right,15,N,N,september,19,2018,9/19/18,female,N,N,3 hours,NA,Y,1 week,Y,4 hours,1.5 days,Y,30 days,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_026_16,38-RH-1,HV026_16,P38,T_0,0,right,16,N,N,september,27,2018,9/27/18,female,N,N,couple of hours,N,N,NA,Y,12 hours,2 days,N,NA,N,NA,NA,NA,scientist in a ruminant nutrition lab
+HV_026_18,39-RH-1,HV026_18,P39,T_0,0,right,18,N,N,september,27,2018,9/27/18,male,N,N,45 minutes,NA,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_026_19,40-RH-1,HV026_19,P40,T_0,0,right,19,N,N,october,12,2018,10/12/18,female,N,N,5 hours,Y,Y,yesterday at 3pm,N,NA,15 hours,N,NA,N,NA,NA,NA,
+HV_026_20,41-RH-1,HV026_20,P41,T_0,0,right,20,N,N,october,18,2018,10/18/18,female,N,N,today (2pm),Y,N,NA,N,NA,last night,N,NA,N,NA,NA,NA,
+HV_026_21,42-RH-1,HV026_21,P42,T_0,0,right,21,N,N,november,12,2018,11/12/18,male,N,N,3 - 4 hours,N,Y,more than a week,Y,48 hours,4 days,N,NA,N,NA,Y,dogs,
+HV_026_22,43-RH-1,HV026_22,P43,T_0,0,right,22,N,N,january,9,2019,1/9/19,female,N,N,7:30am this morning,Y,Y,yesterday,Y,2 days,2 days,N,NA,N,NA,NA,NA,
+HV_026_27,22-RR-1,HV026_27,P22,T_0,0,right,27,N,N,july,20,2018,7/20/18,male,N,N,1 hour,N,N,NA,N,NA,1 hour,N,NA,N,NA,NA,NA,
+HV_027_01,33-RH-1-D,HV027_1,P33,T_0,0,right,1,N,Y,september,10,2018,9/10/18,female,campfire,N,3 hours,N,N,NA,Y,this morning,last evening (9pm),N,NA,N,NA,NA,NA,work in an anatomy lab with models that many people touch.
+HV_027_02,45-LH-1-D,HV027_2,P45,T_0,0,left,2,N,Y,january,16,2019,1/16/19,female,"Kansas City, MO",N,2 hours,Y,Y,1 day,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_027_03,45-SC-1-D,HV027_3,P45,T_0,0,scalp,3,N,Y,january,16,2019,1/16/19,female,"Kansas City, MO",N,2 hours,Y,Y,1 day,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_027_04,45-RH-2-D,HV027_4,P45,2_week,2,right,4,N,Y,feburary,1,2019,2/1/19,female,N,N,4 hours,N,Y,1 hour,Y,12 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_027_05,45-RH-1,HV027_5,P45,T_0,0,right,5,N,N,january,16,2019,1/16/19,female,"Kansas City, MO",N,2 hours,Y,Y,1 day,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_027_06,45-LH-2,HV027_6,P45,2_week,2,left,6,N,N,feburary,1,2019,2/1/19,female,N,N,4 hours,N,Y,1 hour,Y,12 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_027_07,45-SC-2,HV027_7,P45,2_week,2,scalp,7,N,N,feburary,1,2019,2/1/19,female,N,N,4 hours,N,Y,1 hour,Y,12 hours,18 hours,N,NA,N,NA,NA,NA,
+HV_027_08,22-RH-2,HV027_8,P22,2_week,2,right,8,N,N,august,3,2018,8/3/18,male,N,N,0.5 hour,N,N,NA,N,NA,0.5 hour,N,NA,N,NA,NA,NA,
+HV_027_09,23-RH-2,HV027_9,P23,2_week,2,right,9,N,N,august,8,2018,8/8/18,male,N,N,1 hour,Y,Y,1 day,Y,18-May,a few hours,Y,1 month,N,NA,NA,NA,
+HV_027_10,24-RH-2,HV027_10,P24,2_week,2,right,10,N,N,august,22,2018,8/22/18,female,N,N,this morning,N,Y,month,Y,couple of months,this morning,N,NA,N,NA,Y,Dog,
+HV_027_11,25-RH-2,HV027_11,P25,2_week,2,right,11,N,N,september,7,2018,9/7/18,female,N,N,this morning,Y,N,NA,Y,2 weeks,4 days,N,NA,N,NA,NA,NA,
+HV_027_12,26-RH-2,HV027_12,P26,2_week,2,right,12,N,N,september,10,2018,9/10/18,female,N,N,4 hours,Y,Y,12 hours,Y,4 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_027_13,27-RH-2,HV027_13,P27,2_week,2,right,13,N,N,september,14,2018,9/14/18,female,N,N,6 hours,NA,N,NA,N,NA,6 hours,N,NA,N,NA,NA,NA,
+HV_027_14,28-RH-2,HV027_14,P28,2_week,2,right,14,N,N,september,17,2018,9/27/18,female,N,N,this morning (8am),N,N,NA,N,NA,this morning (8am),Y,yesterday,N,NA,NA,NA,
+HV_027_15,29-RH-2,HV027_15,P29,2_week,2,right,15,N,N,september,19,2018,9/19/18,female,N,N,1 - 2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_027_16,30-RH-2,HV027_16,P30,2_week,2,right,16,N,N,september,19,2018,9/19/18,female,N,N,2 hours,Y,N,NA,Y,4 hours,7 hours,N,NA,N,NA,NA,NA,
+HV_027_18,31-RH-2,HV027_18,P31,2_week,2,right,18,N,N,september,19,2018,9/19/18,female,N,N,2 hours,NA,N,NA,Y,1 day,24 hours,N,NA,N,NA,NA,NA,
+HV_027_19,32-RH-2,HV027_19,P32,2_week,2,right,19,N,N,september,20,2018,9/20/18,female,N,N,4 hours,Y,Y,24 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_027_20,34-RH-2,HV027_20,P34,2_week,2,right,20,N,N,september,26,2018,9/26/18,female,N,N,1.5 hours,N,Y,12 hours,Y,less than 1 day,1.5 hours,N,NA,N,NA,NA,NA,
+HV_027_21,35-RH-2,HV027_21,P35,2_week,2,right,21,N,N,october,3,2018,10/3/18,female,N,N,3 hour,Y,N,NA,Y,12 hours,3 days,N,NA,N,NA,Y,cattle and dogs,
+HV_027_22,36-RH-2,HV027_22,P36,2_week,2,right,22,N,N,october,2,2018,10/2/18,female,N,N,45 minutes,N,Y,16 hours,N,NA,14 hours,N,NA,N,NA,Y,"cattle, dogs, and sheep",
+HV_027_27,33-RR-1-D,HV027_27,P33,T_0,0,right,27,N,Y,september,10,2018,9/10/18,female,campfire,N,3 hours,N,N,NA,Y,this morning,last evening (9pm),N,NA,N,NA,NA,NA,work in an anatomy lab with models that many people touch.
+HV_028_01,22-RH-3,HV028_1,P22,1_month,4,right,1,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_028_02,23-RH-3,HV028_2,P23,1_month,4,right,2,N,N,august,27,2018,8/27/18,male,N,N,3 hours,Y,Y,end of july first week of august,Y,may,5 hours,Y,may/june,N,NA,NA,NA,
+HV_028_03,24-RH-3,HV028_3,P24,1_month,4,right,3,N,N,may,6,2019,5/6/19,female,N,N,1 hour,Y,Y,1 week,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_028_04,25-RH-3,HV028_4,P25,1_month,4,right,4,N,N,september,24,2018,9/24/18,female,N,N,this morning,NA,Y,1 - 2 weeks,N,NA,5 days,N,NA,N,NA,NA,NA,
+HV_028_05,26-RH-3,HV028_5,P26,1_month,4,right,5,N,N,september,28,2018,9/28/18,female,N,N,4 hours,Y,Y,14 hours,Y,3 hours,13 hours,N,NA,N,NA,NA,NA,washing hands more often due to spread of germs
+HV_028_06,27-RH-3,HV028_6,P27,1_month,4,right,6,N,N,october,1,2018,10/1/18,female,N,N,5 hours,N,N,NA,Y,4 hours,5 hours,N,NA,N,NA,NA,NA,
+HV_028_07,28-RH-3,HV028_7,P28,1_month,4,right,7,N,N,september,28,2018,9/28/18,female,N,N,2 hours,NA,N,NA,N,NA,2 hours,Y,last weekend (saturday),N,NA,NA,NA,
+HV_028_08,29-RH-3,HV028_8,P29,1_month,4,right,8,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_028_09,30-RH-3,HV028_9,P30,1_month,4,right,9,N,N,october,5,2018,10/5/18,female,N,N,2 hours,NA,N,NA,Y,5 hours,72 hours,N,NA,N,NA,NA,NA,
+HV_028_10,31-RH-3,HV028_10,P31,1_month,4,right,10,N,N,october,5,2018,10/5/18,female,N,N,1 hour,NA,N,NA,N,NA,24 - 36 hours,N,NA,N,NA,NA,NA,
+HV_028_11,32-RH-3,HV028_11,P32,1_month,4,right,11,N,N,october,8,2018,10/8/18,female,N,N,30 minutes,Y,Y,3 days,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_028_12,34-RH-3,HV028_12,P34,1_month,4,right,12,N,N,october,11,2018,10/11/18,female,N,N,2 hours,NA,Y,3 hours,Y,12 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_028_13,35-RH-3,HV028_13,P35,1_month,4,right,13,N,N,october,19,2018,10/19/18,female,N,N,12 hours,Y,N,NA,Y,5 days,5 days,N,NA,N,NA,Y,cattle and dogs,
+HV_028_14,36-RH-3,HV028_14,P36,1_month,4,right,14,N,N,october,19,2018,10/19/18,female,N,N,2 hours,Y,N,NA,N,NA,2 hours,N,NA,N,NA,Y,cattle and dogs,face wash with benzol peroxide
+HV_028_15,37-RH-3,HV028_15,P37,1_month,4,right,15,N,N,october,18,2018,10/18/18,female,N,N,this morning,N,N,NA,Y,3 hours,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab. recently dyed/colored hair
+HV_028_16,38-RH-3,HV028_16,P38,1_month,4,right,16,N,N,october,26,2018,10/26/18,female,N,N,1 hour,NA,N,NA,Y,48 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_028_18,39-RH-3,HV028_18,P39,1_month,4,right,18,N,N,november,15,2018,11/15/18,male,N,N,3 hours,NA,N,NA,N,NA,16 hours,N,NA,N,NA,NA,NA,
+HV_028_19,40-RH-3,HV028_19,P40,1_month,4,right,19,N,N,november,12,2018,11/12/18,female,N,N,11:30am today,NA,N,NA,N,NA,yesterday at noon,N,NA,N,NA,NA,NA,
+HV_028_20,41-RH-3,HV028_20,P41,1_month,4,right,20,N,N,november,19,2018,11/19/18,female,N,N,noon today,N,N,NA,N,NA,6 this morning,N,NA,N,NA,NA,NA,
+HV_028_21,42-RH-3,HV028_21,P42,1_month,4,right,21,N,N,december,17,2018,12/17/18,male,washinton DC and Chicago,N,4 hours,N,Y,2 weeks,Y,2 days,1 day,N,NA,N,NA,Y,dogs,
+HV_028_22,43-RH-3,HV028_22,P43,1_month,4,right,22,N,N,march,6,2019,3/6/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_028_27,22-RR-3,HV028_27,P22,1_month,4,right,27,N,N,august,30,2018,8/30/18,male,N,N,20 min,N,N,NA,N,NA,40 min,N,NA,N,NA,NA,NA,
+HV_029_01,22-RH-4,HV029_1,P22,3_month,12,right,1,N,N,november,2,2018,11/2/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_029_02,23-RH-4,HV029_2,P23,3_month,12,right,2,N,N,october,25,2018,10/25/18,male ,"Grand Island, NE",N,1 hour,N,N,NA,N,NA,3 hours,N,NA,N,NA,NA,NA,cleaned a lot with clorox recently 
+HV_029_03,24-RH-4,HV029_3,P24,3_month,12,right,3,N,N,august,7,2019,8/7/19,female,N,N,this morning,Y,Y,couple of weeks,Y,this morning,this morning,N,NA,N,NA,Y,Dog,
+HV_029_04,25-RH-4,HV029_4,P25,3_month,12,right,4,N,N,november,26,2018,11/26/18,female,N,N,1 hour,N,Y,1 week,Y,2 days,4 days,N,NA,N,NA,NA,NA,
+HV_029_05,26-RH-4,HV029_5,P26,3_month,12,right,5,N,N,november,28,2018,11/28/18,female,new grocery store,N,4 hours,NA,Y,2 weeks,Y,3.5 hours,14 hours,N,NA,N,NA,NA,NA,been applying more lotion to skin because of dry air
+HV_029_06,27-RH-4,HV029_6,P27,3_month,12,right,6,N,N,november,30,2018,11/30/18,female,N,N,4.75 hours,NA,N,NA,Y,4.5 hours,4.75 hours,N,NA,N,NA,NA,NA,
+HV_029_07,28-RH-4,HV029_7,P28,3_month,12,right,7,N,N,november,30,2018,11/30/18,female,N,N,this morning,N,N,NA,N,NA,this morning,N,NA,N,NA,NA,NA,
+HV_029_08,29-RH-4,HV029_8,P29,3_month,12,right,8,N,N,december,5,2018,12/5/18,female,N,N,2 hours,N,N,NA,N,NA,2 days,N,NA,N,NA,NA,NA,
+HV_029_09,30-RH-4,HV029_9,P30,3_month,12,right,9,N,N,december,5,2018,12/5/18,female,N,N,2 hours,NA,N,NA,Y,7 hours,4 hours,N,NA,Y,1 hour,NA,NA,tanning bed - red light therapy (1 hour ago)
+HV_029_10,31-RH-4,HV029_10,P31,3_month,12,right,10,N,N,december,6,2018,12/6/18,female,N,N,10 minutes,NA,N,NA,Y,24 hours,12 hours,N,NA,N,NA,NA,NA,
+HV_029_11,32-RH-4,HV029_11,P32,3_month,12,right,11,N,N,december,6,2018,12/6/18,female,N,N,30 minutes,Y,Y,4 hours,N,NA,10 hours,N,NA,N,NA,NA,NA,
+HV_029_12,34-RH-4,HV029_12,P34,3_month,12,right,12,N,N,december,12,2018,12/12/18,female,N,N,2 hours,NA,Y,less than 12 hours,Y,2 hours,2 hours,N,NA,N,NA,NA,NA,
+HV_029_13,35-RH-4,HV029_13,P35,3_month,12,right,13,N,N,january,9,2019,1/9/19,female,N,N,30 minutes,Y,N,NA,Y,12 hours,24 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_029_14,36-RH-4,HV029_14,P36,3_month,12,right,14,N,N,december,17,2018,12/17/18,female,N,N,4 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_029_15,37-RH-4,HV029_15,P37,3_month,12,right,15,N,N,december,17,2018,12/17/18,female,N,N,5 hours,NA,N,NA,Y,7 hours,7 hours,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_029_16,38-RH-4,HV029_16,P38,3_month,12,right,16,N,N,january,9,2019,1/9/19,female,N,Mexico,1 hour,N,N,NA,Y,24 hours,2 days,Y,5 days,N,NA,NA,NA,
+HV_029_18,39-RH-4,HV029_18,P39,3_month,12,right,18,N,N,january,8,2019,1/8/19,male,N,N,45 minutes,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_029_19,40-RH-4,HV029_19,P40,3_month,12,right,19,N,N,january,10,2019,1/8/19,female,"Tucson, AZ",Costa Rica and Nicaragua,10:30,N,N,NA,Y,11 days,this morning (10am),Y,8 days,N,NA,NA,NA,
+HV_029_20,41-RH-4,HV029_20,P41,3_month,12,right,20,N,N,january,9,2019,1/9/19,female,N,N,noon today,N,N,NA,N,NA,yesterday (6pm),N,NA,N,NA,NA,NA,
+HV_029_21,42-RH-4,HV029_21,P42,3_month,12,right,21,N,N,feburary,15,2019,2/15/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,
+HV_029_22,43-RH-4,HV029_22,P43,3_month,12,right,22,N,N,april,8,2019,4/19/19,female,N,N,1 hour,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_029_27,22-RR-4,HV029_27,P22,3_month,12,right,27,N,N,august,30,2018,8/30/18,male,N,N,0.5 hour,N,N,NA,N,NA,3 - 4 hours,N,NA,N,NA,NA,NA,
+HV_030_01,22-RH-5,HV030_1,P22,6_month,24,right,1,N,N,january,23,2019,1/23/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
+HV_030_02,23-RH-5,HV030_2,P23,6_month,24,right,2,N,N,january,28,2019,1/28/19,male,N,N,4 hours,Y,Y,a couple of weeks ago,Y,a few days ago,5 - 6 hours,N,NA,N,NA,NA,NA,
+HV_030_03,24-RH-5,HV030_3,P24,6_month,24,right,3,N,N,april,4,2019,4/4/19,female,N,N,2 hours,Y,Y,1 day,Y,this morning,this morning,N,NA,N,NA,Y,Dog,return from Ab hold. Will actually be collection 5
+HV_030_04,25-RH-5,HV030_4,P25,6_month,24,right,4,N,N,feburary,25,2019,2/25/19,female,N,N,this morning,N,Y,a couple of weeks ago,Y,a few days ago,last night,N,NA,N,NA,NA,NA,started immunosuppressant back on january 1st
+HV_030_05,26-RH-5,HV030_5,P26,6_month,24,right,5,N,N,march,6,2019,3/6/19,female,N,N,1.5 hours,Y,Y,1 week,Y,1 hour,10 hours,N,NA,N,NA,Y,livestock,been applying more lotion to hands because of dry air. have also been washing hands more often becuase I have been working with livestock. 
+HV_030_06,27-RH-5,HV030_6,P27,6_month,24,right,6,N,N,feburary,28,2019,2/28/19,female,"Springfield, MO",N,4 hours,NA,N,NA,Y,4 hours,4 hours,N,NA,N,NA,NA,NA,
+HV_030_07,28-RH-5,HV030_7,P28,6_month,24,right,7,N,N,march,1,2019,3/1/19,female,"Baltimore, MD",N,1 hour,N,N,NA,N,NA,7am this morning,Y,2 weeks,N,NA,NA,NA,
+HV_030_08,29-RH-5,HV030_8,P29,6_month,24,right,8,N,N,march,4,2019,3/4/19,female,N,N,0.5 hour,NA,N,NA,N,NA,1.5 days,N,NA,N,NA,NA,NA,
+HV_030_09,30-RH-5,HV030_9,P30,6_month,24,right,9,N,N,march,8,2019,3/8/19,female,N,N,2 hours,N,N,NA,Y,24 hours,3 days,N,NA,Y,48 hours,NA,NA,red light tanning and dyed hair 3 days ago
+HV_030_10,32-RH-5,HV030_10,P32,6_month,24,right,10,N,N,march,5,2019,3/5/19,female,N,N,30 minutes,Y,Y,1 day,N,NA,11 hours,N,NA,N,NA,NA,NA,
+HV_030_11,34-RH-5,HV030_11,P34,6_month,24,right,11,N,N,march,11,2019,3/11/19,female,N,N,2 hours,NA,Y,less than 12 hours,Y,12 hours,15 hours,N,NA,N,NA,NA,NA,
+HV_030_12,35-RH-5,HV030_12,P35,6_month,24,right,12,N,N,march,19,2019,3/19/19,female,N,N,2 hours,Y,N,NA,Y,12 hours,48 hours,N,NA,N,NA,Y,cattle and dogs,
+HV_030_13,36-RH-5,HV030_13,P36,6_month,24,right,13,N,N,march,20,2019,3/20/19,female,N,N,2 hours,N,N,NA,N,NA,18 hours,N,NA,N,NA,Y,livestock and dogs,
+HV_030_14,37-RH-5,HV030_14,P37,6_month,24,right,14,N,N,march,19,2019,3/19/19,female,N,N,1 hour,N,N,NA,Y,1 hour,2 days,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_030_15,38-RH-5,HV030_15,P38,6_month,24,right,15,N,N,march,28,2019,3/28/19,female,Missouri,N,20 minutes,N,N,NA,Y,24 hours,48 hours,N,NA,N,NA,NA,NA,
+HV_030_16,39-RH-5,HV030_16,P39,6_month,24,right,16,N,N,march,28,2019,3/28/19,male,N,N,2 hours,Y,N,NA,N,NA,12 hours,N,NA,N,NA,NA,NA,
+HV_030_18,40-RH-5,HV030_18,P40,6_month,24,right,18,N,N,april,11,2019,4/11/19,female,N,N,4 hours,N,Y,18 hours,Y,the last day of trial testimony,4 hours,N,NA,N,NA,NA,NA,
+HV_030_19,41-RH-5,HV030_19,P41,6_month,24,right,19,N,N,april,18,2019,4/18/19,female,"Columbia, Missouri",N,2 hours,NA,N,NA,N,NA,yesterday morning,Y,2 days,N,NA,NA,NA,
+HV_030_20,42-RH-5,HV030_20,P42,6_month,24,right,20,N,N,may,13,2019,5/13/19,male,N,N,2 hours,N,N,NA,Y,1 week,3 days,N,NA,N,NA,Y,dogs,gardening with hands in soil
+HV_030_21,43-RH-5,HV030_21,P43,6_month,24,right,21,N,N,july,9,2019,7/9/19,female,N,N,2 hours,Y,N,NA,N,NA,1 day,N,NA,N,NA,NA,NA,
+HV_030_22,37-RH-2,HV030_22,P37,2_week,2,right,22,N,N,october,3,2018,10/3/18,female,"Mead, NE",N,2 hours,Y,N,NA,Y,12 hours,1 day,N,NA,N,NA,Y,livestock,scientist in a ruminant nutrition lab
+HV_030_27,22-RR-5,HV030_27,P22,6_month,24,right,27,N,N,january,23,2019,1/23/19,male,N,N,3 hours,N,Y,3 hours,N,NA,3 hours,N,NA,N,NA,NA,NA,
