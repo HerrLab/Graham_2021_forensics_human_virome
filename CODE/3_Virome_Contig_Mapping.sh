@@ -9,11 +9,11 @@
 #This pipeline should begin using the fasta file unmapped_1000_contigs.fa generated using 2_Virome_Assembly.sh
 
 #Output Notes:
-#This pipeline will generate a read abundance table that can be used for input into phyloseq in R (counts2_bowtie.txt)
-#The next step in this pipeline is The next step in pipeline is 4. Contig Viral Annotation (4_Contig_Annotation.sh)
+#This pipeline will generate a read abundance table that can be used for input into Phyloseq in R (counts2_bowtie.txt)
+#The next step in this pipeline is the next step in pipeline is 4. Contig Viral Annotation (4_Contig_Annotation.sh)
 
 #General Notes:
-#This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool comands may differ depending on installation of the tool. Please refer to the listed githubs for each tool used as mentioned in script for further information if issues arise 
+#This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool commands may differ depending on installation of the tool. Please refer to the listed Githubs for each tool used as mentioned in script for further information if issues arise 
 #Some file locations may differ from yours so this needs to be changed accordingly. This script is designed to be run all in one folder
 #This script is designed to be used post the first and second steps of the pipeline, however any contig assembly fasta file can be used with this script
 
@@ -34,7 +34,7 @@ bowtie2-build -f unmapped_1000_contigs.fa VContigs_index
 ## -------------------------------------- ##
 ############################################
 
-#Mapping was preformed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
+#Mapping was performed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
 
 bowtie2 --end-to-end -x VContigs_index -1 Raw_Reads/HV_001_001_forward.fq.gz -2 Raw_Reads/HV_001_01_reverse.fq.gz | samtools view -F 4 -o HV_001_01.bam
 
@@ -51,7 +51,7 @@ samtools idxstats HV_001_01.sorted.bam > HV_001_01.sorted.bam.idxstats.txt
 ## ------------------------------------------- ##
 #################################################
 
-#Once all samples have been run through this pipline you can convert the mapped abundance statistics into a read abundance table that can be used as an OTU table in phyloseq in R. 
+#Once all samples have been run through this pipeline you can convert the mapped abundance statistics into a read abundance table that can be used as an OTU table in Phyloseq in R. 
 #get_count_table.py python script avalible at: https://github.com/edamame-course/Metagenome
 
 python2 get_count_table.py *.idxstats.txt > counts_bowtie.txt
