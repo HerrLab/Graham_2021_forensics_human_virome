@@ -7,9 +7,9 @@ output: html_document
 
 # Input Notes: 
   #Will need the following files: 
-  #Sequencing_Data_Info_Sheet3.csv (metadata, provided on github)
+  #Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
   #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
-  #vc_tax_nounclass.csv (is vc_tax.csv generated in 4_Contig_Annotation.sh but without the unclassified contigs) (e.g. it only contains classified contig taxonomy) 
+  #vc_tax_nounclass.csv (is vc_tax.csv generated in 4_Contig_Annotation.sh but without the unclassified contigs) (e.g., it only contains classified contig taxonomy) 
 
 # Output Notes: 
   #Will generate a Phyloseq object that only contains CheckV annotated contigs that is used to make a krona plot of the overall abundance distribution of each taxonomic classification 
@@ -38,7 +38,7 @@ library(ggplot2)
 ## -------------------------------------- ##
 ############################################
 
-## Upload sample metadata for the phyloseq object
+## Upload sample metadata for the Phyloseq object
 
 Upload_Metadata <- read_csv("Sequencing_Data_Info_Sheet3.csv")
 Metadata <- Upload_Metadata
@@ -60,7 +60,7 @@ CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
 # Make otu_table for Phyloseq
 CHeckV_OTU <- otu_table(CHeckV_counts, taxa_are_rows = TRUE)
 
-## Upload taxonomy information to make the OTU table for the phyloseq object
+## Upload taxonomy information to make the OTU table for the Phyloseq object
 
 tax_ann <- read.csv("vc_tax_nounclass.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <-as.matrix(tax_ann)
@@ -115,8 +115,8 @@ colnames(krona_plot) <- c()
 write.table(krona_plot, file='FIGURE_krona_plot.tsv', col.names=F, row.names=F, sep = "\t",quote=F)
 ```
 ```{bash, include=FALSE}
-# Kronatools is a linux baised program and is not set up to be run in R
-# Visit their github for installation instructions:https://github.com/marbl/Krona/wiki/KronaTools
+# Kronatools is a Linux biased program and is not set up to be run in R
+# Visit their Github for installation instructions: https://github.com/marbl/Krona/wiki/KronaTools
 
 # In terminal:
 # Make sure to download KronaTools to your desktop. KronaTools will not work in R. 
