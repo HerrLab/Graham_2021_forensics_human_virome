@@ -26,7 +26,7 @@ library(ggplot2)
 ## Determine Stable Viral Families by Location
 
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-OTU <- read.csv("counts2_FINAL_1x.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Subfamily, Genus, Species))
