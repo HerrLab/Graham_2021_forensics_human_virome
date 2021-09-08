@@ -1,3 +1,7 @@
+### Title: 04_Contig_Annotation ###
+### Author: Ema H Graham ###
+### For Questions Email: ema.graham@huskers.unl.edu ###
+
 ############################################
 ## -------------------------------------- ##
 ## ------------- Description ------------ ##
