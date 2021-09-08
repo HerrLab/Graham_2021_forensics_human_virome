@@ -1,0 +1,129 @@
+---
+title: "5_Phyloseq_Overall_Taxonomy"
+output: html_document
+---
+
+## Description
+
+# Input Notes: 
+  #Will need the following files: 
+  #Sequencing_Data_Info_Sheet3.csv (metadata, provided on github)
+  #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
+  #vc_tax_nounclass.csv (is vc_tax.csv generated in 4_Contig_Annotation.sh but without the unclassified contigs) (e.g. it only contains classified contig taxonomy) 
+
+# Output Notes: 
+  #Will generate a Phyloseq object that only contains CheckV annotated contigs that is used to make a krona plot of the overall abundance distribution of each taxonomic classification 
+
+
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Packages to Load ---------- ##
+## -------------------------------------- ##
+############################################
+
+library(readr)
+library(dplyr)
+library(tidyr)
+library(phyloseq)
+library(ggplot2)
+```
+
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Phyloseq Object ----------- ##
+## -------------------------------------- ##
+############################################
+
+## Upload sample metadata for the phyloseq object
+
+Upload_Metadata <- read_csv("Sequencing_Data_Info_Sheet3.csv")
+Metadata <- Upload_Metadata
+# In the metadata change the Time_Collected so that it is better for graph outputs
+Metadata$Time <- Metadata$Time_Collected
+Metadata$Time[which(Metadata$Time == "T_0")] <- "00_Weeks"
+Metadata$Time[which(Metadata$Time == "2_week")] <- "02_Weeks"
+Metadata$Time[which(Metadata$Time == "1_month")] <- "04_Weeks"
+Metadata$Time[which(Metadata$Time == "3_month")] <- "12_Weeks"
+Metadata$Time[which(Metadata$Time == "6_month")] <- "24_Weeks"
+# Make sample_data for Phyloseq
+META <- sample_data(Metadata)
+sample_names(META)= META$SampleID
+
+## Upload count data to make the OTU table for the phyloseq object
+
+CHeckV_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
+# Make otu_table for Phyloseq
+CHeckV_OTU <- otu_table(CHeckV_counts, taxa_are_rows = TRUE)
+
+## Upload taxonomy information to make the OTU table for the phyloseq object
+
+tax_ann <- read.csv("vc_tax_nounclass.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+tax_ann <-as.matrix(tax_ann)
+# Make tax_table for Phyloseq
+CHeckV_tax <- tax_table(tax_ann)
+
+## Make Phyloseq object
+
+CHeckV_PHY <- phyloseq(CHeckV_OTU, CHeckV_tax, META)
+
+## Remove samples from individuals who did not complete from the study, samples from individuals who did not have a complete set of samples, and samples that were repeated samples
+
+Samples_toRemove <- c("HV_001_27", "HV_002_27", "HV_003_27", "HV_004_27", "HV_005_27", "HV_006_27", "HV_007_27", "HV_008_27",
+                      "HV_009_27", "HV_010_27", "HV_011_27", "HV_012_27", "HV_013_27", "HV_014_27", "HV_015_27", "HV_016_27",
+                      "HV_017_27", "HV_018_27", "HV_019_27", "HV_020_27", "HV_021_27", "HV_022_27", "HV_023_27", "HV_024_27",
+                      "HV_025_27", "HV_026_27", "HV_027_27", "HV_028_27", "HV_029_27", "HV_030_27", "HV_015_20", "HV_015_21", 
+                      "HV_020_22", "HV_027_02", "HV_027_03", "HV_027_04", "HV_027_05", "HV_027_06", "HV_027_07", "HV_020_10",
+                      "HV_021_13", "HV_027_01","HV_003_15")
+
+## Final Phyloseq Object
+
+CHeckV_PHY2 <- subset_samples(CHeckV_PHY, !(SampleID %in% Samples_toRemove))
+```
+# Human Skin Virome Phyloseq Object:
+```{r}
+CHeckV_PHY2
+```
+
+```{r, echo=FALSE}
+###########################################
+## ------------------------------------- ##
+## ------------ Krona Plot ------------- ##
+## ------------------------------------- ##
+###########################################
+
+## Calculate the overall abundance and prevalence for each taxonomic classification 
+prevelancedf <- apply(X = otu_table(CHeckV_PHY2),
+                     MARGIN = 1,
+                     FUN = function(x){sum(x > 0)})
+# Add taxonomy and total read counts to the data.frame
+prevelancedf <- data.frame(Prevalence = prevelancedf,
+                          TotalAbundance = taxa_sums(CHeckV_PHY2),
+                          tax_table(CHeckV_PHY2))
+# Reorganize the data.frame into the right format to be entered into kronatools                          
+krona_plot <- subset(prevelancedf, select = -c(Prevalence))
+krona_plot$root<- "root"
+# Use krona_plot[c("TotalAbundance", "root", then list your organism classification ranks (col headers of your taxonomy file)
+krona_plot <- krona_plot[c("TotalAbundance", "root", "Superkingdom", "Realm", "Kingdom", "Phylum", "Class", "Order", "Family","Subfamily", "Genus", "Species")]
+rownames(krona_plot) <- c()
+colnames(krona_plot) <- c()
+# Write the name of the file you want to save it as
+write.table(krona_plot, file='FIGURE_krona_plot.tsv', col.names=F, row.names=F, sep = "\t",quote=F)
+```
+```{bash, include=FALSE}
+# Kronatools is a linux baised program and is not set up to be run in R
+# Visit their github for installation instructions:https://github.com/marbl/Krona/wiki/KronaTools
+
+# In terminal:
+# Make sure to download KronaTools to your desktop. KronaTools will not work in R. 
+# In Terminal in R, move to file containing scripts downloaded from KronaTools
+
+cd /KronaTools-2.7/scripts
+
+# Change name of .hmtl file to what you want krona graph saved as. Make sure to change the Path_to_files to the correct path you are using for your files. 
+./ImportText.pl -o Path_to_files/virome_krona_plot.html Path_to_files/FIGURE_krona_plot.tsv
+```
