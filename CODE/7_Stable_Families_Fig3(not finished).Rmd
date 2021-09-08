@@ -20,6 +20,7 @@ output: html_document
 ############################################
 library(readr)
 library(dplyr)
+library(plyr)
 library(tidyr)
 library(cowplot)
 library(ggplot2)
