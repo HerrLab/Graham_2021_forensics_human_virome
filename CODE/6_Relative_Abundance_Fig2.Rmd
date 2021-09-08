@@ -9,7 +9,7 @@ output: html_document
   #Will need the following files:
   #Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
   #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
-   #vc_tax.csv (generated in 4_Contig_Annotation.sh)
+  #vc_tax.csv (generated in 4_Contig_Annotation.sh)
 
 # Output Notes: 
   #Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location
