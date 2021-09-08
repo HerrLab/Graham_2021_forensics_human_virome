@@ -5,8 +5,8 @@
 ############################################
 
 #Input Notes:
-#This is the third step of this pipeline is designed to be used after completing 2_Virome_Assembly.sh
-#This pipeline should begin using the fasta file unmapped_1000_contigs.fa generated using 2_Virome_Assembly.sh
+#This is the third step of this pipeline is designed to be used after completing 02_Virome_Assembly.sh
+#This pipeline should begin using the fasta file unmapped_1000_contigs.fa generated using 02_Virome_Assembly.sh
 
 #Output Notes:
 #This pipeline will generate a read abundance table that can be used for input into Phyloseq in R (counts2_bowtie.txt)
