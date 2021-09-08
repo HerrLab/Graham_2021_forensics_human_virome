@@ -1,25 +1,21 @@
 ---
-title: "6_Relative_Abundance_Fig2"
+title: "06_Relative_Abundance_Fig2"
 output: html_document
+author: "Author: Ema H Graham"
 ---
 
 ## Description
 
-# Input Notes: 
-  #Will need the following files:
-  #Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
-  #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
-  #vc_tax.csv (generated in 4_Contig_Annotation.sh)
+Input Notes: 
+Will need the following files:
+- Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
+- counts2_bowtie.csv (generated in 03_Virome_Contig_Mapping.sh)
+- vc_tax.csv (generated in 04_Contig_Annotation.sh)
 
-# Output Notes: 
-  #Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location
+Output Notes: 
+Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location
 
-```{r setup, include=FALSE}
-############################################
-## -------------------------------------- ##
-## ---------- Packages to Load ---------- ##
-## -------------------------------------- ##
-############################################
+```{r setup,message=FALSE}
 library(readr)
 library(dplyr)
 library(tidyr)
@@ -27,14 +23,10 @@ library(phyloseq)
 library(ggplot2)
 ```
 
-```{r setup, include=FALSE}
-############################################
-## -------------------------------------- ##
-## -------- Make Phyloseq Object -------- ##
-## -------------------------------------- ##
-############################################
+## Make Phyloseq Object
 
-## Upload sample metadata for the Phyloseq object
+Upload sample metadata for the Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
 Upload_Metadata <- read_csv("Sequencing_Data_Info_Sheet3.csv")
 Metadata <- Upload_Metadata
 # In the metadata change the Time_Collected so that it is better for graph outputs
@@ -47,53 +39,47 @@ Metadata$Time[which(Metadata$Time == "6_month")] <- "24_Weeks"
 # Make sample_data for Phyloseq
 META <- sample_data(Metadata)
 sample_names(META)= META$SampleID
-
-## Upload count data to make the OTU table for the Phyloseq object
-
+```
+Upload count data to make the OTU table for the Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
 # Make otu_table for Phyloseq
 CHeckV_bar_OTU <- otu_table(CHeckV_counts, taxa_are_rows = TRUE)
-
-## Upload taxonomy information to make the OTU table for the Phyloseq object
-
+```
+Upload taxonomy information to make the OTU table for the Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
 tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <-as.matrix(tax_ann)
 # Make tax_table for Phyloseq
 CHeckV_bar_tax <- tax_table(tax_ann)
-
-## Make Phyloseq object
-
+```
+Make Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_bar_PHY <- phyloseq(CHeckV_bar_OTU, CHeckV_bar_tax, META)
-
-## Remove samples from individuals who did not complete from the study, samples from individuals who did not have a complete set of samples, and samples that were repeated samples
-
+```
+Remove samples from individuals who did not complete from the study, samples from individuals who did not have a complete set of samples, and samples that were repeated samples
+```{r,message=FALSE,warning=FALSE,results="hide"}
 Samples_toRemove <- c("HV_001_27", "HV_002_27", "HV_003_27", "HV_004_27", "HV_005_27", "HV_006_27", "HV_007_27", "HV_008_27",
                       "HV_009_27", "HV_010_27", "HV_011_27", "HV_012_27", "HV_013_27", "HV_014_27", "HV_015_27", "HV_016_27",
                       "HV_017_27", "HV_018_27", "HV_019_27", "HV_020_27", "HV_021_27", "HV_022_27", "HV_023_27", "HV_024_27",
                       "HV_025_27", "HV_026_27", "HV_027_27", "HV_028_27", "HV_029_27", "HV_030_27", "HV_015_20", "HV_015_21", 
                       "HV_020_22", "HV_027_02", "HV_027_03", "HV_027_04", "HV_027_05", "HV_027_06", "HV_027_07", "HV_020_10",
                       "HV_021_13", "HV_027_01","HV_003_15")
-
-## Final Phyloseq Object
-
+```
+Final Phyloseq Object
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_bar_PHY2 <- subset_samples(CHeckV_bar_PHY, !(SampleID %in% Samples_toRemove))
 ```
-
-# Human Skin Virome Phyloseq Object:
+Human Skin Virome Phyloseq Object
 ```{r}
 CHeckV_bar_PHY2
 ```
 
-```{r, include=FALSE}
-############################################
-## -------------------------------------- ##
-## --------- Left Hand Taxa Sums -------- ##
-## -------------------------------------- ##
-############################################
+## Left Hand Taxa Sums
 
-## Calculate the top ten most abundant identified family level taxonomy for each subject for all left hand samples
-
+Calculate the top ten most abundant identified family level taxonomy for each subject for all left hand samples
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_bar_PHY2_LH<- subset_samples(CHeckV_bar_PHY2, Location=="left")
 P_01 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P01")
 TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
@@ -181,29 +167,24 @@ P_43 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P43")
 TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
 TopNOTUs_10_LH<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
 TopNOTUs_10_list_LH<-unique(names(TopNOTUs_10_LH))
-
-# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```
+Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```{r,message=FALSE,warning=FALSE,results="hide"}
 TopNOTUs_10_list_noUn_LH<-TopNOTUs_10_list_LH[!grepl("Unclassified",TopNOTUs_10_list_LH)]
 TopNOTUs_10_list_noUn_LH<-TopNOTUs_10_list_noUn_LH[!grepl("Unlcassified",TopNOTUs_10_list_noUn_LH)]
 TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Cressdnaviricota")
 TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Duplodnaviria")
 TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Monodnaviria")
 ```
-
+Top ten most abundant family level taxa per individual for left hand samples
 ```{r}
-# Top ten most abundant family level taxa per individual for left hand samples:
 TopNOTUs_10_list_noUn_LH
 ```
 
-```{r, include=FALSE}
-############################################
-## -------------------------------------- ##
-## -------- Right Hand Taxa Sums -------- ##
-## -------------------------------------- ##
-############################################
+## Right Hand Taxa Sums
 
-## Calculate the top ten most abundant identified family level taxonomy for each subject for all right hand samples
-
+Calculate the top ten most abundant identified family level taxonomy for each subject for all right hand samples
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_bar_PHY2_RH<- subset_samples(CHeckV_bar_PHY2, Location=="right")
 P_01 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P01")
 TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
@@ -291,8 +272,9 @@ P_43 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P43")
 TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
 TopNOTUs_10_RH<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
 TopNOTUs_10_list_RH<-unique(names(TopNOTUs_10_RH))
-
-# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```
+Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```{r,message=FALSE,warning=FALSE,results="hide"}
 TopNOTUs_10_list_noUn_RH<-TopNOTUs_10_list_RH[!grepl("Unclassified",TopNOTUs_10_list_RH)]
 TopNOTUs_10_list_noUn_RH<-TopNOTUs_10_list_noUn_RH[!grepl("Unlcassified",TopNOTUs_10_list_noUn_RH)]
 TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Caudovirales")
@@ -300,21 +282,15 @@ TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Cressdnaviric
 TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Duplodnaviria")
 TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Monodnaviria")
 ```
-
+Top ten most abundant family level taxa per individual for right hand samples
 ```{r}
-# Top ten most abundant family level taxa per individual for right hand samples:
 TopNOTUs_10_list_noUn_RH
 ```
 
-```{r, include=FALSE}
-############################################
-## -------------------------------------- ##
-## ----------  Scalp Taxa Sums ---------- ##
-## -------------------------------------- ##
-############################################
+## Scalp Taxa Sums
 
-## Calculate the top ten most abundant identified family level taxonomy for each subject for all scalp samples
-
+Calculate the top ten most abundant identified family level taxonomy for each subject for all scalp samples
+```{r,message=FALSE,warning=FALSE,results="hide"}
 CHeckV_bar_PHY2_SC<- subset_samples(CHeckV_bar_PHY2, Location=="scalp")
 P_01 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P01")
 TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
@@ -402,8 +378,9 @@ P_43 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P43")
 TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
 TopNOTUs_10_SC<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
 TopNOTUs_10_list_SC<-unique(names(TopNOTUs_10_SC))
-
-# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```
+Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+```{r,message=FALSE,warning=FALSE,results="hide"}
 TopNOTUs_10_list_noUn_SC<-TopNOTUs_10_list_SC[!grepl("Unclassified",TopNOTUs_10_list_SC)]
 TopNOTUs_10_list_noUn_SC<-TopNOTUs_10_list_noUn_SC[!grepl("Unlcassified",TopNOTUs_10_list_noUn_SC)]
 TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Caudovirales")
@@ -411,21 +388,15 @@ TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Cressdnaviric
 TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Duplodnaviria")
 TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Monodnaviria")
 ```
-
+Top ten most abundant family level taxa per individual for scalp samples
 ```{r}
-# Top ten most abundant family level taxa per individual for scalp samples:
 TopNOTUs_10_list_noUn_SC
 ```
 
-```{r, include=FALSE}
-############################################
-## -------------------------------------- ##
-## ---------  Relative Abundance -------- ##
-## -------------------------------------- ##
-############################################
+## Relative Abundance
 
-## Calculation of relative abundance for the top ten most abundant taxonomy per subject for left hand 
-
+Calculation of relative abundance for the top ten most abundant taxonomy per subject for left hand 
+```{r,message=FALSE,warning=FALSE,results="hide"}
 ent10_LH <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_LH)
 glom.subject_LH <- merge_samples(ent10_LH, "Subject")
 # Calculate the relative abundance for each family in set
@@ -436,9 +407,9 @@ data_glom_LH<- psmelt(glom_LH)
 data_glom_LH$Family <- as.character(data_glom_LH$Family)
 data_glom_LH$Location<-"Left Hand"
 data_glom_LH$Family <- factor(data_glom_LH$Family, levels = c("Siphoviridae", "Podoviridae", "Uncultured phage", "Myoviridae", "Herelleviridae", "Genomoviridae", "Microviridae", "Papillomaviridae", "Lake Sarah-associated circular molecule 3", "Pithoviridae", "Uncultured virus", "Sewage-associated circular DNA molecule", "Streptococcus satellite phage Javan305", "Caulimoviridae", "Staphylococcus phage PhiSepi-HH1", "Phycodnaviridae", "Circoviridae", "Staphylococcus phage PI-Sepi-HH2", "Baculoviridae", "Poxviridae", "Polyomaviridae", "Bovine faeces associated circular DNA virus 1", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria"))
-
-## Calculation of relative abundance for the top ten most abundant taxonomy per subject for right hand 
-
+```
+Calculation of relative abundance for the top ten most abundant taxonomy per subject for right hand 
+```{r,message=FALSE,warning=FALSE,results="hide"}
 ent10_RH <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_RH)
 glom.subject_RH <- merge_samples(ent10_RH, "Subject")
 # Calculate the relative abundance for each family in set
@@ -449,9 +420,9 @@ data_glom_RH<- psmelt(glom_RH)
 data_glom_RH$Family <- as.character(data_glom_RH$Family)
 data_glom_RH$Location<-"Right Hand"
 data_glom_RH$Family <- factor(data_glom_RH$Family, levels = c("Caulimoviridae", "Siphoviridae", "Microviridae", "Papillomaviridae", "Genomoviridae", "Herelleviridae", "Baculoviridae", "Circoviridae", "Uncultured phage", "Myoviridae", "Sewage-associated circular DNA molecule", "Lake Sarah-associated circular molecule 3", "Podoviridae", "Mimiviridae", "Staphylococcus phage PI-Sepi-HH2", "Staphylococcus phage PhiSepi-HH1", "Streptococcus satellite phage Javan359", "Streptococcus satellite phage Javan360", "Smacoviridae", "Uncultured human fecal virus clone E.ramosum_S04.r3.N09_4_c1", "Inoviridae", "Uncultured virus isolate Wastewater_Circular_Virus_FL54", "Unclassified Caudovirales", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria"))
-
-## Calculation of relative abundance for the top ten most abundant taxonomy per subject for scalp
-
+```
+Calculation of relative abundance for the top ten most abundant taxonomy per subject for scalp
+```{r,message=FALSE,warning=FALSE,results="hide"}
 ent10_SC <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_SC)
 glom.subject_SC <- merge_samples(ent10_SC, "Subject")
 # Calculate the relative abundance for each family in set
@@ -462,13 +433,13 @@ data_glom_SC<- psmelt(glom_SC)
 data_glom_SC$Family <- as.character(data_glom_SC$Family)
 data_glom_SC$Location<-"Scalp"
 data_glom_SC$Family <- factor(data_glom_SC$Family, levels = c("Circoviridae", "Siphoviridae", "Herelleviridae", "Genomoviridae", "Papillomaviridae", "Lake Sarah-associated circular molecule 3", "Myoviridae", "Uncultured virus", "Podoviridae", "Microviridae", "Caulimoviridae", "Sewage-associated circular DNA molecule", "Autographiviridae", "Retroviridae", "Anelloviridae", "Gopherus associated circular DNA virus 4", "Baculoviridae", "Phycodnaviridae", "Chicken virus mg4_2302", "Streptococcus satellite phage Javan361", "Unclassified Caudovirales", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria" ))
-
-## Combine the three autotomical location datasets
-
+```
+Combine the three location datasets
+```{r,message=FALSE,warning=FALSE,results="hide"}
 data_glom_ALL<-rbind(data_glom_SC,data_glom_RH,data_glom_LH)
-
-## Generate relative abundance plot
-
+```
+Generate relative abundance plot
+```{r,message=FALSE,warning=FALSE,results="hide"}
 spatial_plot <- ggplot(data=data_glom_ALL, aes(x=Location, y=Abundance, fill=Family)) + facet_grid(~Sample, scales = "free")+geom_col(position = "fill")
 
 relativeabund<-spatial_plot + geom_bar(aes(), stat="identity", position="stack",colour = 'black')  +
@@ -477,7 +448,7 @@ theme(legend.position="bottom",axis.title.x = element_text(vjust=1, hjust=2,size
 ggsave(plot=relativeabund,"Figures/RelativeAbundanceFIGURE.pdf",dpi = 500, width = 29,
   height = 16, units="in",pointsize=12)
 ```
+Relative abundance of the top ten most abundant identified viral families per subject by location
 ```{r}
-# Relative abundance of the top ten most abundant identified viral families per subject by location:
 relativeabund
 ```
