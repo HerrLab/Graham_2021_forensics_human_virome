@@ -1,3 +1,7 @@
+### Title: 02_Virome_Assembly ###
+### Author: Ema H Graham ###
+### For Questions Email: ema.graham@huskers.unl.edu ###
+
 ############################################
 ## -------------------------------------- ##
 ## ------------- Description ------------ ##
