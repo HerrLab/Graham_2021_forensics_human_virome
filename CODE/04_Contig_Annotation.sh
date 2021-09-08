@@ -5,9 +5,9 @@
 ############################################
 
 #Input Notes:
-#This is the fourth step of this pipeline is designed to be used after completing 2_Virome_Assembly.sh
-  # You can perform this step either before or after the third step:  3. Virome Contig Mapping (3_Virome_Contig_Mapping.sh)
-#This pipeline should begin using the fasta file unmapped_1000_contigs.fa generated using 2_Virome_Assembly.sh
+#This is the fourth step of this pipeline is designed to be used after completing 02_Virome_Assembly.sh
+  # You can perform this step either before or after the third step:  3. Virome Contig Mapping (03_Virome_Contig_Mapping.sh)
+#This pipeline should begin using the fasta file unmapped_1000_contigs.fa generated using 02_Virome_Assembly.sh
 
 #Output Notes:
 #This pipeline will result in multiple taxonomic classification tables for each of the 1298 contigs. These were then put together into one taxonomy file named vc_tax.csv
