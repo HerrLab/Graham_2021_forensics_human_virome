@@ -1,0 +1,715 @@
+---
+title: "7_Stable_Families_Fig3"
+output: html_document
+---
+
+## Description
+
+# Input Notes: 
+  #Will need the following files:
+  #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
+  #vc_tax.csv (generated in 4_Contig_Annotation.sh)
+  
+ # Output Notes: 
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Packages to Load ---------- ##
+## -------------------------------------- ##
+############################################
+library(readr)
+library(dplyr)
+library(tidyr)
+library(cowplot)
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+##############################################
+## ---------------------------------------- ##
+## -Determine Stable Families by Location - ##
+## ---------------------------------------- ##
+##############################################
+
+OTU <- read.csv("counts2_FINAL_1x.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
+OTU_SUMS<- subset (OTU_SUMS, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Subfamily, Genus, Species))
+OTU_SUMS<-ddply(OTU_SUMS,"Family",numcolwise(sum))
+OTU_SUMS<- subset (OTU_SUMS, select = -c(HV_001_27,HV_004_27,HV_005_27,HV_006_27,HV_007_27,HV_008_27,HV_009_27,HV_010_27,HV_011_27,HV_012_27,HV_013_27,HV_014_27,HV_015_20,HV_015_27,HV_016_27,HV_017_27,HV_018_27,HV_019_27,HV_020_10,HV_020_22,HV_020_27,HV_021_13,HV_021_27,HV_022_27,HV_023_27,HV_024_27,HV_025_27,HV_026_27,HV_027_01,HV_027_02,HV_027_05,HV_027_06,HV_027_07,HV_027_27,HV_028_27,HV_029_27,HV_030_27,HV_015_21,HV_027_03,HV_027_04))
+OTU_SUMS -> OTU_Stable 
+# Turn into binary presence/absance data
+OTU_Stable <- OTU_Stable %>% mutate_if(is.numeric, ~1 * (. != 0))
+```
+
+```{r setup, include=FALSE}
+#P01 Left
+OTU_Stable$P01_LH <- OTU_Stable$HV_001_01 + OTU_Stable$HV_002_01 + OTU_Stable$HV_003_01 + OTU_Stable$HV_004_01 + OTU_Stable$HV_005_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+#P01 Right
+OTU_Stable$P01_RH <- OTU_Stable$HV_001_02 + OTU_Stable$HV_002_02 + OTU_Stable$HV_003_02 + OTU_Stable$HV_004_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+#P01 Scalp
+OTU_Stable$P01_SC <- OTU_Stable$HV_001_03 + OTU_Stable$HV_004_03 + OTU_Stable$HV_003_03 + OTU_Stable$HV_005_03 + OTU_Stable$HV_002_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+
+#P02 Left
+OTU_Stable$P02_LH <- OTU_Stable$HV_001_04 + OTU_Stable$HV_002_04 + OTU_Stable$HV_003_04 + OTU_Stable$HV_004_04 + OTU_Stable$HV_005_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+#P02 Right
+OTU_Stable$P02_RH <- OTU_Stable$HV_001_05 + OTU_Stable$HV_002_05 + OTU_Stable$HV_003_05 + OTU_Stable$HV_004_05 + OTU_Stable$HV_005_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+#P02 Scalp
+OTU_Stable$P02_SC <- OTU_Stable$HV_001_06 + OTU_Stable$HV_002_06 + OTU_Stable$HV_003_06 + OTU_Stable$HV_004_06 + OTU_Stable$HV_005_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+
+#P03 Left
+OTU_Stable$P03_LH <- OTU_Stable$HV_001_07 + OTU_Stable$HV_002_07 + OTU_Stable$HV_003_07 + OTU_Stable$HV_004_07 + OTU_Stable$HV_005_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+#P03 Right
+OTU_Stable$P03_RH <- OTU_Stable$HV_001_08 + OTU_Stable$HV_002_08 + OTU_Stable$HV_003_08 + OTU_Stable$HV_004_08 + OTU_Stable$HV_005_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+#P03 Scalp
+OTU_Stable$P03_SC <- OTU_Stable$HV_001_09 + OTU_Stable$HV_002_09 + OTU_Stable$HV_003_09 + OTU_Stable$HV_004_09 + OTU_Stable$HV_005_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+
+#P04 Left
+OTU_Stable$P04_LH <- OTU_Stable$HV_001_10 + OTU_Stable$HV_002_10 + OTU_Stable$HV_003_10 + OTU_Stable$HV_004_10 + OTU_Stable$HV_005_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+#P04 Right
+OTU_Stable$P04_RH <- OTU_Stable$HV_001_11 + OTU_Stable$HV_002_11 + OTU_Stable$HV_003_11 + OTU_Stable$HV_004_11 + OTU_Stable$HV_005_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+#P04 Scalp
+OTU_Stable$P04_SC <- OTU_Stable$HV_001_12 + OTU_Stable$HV_002_12 + OTU_Stable$HV_003_12 + OTU_Stable$HV_004_12 + OTU_Stable$HV_005_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
+
+
+#P05 Left
+OTU_Stable$P05_LH <- OTU_Stable$HV_001_13 + OTU_Stable$HV_002_13 + OTU_Stable$HV_003_13 + OTU_Stable$HV_004_13 + OTU_Stable$HV_005_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+#P05 Right
+OTU_Stable$P05_RH <- OTU_Stable$HV_001_14 + OTU_Stable$HV_002_14 + OTU_Stable$HV_003_14 + OTU_Stable$HV_004_14 + OTU_Stable$HV_005_14
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+#P05 Scalp
+OTU_Stable$P05_SC <- OTU_Stable$HV_001_15 + OTU_Stable$HV_002_15  + OTU_Stable$HV_004_15+OTU_Stable$HV_003_15 + OTU_Stable$HV_005_15
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
+# removed OTU_Stable$HV_003_15
+
+#P06 Left
+OTU_Stable$P06_LH <- OTU_Stable$HV_001_16 + OTU_Stable$HV_003_16 + OTU_Stable$HV_004_16 + OTU_Stable$HV_005_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+#P06 Right
+OTU_Stable$P06_RH <- OTU_Stable$HV_001_18 + OTU_Stable$HV_002_18 + OTU_Stable$HV_003_18 + OTU_Stable$HV_004_18 + OTU_Stable$HV_005_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+#P06 Scalp
+OTU_Stable$P06_SC <- OTU_Stable$HV_001_19 + OTU_Stable$HV_002_19 + OTU_Stable$HV_003_19 + OTU_Stable$HV_004_19 + OTU_Stable$HV_005_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+
+#P07 Left
+OTU_Stable$P07_LH <- OTU_Stable$HV_001_20 + OTU_Stable$HV_002_20 + OTU_Stable$HV_003_20 + OTU_Stable$HV_004_20 + OTU_Stable$HV_005_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+#P07 Right
+OTU_Stable$P07_RH <- OTU_Stable$HV_001_21 + OTU_Stable$HV_002_21 + OTU_Stable$HV_003_21 + OTU_Stable$HV_004_21 
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+#P07 Scalp
+OTU_Stable$P07_SC <- OTU_Stable$HV_001_22 + OTU_Stable$HV_002_22 + OTU_Stable$HV_003_22 + OTU_Stable$HV_004_22 + OTU_Stable$HV_005_22
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
+
+
+#P08 Left
+OTU_Stable$P08_LH <- OTU_Stable$HV_006_01 + OTU_Stable$HV_007_01 + OTU_Stable$HV_008_01 + OTU_Stable$HV_009_01 + OTU_Stable$HV_010_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+#P08 Right
+OTU_Stable$P08_RH <- OTU_Stable$HV_006_02 + OTU_Stable$HV_007_02 + OTU_Stable$HV_008_02 + OTU_Stable$HV_010_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+#P08 Scalp
+OTU_Stable$P08_SC <- OTU_Stable$HV_006_03 + OTU_Stable$HV_007_03 + OTU_Stable$HV_008_03 + OTU_Stable$HV_009_03 + OTU_Stable$HV_010_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+
+#P09 Left
+OTU_Stable$P09_LH <- OTU_Stable$HV_006_04 + OTU_Stable$HV_007_04 + OTU_Stable$HV_008_04 + OTU_Stable$HV_009_04 + OTU_Stable$HV_010_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+#P09 Right
+OTU_Stable$P09_RH <- OTU_Stable$HV_006_05 + OTU_Stable$HV_007_05 + OTU_Stable$HV_008_05 + OTU_Stable$HV_009_05 + OTU_Stable$HV_010_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+#P09 Scalp
+OTU_Stable$P09_SC <- OTU_Stable$HV_006_06 + OTU_Stable$HV_007_06 + OTU_Stable$HV_008_06 + OTU_Stable$HV_009_06 + OTU_Stable$HV_010_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+
+#P10 Left
+OTU_Stable$P10_LH <- OTU_Stable$HV_006_07 + OTU_Stable$HV_007_07 + OTU_Stable$HV_008_07 + OTU_Stable$HV_009_07 + OTU_Stable$HV_010_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+#P10 Right
+OTU_Stable$P10_RH <- OTU_Stable$HV_006_08 + OTU_Stable$HV_007_08 + OTU_Stable$HV_008_08 + OTU_Stable$HV_009_08 + OTU_Stable$HV_010_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+#P10 Scalp
+OTU_Stable$P10_SC <- OTU_Stable$HV_006_09 + OTU_Stable$HV_007_09 + OTU_Stable$HV_008_09 + OTU_Stable$HV_009_09 + OTU_Stable$HV_010_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+
+#P11 Left
+OTU_Stable$P11_LH <- OTU_Stable$HV_006_10 + OTU_Stable$HV_007_10 + OTU_Stable$HV_008_10 + OTU_Stable$HV_009_10 + OTU_Stable$HV_010_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+#P11 Right
+OTU_Stable$P11_RH <- OTU_Stable$HV_006_11 + OTU_Stable$HV_007_11 + OTU_Stable$HV_008_11 + OTU_Stable$HV_009_11 + OTU_Stable$HV_010_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+#P11 Scalp
+OTU_Stable$P11_SC <- OTU_Stable$HV_006_12 + OTU_Stable$HV_007_12 + OTU_Stable$HV_008_12 + OTU_Stable$HV_009_12 + OTU_Stable$HV_010_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+
+#P12 Left
+OTU_Stable$P12_LH <- OTU_Stable$HV_006_13 + OTU_Stable$HV_007_13 + OTU_Stable$HV_008_13 + OTU_Stable$HV_009_13 + OTU_Stable$HV_010_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+#P12 Right
+OTU_Stable$P12_RH <- OTU_Stable$HV_006_14 + OTU_Stable$HV_007_14 + OTU_Stable$HV_008_14 + OTU_Stable$HV_009_14 + OTU_Stable$HV_010_14
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+#P12 Scalp
+OTU_Stable$P12_SC <- OTU_Stable$HV_006_15 + OTU_Stable$HV_007_15 + OTU_Stable$HV_008_15 + OTU_Stable$HV_009_15 + OTU_Stable$HV_010_15
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+
+#P13 Left
+OTU_Stable$P13_LH <- OTU_Stable$HV_006_16 + OTU_Stable$HV_007_16 + OTU_Stable$HV_008_16 + OTU_Stable$HV_009_16 + OTU_Stable$HV_010_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+#P13 Right
+OTU_Stable$P13_RH <- OTU_Stable$HV_006_18 + OTU_Stable$HV_007_18 + OTU_Stable$HV_008_18 + OTU_Stable$HV_009_18 + OTU_Stable$HV_010_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+#P13 Scalp
+OTU_Stable$P13_SC <- OTU_Stable$HV_006_19 + OTU_Stable$HV_007_19 + OTU_Stable$HV_008_19 + OTU_Stable$HV_009_19 + OTU_Stable$HV_010_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+
+#P14 Left
+OTU_Stable$P14_LH <- OTU_Stable$HV_006_20 + OTU_Stable$HV_007_20 + OTU_Stable$HV_008_20 + OTU_Stable$HV_009_20 + OTU_Stable$HV_010_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+#P14 Right
+OTU_Stable$P14_RH <- OTU_Stable$HV_006_21 + OTU_Stable$HV_007_21 + OTU_Stable$HV_008_21 + OTU_Stable$HV_009_21 + OTU_Stable$HV_010_21
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+#P14 Scalp
+OTU_Stable$P14_SC <- OTU_Stable$HV_006_22 + OTU_Stable$HV_007_22 + OTU_Stable$HV_008_22 + OTU_Stable$HV_009_22 + OTU_Stable$HV_010_22
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+
+#P15 Left
+OTU_Stable$P15_LH <- OTU_Stable$HV_011_01 + OTU_Stable$HV_012_01 + OTU_Stable$HV_013_01 + OTU_Stable$HV_014_01 + OTU_Stable$HV_015_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+#P15 Right
+OTU_Stable$P15_RH <- OTU_Stable$HV_011_02 + OTU_Stable$HV_012_02 + OTU_Stable$HV_013_02 + OTU_Stable$HV_014_02 + OTU_Stable$HV_015_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+#P15 Scalp
+OTU_Stable$P15_SC <- OTU_Stable$HV_011_03 + OTU_Stable$HV_012_03 + OTU_Stable$HV_013_03 + OTU_Stable$HV_014_03 + OTU_Stable$HV_015_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+
+#P16 Left
+OTU_Stable$P16_LH <- OTU_Stable$HV_011_04 + OTU_Stable$HV_012_04 + OTU_Stable$HV_013_04 + OTU_Stable$HV_014_04 + OTU_Stable$HV_015_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+#P16 Right
+OTU_Stable$P16_RH <- OTU_Stable$HV_011_05 + OTU_Stable$HV_012_05 + OTU_Stable$HV_013_05 + OTU_Stable$HV_014_05 + OTU_Stable$HV_015_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+#P16 Scalp
+OTU_Stable$P16_SC <- OTU_Stable$HV_011_06 + OTU_Stable$HV_012_06 ++ OTU_Stable$HV_014_06 + OTU_Stable$HV_015_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+
+#P17 Left
+OTU_Stable$P17_LH <- OTU_Stable$HV_011_07 + OTU_Stable$HV_012_07 + OTU_Stable$HV_013_07 + OTU_Stable$HV_014_07 + OTU_Stable$HV_015_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+#P17 Right
+OTU_Stable$P17_RH <- OTU_Stable$HV_011_08 + OTU_Stable$HV_012_08 + OTU_Stable$HV_013_08 + OTU_Stable$HV_014_08 + OTU_Stable$HV_015_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+#P17 Scalp
+OTU_Stable$P17_SC <- OTU_Stable$HV_011_09 + OTU_Stable$HV_012_09 + OTU_Stable$HV_013_09 + OTU_Stable$HV_014_09 + OTU_Stable$HV_015_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+
+#P18 Left
+OTU_Stable$P18_LH <- OTU_Stable$HV_011_10 + OTU_Stable$HV_012_10 + OTU_Stable$HV_013_10 + OTU_Stable$HV_014_10 + OTU_Stable$HV_015_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+#P18 Right
+OTU_Stable$P18_RH <- OTU_Stable$HV_011_11 + OTU_Stable$HV_012_11 + OTU_Stable$HV_013_11 + OTU_Stable$HV_014_11 + OTU_Stable$HV_015_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+#P18 Scalp
+OTU_Stable$P18_SC <- OTU_Stable$HV_011_12 + OTU_Stable$HV_012_12 + OTU_Stable$HV_013_12 + OTU_Stable$HV_014_12 + OTU_Stable$HV_015_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+
+#P19 Left
+OTU_Stable$P19_LH <- OTU_Stable$HV_011_13 + OTU_Stable$HV_012_13 + OTU_Stable$HV_013_13 + OTU_Stable$HV_014_13 + OTU_Stable$HV_015_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+#P19 Right
+OTU_Stable$P19_RH <- OTU_Stable$HV_011_14 + OTU_Stable$HV_012_14 + OTU_Stable$HV_013_14 + OTU_Stable$HV_014_14 + OTU_Stable$HV_015_14
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+#P19 Scalp
+OTU_Stable$P19_SC <- OTU_Stable$HV_011_15 + OTU_Stable$HV_012_15 + OTU_Stable$HV_013_15 + OTU_Stable$HV_014_15 + OTU_Stable$HV_015_15
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+
+#P20 Left
+OTU_Stable$P20_LH <- OTU_Stable$HV_011_16 + OTU_Stable$HV_012_16 + OTU_Stable$HV_013_16 + OTU_Stable$HV_014_16 + OTU_Stable$HV_015_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+#P20 Right
+OTU_Stable$P20_RH <- OTU_Stable$HV_011_18 + OTU_Stable$HV_012_18 + OTU_Stable$HV_013_18 + OTU_Stable$HV_014_18 + OTU_Stable$HV_015_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+#P20 Scalp
+OTU_Stable$P20_SC <- OTU_Stable$HV_011_19 + OTU_Stable$HV_012_19 + OTU_Stable$HV_013_19 + OTU_Stable$HV_014_19 + OTU_Stable$HV_015_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+
+#P21 Left
+OTU_Stable$P21_LH <- OTU_Stable$HV_011_20 + OTU_Stable$HV_012_20 + OTU_Stable$HV_013_20 + OTU_Stable$HV_014_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+#P21 Right
+OTU_Stable$P21_RH <- OTU_Stable$HV_011_21 + OTU_Stable$HV_012_21 + OTU_Stable$HV_013_21 + OTU_Stable$HV_014_21
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+#P21 Scalp
+OTU_Stable$P21_SC <- OTU_Stable$HV_011_22 + OTU_Stable$HV_012_22 + OTU_Stable$HV_013_22 + OTU_Stable$HV_014_22
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+
+#P22 Left
+OTU_Stable$P22_LH <- OTU_Stable$HV_021_02 + OTU_Stable$HV_022_01 + OTU_Stable$HV_023_01 + OTU_Stable$HV_024_01 + OTU_Stable$HV_025_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+#P22 Right
+OTU_Stable$P22_RH <- OTU_Stable$HV_026_01 + OTU_Stable$HV_027_08 + OTU_Stable$HV_028_01 + OTU_Stable$HV_029_01 + OTU_Stable$HV_030_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+#P22 Scalp
+OTU_Stable$P22_SC <- OTU_Stable$HV_016_01 + OTU_Stable$HV_017_01 + OTU_Stable$HV_018_01 + OTU_Stable$HV_019_01 + OTU_Stable$HV_020_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+
+#P23 Left
+OTU_Stable$P23_LH <- OTU_Stable$HV_021_03 + OTU_Stable$HV_022_02 + OTU_Stable$HV_023_02 + OTU_Stable$HV_024_02 + OTU_Stable$HV_025_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+#P23 Right
+OTU_Stable$P23_RH <- OTU_Stable$HV_026_02 + OTU_Stable$HV_027_09 + OTU_Stable$HV_028_02 + OTU_Stable$HV_029_02 + OTU_Stable$HV_030_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+#P23 Scalp
+OTU_Stable$P23_SC <- OTU_Stable$HV_016_02 + OTU_Stable$HV_017_02 + OTU_Stable$HV_018_02 + OTU_Stable$HV_019_02 + OTU_Stable$HV_020_02
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+
+#P24 Left
+OTU_Stable$P24_LH <- OTU_Stable$HV_021_04 + OTU_Stable$HV_022_03 + OTU_Stable$HV_023_03 + OTU_Stable$HV_024_03 + OTU_Stable$HV_025_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+#P24 Right
+OTU_Stable$P24_RH <- OTU_Stable$HV_026_03 + OTU_Stable$HV_027_10 + OTU_Stable$HV_028_03 + OTU_Stable$HV_029_03 + OTU_Stable$HV_030_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+#P24 Scalp
+OTU_Stable$P24_SC <- OTU_Stable$HV_016_03 + OTU_Stable$HV_017_03 + OTU_Stable$HV_018_03 + OTU_Stable$HV_019_03 + OTU_Stable$HV_021_01
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+
+#P25 Left
+OTU_Stable$P25_LH <- OTU_Stable$HV_021_05 + OTU_Stable$HV_022_04 + OTU_Stable$HV_023_04 + OTU_Stable$HV_024_04 + OTU_Stable$HV_025_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+#P25 Right
+OTU_Stable$P25_RH <- OTU_Stable$HV_026_04 + OTU_Stable$HV_027_11 + OTU_Stable$HV_028_04 + OTU_Stable$HV_029_04 + OTU_Stable$HV_030_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+#P25 Scalp
+OTU_Stable$P25_SC <- OTU_Stable$HV_016_04 + OTU_Stable$HV_017_04 + OTU_Stable$HV_018_04 + OTU_Stable$HV_019_04 + OTU_Stable$HV_020_03
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+
+#P26 Left
+OTU_Stable$P26_LH <- OTU_Stable$HV_021_06 + OTU_Stable$HV_022_05 + OTU_Stable$HV_023_05 + OTU_Stable$HV_024_05 + OTU_Stable$HV_025_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+#P26 Right
+OTU_Stable$P26_RH <- OTU_Stable$HV_026_05 + OTU_Stable$HV_027_12 + OTU_Stable$HV_028_05 + OTU_Stable$HV_029_05 + OTU_Stable$HV_030_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+#P26 Scalp
+OTU_Stable$P26_SC <- OTU_Stable$HV_016_05 + OTU_Stable$HV_017_05 + OTU_Stable$HV_018_05 + OTU_Stable$HV_019_05 + OTU_Stable$HV_020_04
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+
+#P27 Left
+OTU_Stable$P27_LH <- OTU_Stable$HV_021_07 + OTU_Stable$HV_022_06 + OTU_Stable$HV_023_06 + OTU_Stable$HV_024_06 + OTU_Stable$HV_025_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+#P27 Right
+OTU_Stable$P27_RH <- OTU_Stable$HV_026_06 + OTU_Stable$HV_027_13 + OTU_Stable$HV_028_06 + OTU_Stable$HV_029_06 + OTU_Stable$HV_030_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+#P27 Scalp
+OTU_Stable$P27_SC <- OTU_Stable$HV_016_06 + OTU_Stable$HV_017_06 + OTU_Stable$HV_018_06 + OTU_Stable$HV_019_06 + OTU_Stable$HV_020_05
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+
+#P28 Left
+OTU_Stable$P28_LH <- OTU_Stable$HV_021_08 + OTU_Stable$HV_022_07 + OTU_Stable$HV_023_07 + OTU_Stable$HV_024_07 + OTU_Stable$HV_025_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+#P28 Right
+OTU_Stable$P28_RH <- OTU_Stable$HV_026_07 + OTU_Stable$HV_027_14 + OTU_Stable$HV_028_07 + OTU_Stable$HV_029_07 + OTU_Stable$HV_030_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+#P28 Scalp
+OTU_Stable$P28_SC <- OTU_Stable$HV_016_07 + OTU_Stable$HV_017_07 + OTU_Stable$HV_018_07 + OTU_Stable$HV_019_07 + OTU_Stable$HV_020_06
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+
+#P29 Left
+OTU_Stable$P29_LH <- OTU_Stable$HV_021_09 + OTU_Stable$HV_022_08 + OTU_Stable$HV_023_08 + OTU_Stable$HV_024_08 + OTU_Stable$HV_025_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+#P29 Right
+OTU_Stable$P29_RH <- OTU_Stable$HV_026_08 + OTU_Stable$HV_027_15 + OTU_Stable$HV_028_08 + OTU_Stable$HV_029_08 + OTU_Stable$HV_030_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+#P29 Scalp
+OTU_Stable$P29_SC <- OTU_Stable$HV_016_08 + OTU_Stable$HV_017_08 + OTU_Stable$HV_018_08 + OTU_Stable$HV_019_08 + OTU_Stable$HV_020_07
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+
+#P30 Left
+OTU_Stable$P30_LH <- OTU_Stable$HV_021_10 + OTU_Stable$HV_022_09 + OTU_Stable$HV_023_09 + OTU_Stable$HV_024_09 + OTU_Stable$HV_025_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+#P30 Right
+OTU_Stable$P30_RH <- OTU_Stable$HV_026_09 + OTU_Stable$HV_027_16 + OTU_Stable$HV_028_09 + OTU_Stable$HV_029_09 + OTU_Stable$HV_030_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+#P30 Scalp
+OTU_Stable$P30_SC <- OTU_Stable$HV_016_09 + OTU_Stable$HV_017_09 + OTU_Stable$HV_018_09 + OTU_Stable$HV_019_09 + OTU_Stable$HV_020_08
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+
+#P31 Left
+OTU_Stable$P31_LH <- OTU_Stable$HV_021_11 + OTU_Stable$HV_022_10 + OTU_Stable$HV_023_10 + OTU_Stable$HV_024_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+#P31 Right
+OTU_Stable$P31_RH <- OTU_Stable$HV_026_10 + OTU_Stable$HV_027_18 + OTU_Stable$HV_028_10 + OTU_Stable$HV_029_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+#P31 Scalp
+OTU_Stable$P31_SC <- OTU_Stable$HV_016_10 + OTU_Stable$HV_017_10 + OTU_Stable$HV_018_10 + OTU_Stable$HV_019_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+
+#P32 Left
+OTU_Stable$P32_LH <- OTU_Stable$HV_021_12 + OTU_Stable$HV_022_11 + OTU_Stable$HV_023_11 + OTU_Stable$HV_024_11 + OTU_Stable$HV_025_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+#P32 Right
+OTU_Stable$P32_RH <- OTU_Stable$HV_026_11 + OTU_Stable$HV_027_19 + OTU_Stable$HV_028_11 + OTU_Stable$HV_029_11 + OTU_Stable$HV_030_10
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+#P32 Scalp
+OTU_Stable$P32_SC <- OTU_Stable$HV_016_11 + OTU_Stable$HV_017_11 + OTU_Stable$HV_018_11 + OTU_Stable$HV_019_11 + OTU_Stable$HV_020_09
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+
+#P34 Left
+OTU_Stable$P34_LH <- OTU_Stable$HV_021_14 + OTU_Stable$HV_022_12 + OTU_Stable$HV_023_12 + OTU_Stable$HV_024_12 + OTU_Stable$HV_025_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+#P34 Right
+OTU_Stable$P34_RH <- OTU_Stable$HV_026_12 + OTU_Stable$HV_027_20 + OTU_Stable$HV_028_12 + OTU_Stable$HV_029_12 + OTU_Stable$HV_030_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+#P34 Scalp
+OTU_Stable$P34_SC <- OTU_Stable$HV_016_12 + OTU_Stable$HV_017_12 + OTU_Stable$HV_018_12 + OTU_Stable$HV_019_12 + OTU_Stable$HV_020_11
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+
+#P35 Left
+OTU_Stable$P35_LH <- OTU_Stable$HV_021_15 + OTU_Stable$HV_022_13 + OTU_Stable$HV_023_13 + OTU_Stable$HV_024_13 + OTU_Stable$HV_025_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+#P35 Right
+OTU_Stable$P35_RH <- OTU_Stable$HV_026_13 + OTU_Stable$HV_027_21 + OTU_Stable$HV_028_13 + OTU_Stable$HV_029_13 + OTU_Stable$HV_030_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+#P35 Scalp
+OTU_Stable$P35_SC <- OTU_Stable$HV_016_13 + OTU_Stable$HV_017_13 + OTU_Stable$HV_018_13 + OTU_Stable$HV_019_13 + OTU_Stable$HV_020_12
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+
+#P36 Left
+OTU_Stable$P36_LH <- OTU_Stable$HV_021_16 + OTU_Stable$HV_022_14 + OTU_Stable$HV_023_14 + OTU_Stable$HV_024_14 + OTU_Stable$HV_025_14
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+#P36 Right
+OTU_Stable$P36_RH <- OTU_Stable$HV_026_14 + OTU_Stable$HV_027_22 + OTU_Stable$HV_028_14 + OTU_Stable$HV_029_14 + OTU_Stable$HV_030_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+#P36 Scalp
+OTU_Stable$P36_SC <- OTU_Stable$HV_016_14 + OTU_Stable$HV_017_14 + OTU_Stable$HV_018_14 + OTU_Stable$HV_019_14 + OTU_Stable$HV_020_13
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+
+#P37 Left
+OTU_Stable$P37_LH <- OTU_Stable$HV_021_18 + OTU_Stable$HV_022_15 + OTU_Stable$HV_023_15 + OTU_Stable$HV_024_15 + OTU_Stable$HV_025_15
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+#P37 Right
+OTU_Stable$P37_RH <- OTU_Stable$HV_026_15 + OTU_Stable$HV_028_15 + OTU_Stable$HV_029_15 + OTU_Stable$HV_030_14 + OTU_Stable$HV_030_22
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+#P37 Scalp
+OTU_Stable$P37_SC <- OTU_Stable$HV_016_15 + OTU_Stable$HV_017_15 + OTU_Stable$HV_018_15 + OTU_Stable$HV_019_15 + OTU_Stable$HV_020_14
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+
+#P38 Left
+OTU_Stable$P38_LH <- OTU_Stable$HV_021_19 + OTU_Stable$HV_022_16 + OTU_Stable$HV_023_16 + OTU_Stable$HV_024_16 + OTU_Stable$HV_025_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+#P38 Right
+OTU_Stable$P38_RH <- OTU_Stable$HV_026_16 + OTU_Stable$HV_028_16 + OTU_Stable$HV_029_16 + OTU_Stable$HV_030_15 
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+#P38 Scalp
+OTU_Stable$P38_SC <- OTU_Stable$HV_016_16 + OTU_Stable$HV_017_16 + OTU_Stable$HV_018_16 + OTU_Stable$HV_019_16 + OTU_Stable$HV_020_15
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+
+#P39 Left
+OTU_Stable$P39_LH <- OTU_Stable$HV_021_20 + OTU_Stable$HV_022_18 + OTU_Stable$HV_023_18 + OTU_Stable$HV_024_18 + OTU_Stable$HV_025_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+#P39 Right
+OTU_Stable$P39_RH <- OTU_Stable$HV_026_18 + OTU_Stable$HV_028_18 + OTU_Stable$HV_029_18 + OTU_Stable$HV_030_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+#P39 Scalp
+OTU_Stable$P39_SC <- OTU_Stable$HV_016_18 + OTU_Stable$HV_017_18 + OTU_Stable$HV_018_18 + OTU_Stable$HV_019_18 + OTU_Stable$HV_020_16
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+
+#P40 Left
+OTU_Stable$P40_LH <- OTU_Stable$HV_021_21 + OTU_Stable$HV_022_19 + OTU_Stable$HV_023_19 + OTU_Stable$HV_024_19 + OTU_Stable$HV_025_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+#P40 Right
+OTU_Stable$P40_RH <- OTU_Stable$HV_026_19 + OTU_Stable$HV_028_19 + OTU_Stable$HV_029_19 + OTU_Stable$HV_030_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+#P40 Scalp
+OTU_Stable$P40_SC <- OTU_Stable$HV_016_19 + OTU_Stable$HV_017_19 + OTU_Stable$HV_018_19 + OTU_Stable$HV_019_19 + OTU_Stable$HV_020_18
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+
+#P41 Left
+OTU_Stable$P41_LH <- OTU_Stable$HV_021_22 + OTU_Stable$HV_022_20 + OTU_Stable$HV_023_20 + OTU_Stable$HV_024_20 + OTU_Stable$HV_025_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+#P41 Right
+OTU_Stable$P41_RH <- OTU_Stable$HV_026_20 + OTU_Stable$HV_028_20 + OTU_Stable$HV_029_20 + OTU_Stable$HV_030_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+#P41 Scalp
+OTU_Stable$P41_SC <- OTU_Stable$HV_016_20 + OTU_Stable$HV_017_20 + OTU_Stable$HV_018_20 + OTU_Stable$HV_019_20 + OTU_Stable$HV_020_19
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+
+#P42 Left
+OTU_Stable$P42_LH <- OTU_Stable$HV_022_21 + OTU_Stable$HV_023_21 + OTU_Stable$HV_024_21 + OTU_Stable$HV_025_21 
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+#P42 Right
+OTU_Stable$P42_RH <- OTU_Stable$HV_026_21 + OTU_Stable$HV_028_21 + OTU_Stable$HV_029_21 + OTU_Stable$HV_030_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+#P42 Scalp
+OTU_Stable$P42_SC <- OTU_Stable$HV_016_21 + OTU_Stable$HV_017_21 + OTU_Stable$HV_018_21 + OTU_Stable$HV_019_21 + OTU_Stable$HV_020_20
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+
+#P43 Left
+OTU_Stable$P43_LH <- OTU_Stable$HV_022_22 + OTU_Stable$HV_023_22 + OTU_Stable$HV_024_22 + OTU_Stable$HV_025_01 + OTU_Stable$HV_025_22
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+#P43 Right
+OTU_Stable$P43_RH <- OTU_Stable$HV_026_22 + OTU_Stable$HV_028_22 + OTU_Stable$HV_029_22 + OTU_Stable$HV_030_21
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+#P43 Scalp
+OTU_Stable$P43_SC <- OTU_Stable$HV_016_22 + OTU_Stable$HV_017_22 + OTU_Stable$HV_018_22 + OTU_Stable$HV_019_22 + OTU_Stable$HV_020_21
+OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Stable Left Hand ---------- ##
+## -------------------------------------- ##
+############################################
+
+OTU_LH <- subset(OTU_Stable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Family))
+row.names(OTU_LH) <- OTU_LH$Family
+OTU_ALL_LH <- OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(OTU_ALL_LH) <- OTU_ALL_LH$Family
+OTU_ALL_LH <- subset (OTU_ALL_LH, select = -c(Family))
+OTU_ALL_LH$Mean <- rowMeans(OTU_ALL_LH)
+OTU_ALL_LH$Family <- row.names(OTU_ALL_LH)
+OTU_Stable_LH <- OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(OTU_Stable_LH) <- OTU_Stable_LH$Family
+OTU_Stable_LH <- subset (OTU_Stable_LH, select = -c(Family))
+OTU_Stable_LH$Mean_Stable <- rowMeans(OTU_Stable_LH)
+OTU_Stable_LH$Family <- row.names(OTU_Stable_LH)
+OTU_LH_Compare <- subset (OTU_Stable_LH, select = c(Mean_Stable,Family))
+OTU_LH_Compare<- merge(OTU_ALL_LH, OTU_LH_Compare, by= "Family")
+OTU_LH_Compare$Mean_temp <- OTU_LH_Compare$Mean - OTU_LH_Compare$Mean_Stable
+LH_Stable <- subset(OTU_LH_Compare, 0 < Mean_Stable)
+LH_Markers <- LH_Stable2$Family
+```
+```{r}
+# Left Hand Stable Family Markers: 
+LH_Markers
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Stable Right Hand --------- ##
+## -------------------------------------- ##
+############################################
+
+OTU_RH <- subset(OTU_Stable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Family))
+row.names(OTU_RH) <- OTU_RH$Family
+OTU_ALL_RH <- OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(OTU_ALL_RH) <- OTU_ALL_RH$Family
+OTU_ALL_RH <- subset (OTU_ALL_RH, select = -c(Family))
+OTU_ALL_RH$Mean <- rowMeans(OTU_ALL_RH)
+OTU_ALL_RH$Family <- row.names(OTU_ALL_RH)
+OTU_Stable_RH <- OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(OTU_Stable_RH) <- OTU_Stable_RH$Family
+OTU_Stable_RH <- subset (OTU_Stable_RH, select = -c(Family))
+OTU_Stable_RH$Mean_Stable <- rowMeans(OTU_Stable_RH)
+OTU_Stable_RH$Family <- row.names(OTU_Stable_RH)
+OTU_RH_Compare <- subset (OTU_Stable_RH, select = c(Mean_Stable,Family))
+OTU_RH_Compare<- merge(OTU_ALL_RH, OTU_RH_Compare, by= "Family")
+OTU_RH_Compare$Mean_temp <- OTU_RH_Compare$Mean - OTU_RH_Compare$Mean_Stable
+RH_Stable <- subset(OTU_RH_Compare, 0 < Mean_Stable)
+RH_Markers <- RH_Stable2$Family
+```
+```{r}
+# Right Hand Stable Family Markers: 
+RH_Markers
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ------------ Stable Scalp ------------ ##
+## -------------------------------------- ##
+############################################
+
+OTU_SC <- subset(OTU_Stable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Family))
+row.names(OTU_SC) <- OTU_SC$Family
+OTU_ALL_SC <- OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(OTU_ALL_SC) <- OTU_ALL_SC$Family
+OTU_ALL_SC <- subset (OTU_ALL_SC, select = -c(Family))
+OTU_ALL_SC$Mean <- rowMeans(OTU_ALL_SC)
+OTU_ALL_SC$Family <- row.names(OTU_ALL_SC)
+OTU_Stable_SC <- OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(OTU_Stable_SC) <- OTU_Stable_SC$Family
+OTU_Stable_SC <- subset (OTU_Stable_SC, select = -c(Family))
+OTU_Stable_SC$Mean_Stable <- rowMeans(OTU_Stable_SC)
+OTU_Stable_SC$Family <- row.names(OTU_Stable_SC)
+OTU_SC_Compare <- subset (OTU_Stable_SC, select = c(Mean_Stable,Family))
+OTU_SC_Compare<- merge(OTU_ALL_SC, OTU_SC_Compare, by= "Family")
+OTU_SC_Compare$Mean_temp <- OTU_SC_Compare$Mean - OTU_SC_Compare$Mean_Stable
+SC_Stable <- subset(OTU_SC_Compare, 0 < Mean_Stable)
+SC_Markers <- SC_Stable2$Family
+```
+```{r}
+# Scalp Stable Family Markers: 
+SC_Markers
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ------------ Stable Hands ------------ ##
+## -------------------------------------- ##
+############################################
+
+Hand_Markers_Shared <- LH_Markers[LH_Markers %in% RH_Markers]
+```
+```{r}
+# Hand Stable Family Markers: 
+Hand_Markers_Shared
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ----- Stable Across All Locations ---- ##
+## -------------------------------------- ##
+############################################
+
+Overall_Markers_Shared <- Hand_Markers_Shared[Hand_Markers_Shared  %in% SC_Markers]
+```
+```{r}
+# Stable Across All Locations Family Markers: 
+Overall_Markers_Shared
+```
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ------ Stable Family Bar Graph ------- ##
+## -------------------------------------- ##
+############################################
+marker_bar_family <- read.table(text="
+Location,Family,OverallMean, StableMean
+Left Hand, Baculoviridae, 1.0000000, 0.59523810
+Left Hand, Genomoviridae, 0.9523810, 0.23809524
+Left Hand, Herelleviridae, 0.9047619, 0.02380952
+Left Hand, Myoviridae, 0.7380952, 0.02380952
+Left Hand, Papillomaviridae, 0.5952381, 0.14285714
+Left Hand, Podoviridae, 0.4047619, 0.07142857
+Left Hand, Siphoviridae, 0.9761905, 0.38095238
+Left Hand, Unclassified Caudovirales, 0.9523810, 0.26190476
+Left Hand, Unclassified Homo sapiens like virus, 0.5238095, 0.07142857
+Left Hand, Caulimoviridae, 0, 0
+Left Hand, Unclassified Staphylococcus warneri like virus, 0, 0
+Left Hand, Microviridae, 0, 0
+Left Hand, Unclassified Eukaryotic like virus, 0, 0
+Left Hand, Unclassified Staphylococcus capitis like virus, 0, 0 
+Left Hand, Unclassified Staphylococcus like virus, 0, 0
+Right Hand, Baculoviridae, 1.0000000, 0.30952381
+Right Hand, Caulimoviridae, 1.0000000, 0.02380952
+Right Hand, Genomoviridae, 0.6190476, 0.14285714
+Right Hand, Herelleviridae, 0.7380952, 0.02380952
+Right Hand, Myoviridae, 0.5714286, 0.02380952
+Right Hand, Papillomaviridae, 0.8333333, 0.14285714
+Right Hand, Podoviridae, 0.5476190, 0.02380952
+Right Hand, Siphoviridae, 0.9761905, 0.42857143
+Right Hand, Unclassified Caudovirales, 1.0000000, 0.28571429
+Right Hand, Unclassified Homo sapiens like virus, 0.8095238, 0.04761905
+Right Hand, Unclassified Staphylococcus warneri like virus, 0.2857143, 0.02380952
+Right Hand, Microviridae, 0, 0
+Right Hand, Unclassified Eukaryotic like virus, 0, 0
+Right Hand, Unclassified Staphylococcus capitis like virus, 0, 0
+Right Hand, Unclassified Staphylococcus like virus, 0, 0
+Scalp, Baculoviridae, 0.9761905, 0.40476190
+Scalp, Genomoviridae, 0.9523810, 0.33333333
+Scalp, Herelleviridae, 0.9285714, 0.04761905
+Scalp, Microviridae, 0.9523810, 0.02380952
+Scalp, Papillomaviridae, 0.8571429, 0.21428571
+Scalp, Podoviridae, 0.9285714, 0.11904762
+Scalp, Siphoviridae, 1.0000000, 0.57142857
+Scalp, Unclassified Caudovirales, 1.0000000, 0.52380952
+Scalp, Unclassified Eukaryotic like virus, 0.2857143, 0.02380952
+Scalp, Unclassified Homo sapiens like virus, 0.9523810, 0.09523810
+Scalp, Unclassified Staphylococcus capitis like virus, 0.6190476, 0.02380952
+Scalp, Unclassified Staphylococcus like virus, 0.8571429, 0.02380952
+Scalp, Myoviridae, 0, 0
+Scalp, Caulimoviridae, 0, 0
+Scalp, Unclassified Staphylococcus warneri like virus, 0, 0
+", header=TRUE, sep=",") 
+marker_bar_family$OverallSum<-round(marker_bar_family$OverallMean*42)
+marker_bar_family$StableSum<-round(marker_bar_family$StableMean*42)
+marker_bar_family$PercentStable<-(marker_bar_family$StableSum/marker_bar_family$OverallSum)
+marker_bar_family <- marker_bar_family %>%
+        mutate(PercentStable = paste0(round(PercentStable*100, 1), "%"))
+marker_bar_family[10, "PercentStable"] <- ""
+marker_bar_family[11, "PercentStable"] <- ""
+marker_bar_family[12, "PercentStable"] <- ""
+marker_bar_family[13, "PercentStable"] <- ""
+marker_bar_family[14, "PercentStable"] <- ""
+marker_bar_family[15, "PercentStable"] <- ""
+marker_bar_family[27, "PercentStable"] <- ""
+marker_bar_family[28, "PercentStable"] <- ""
+marker_bar_family[29, "PercentStable"] <- ""
+marker_bar_family[30, "PercentStable"] <- ""
+marker_bar_family[43, "PercentStable"] <- ""
+marker_bar_family[44, "PercentStable"] <- ""
+marker_bar_family[45, "PercentStable"] <- ""
+```
+```{r,include=FALSE}
+plot <- ggplot(marker_bar_family, 
+               aes(x = Family, 
+                   y = OverallSum, 
+                   fill = Location)) +
+  geom_bar(stat = "identity", 
+           position = "dodge",colour="black") +
+  scale_y_continuous(limits = c(0,42), 
+                     expand = c(0, 0)) +
+  coord_flip()
+
+plot2<-ggplot(marker_bar_family, 
+              aes(x = Family, 
+                  y = -StableSum, 
+                  fill = Location)) +
+  geom_bar(stat = "identity", 
+           position = "dodge",alpha=0.5,colour="black") +
+  scale_y_continuous(limits = c(-42,0.1), 
+                     expand = c(.1, 0))+
+  coord_flip()
+p1<-plot+
+   theme_half_open(12)+
+  theme( axis.text.y = element_blank(),
+         axis.title.y = element_blank(),
+         axis.ticks.y = element_blank())+
+  theme(plot.margin = unit(c(0, 1, 0, 0), "cm"),
+        axis.line.y = element_line(color = "grey", linetype = "dotted"))+
+  scale_y_continuous(name = "Prevalence in Study Population",
+                     breaks = seq(0, 42, by = 6),
+                     labels = seq(0, 42, by = 6),
+                     limits = c(0,42), expand = c(0, 0))+
+  theme(legend.position = "none")+
+  ylab("Prevalence in Population")
+p2<-plot2 +
+   theme_half_open(12)+
+  scale_y_continuous(name = "Prevalence Stable",
+                     breaks = seq(0.1, -42, by = -6),
+                     labels = seq(0,  42, by =  6),
+                     limits = c(-42,0), expand = c(0, 0))+
+  theme(legend.position = "none")+
+  theme(plot.margin = unit(c(0, -0.2, 0, 0), "cm"))+ 
+  ylab("Prevalence Stable")
+legend_b <- get_legend(
+  p1 + 
+    guides(color = guide_legend(nrow = 1)) +
+    theme(legend.position = "bottom"))
+prow<-plot_grid(p2, p1,rel_widths = c(1.35,1))
+BAR_figure<-plot_grid(prow, legend_b, ncol = 1,nrow = 2, rel_heights = c(1, .1),align = "hv",axis="t")
+ggsave("BAR_FIGURE.pdf", BAR_figure,width = 16, height = 10, units = "in",dpi = 600, pointsize=12)
+```
+```{r}
+# Persistence of stable identified viral families within the study population:
+BAR_figure
+```
