@@ -15,8 +15,6 @@ Will need the following files:
 Output Notes: 
 Will generate a Phyloseq object that only contains CheckV annotated contigs that is used to make a krona plot of the overall abundance distribution of each taxonomic classification 
 
-
-
 ```{r setup,message=FALSE}
 library(readr)
 library(dplyr)
