@@ -12,7 +12,7 @@
 #The next step in this pipeline is The next step in pipeline is 2. Virome Assembly (2_Virome_Assembly.sh)
 
 #General Notes:
-#This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool comands may differ depending on installation of the tool. Please refer to the listed githubs for each tool used as mentioned in script for further information if issues arise 
+#This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool commands may differ depending on installation of the tool. Please refer to the listed Githubs for each tool used as mentioned in script for further information if issues arise 
 #This script is to help organize all files so that they are in an easier format to process through the pipeline. 
 #Warning: Files need to be downloaded from the SRA website (Bioproject PRJNA754140) which is >4TB worth of data and will take some time to download.  
 
