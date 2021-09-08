@@ -1,0 +1,483 @@
+---
+title: "6_Relative_Abundance_Fig2"
+output: html_document
+---
+
+## Description
+
+# Input Notes: 
+  #Will need the following files:
+  #Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
+  #counts2_bowtie.csv (generated in 3_Virome_Contig_Mapping.sh)
+   #vc_tax_nounclass.csv (generated in 4_Contig_Annotation.sh)
+
+# Output Notes: 
+  #Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------- Packages to Load ---------- ##
+## -------------------------------------- ##
+############################################
+library(readr)
+library(dplyr)
+library(tidyr)
+library(phyloseq)
+library(ggplot2)
+```
+
+```{r setup, include=FALSE}
+############################################
+## -------------------------------------- ##
+## -------- Make Phyloseq Object -------- ##
+## -------------------------------------- ##
+############################################
+
+## Upload sample metadata for the Phyloseq object
+Upload_Metadata <- read_csv("Sequencing_Data_Info_Sheet3.csv")
+Metadata <- Upload_Metadata
+# In the metadata change the Time_Collected so that it is better for graph outputs
+Metadata$Time <- Metadata$Time_Collected
+Metadata$Time[which(Metadata$Time == "T_0")] <- "00_Weeks"
+Metadata$Time[which(Metadata$Time == "2_week")] <- "02_Weeks"
+Metadata$Time[which(Metadata$Time == "1_month")] <- "04_Weeks"
+Metadata$Time[which(Metadata$Time == "3_month")] <- "12_Weeks"
+Metadata$Time[which(Metadata$Time == "6_month")] <- "24_Weeks"
+# Make sample_data for Phyloseq
+META <- sample_data(Metadata)
+sample_names(META)= META$SampleID
+
+## Upload count data to make the OTU table for the Phyloseq object
+
+CHeckV_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
+# Make otu_table for Phyloseq
+CHeckV_bar_OTU <- otu_table(CHeckV_counts, taxa_are_rows = TRUE)
+
+## Upload taxonomy information to make the OTU table for the Phyloseq object
+
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+tax_ann <-as.matrix(tax_ann)
+# Make tax_table for Phyloseq
+CHeckV_bar_tax <- tax_table(tax_ann)
+
+## Make Phyloseq object
+
+CHeckV_bar_PHY <- phyloseq(CHeckV_bar_OTU, CHeckV_bar_tax, META)
+
+## Remove samples from individuals who did not complete from the study, samples from individuals who did not have a complete set of samples, and samples that were repeated samples
+
+Samples_toRemove <- c("HV_001_27", "HV_002_27", "HV_003_27", "HV_004_27", "HV_005_27", "HV_006_27", "HV_007_27", "HV_008_27",
+                      "HV_009_27", "HV_010_27", "HV_011_27", "HV_012_27", "HV_013_27", "HV_014_27", "HV_015_27", "HV_016_27",
+                      "HV_017_27", "HV_018_27", "HV_019_27", "HV_020_27", "HV_021_27", "HV_022_27", "HV_023_27", "HV_024_27",
+                      "HV_025_27", "HV_026_27", "HV_027_27", "HV_028_27", "HV_029_27", "HV_030_27", "HV_015_20", "HV_015_21", 
+                      "HV_020_22", "HV_027_02", "HV_027_03", "HV_027_04", "HV_027_05", "HV_027_06", "HV_027_07", "HV_020_10",
+                      "HV_021_13", "HV_027_01","HV_003_15")
+
+## Final Phyloseq Object
+
+CHeckV_bar_PHY2 <- subset_samples(CHeckV_bar_PHY, !(SampleID %in% Samples_toRemove))
+```
+
+# Human Skin Virome Phyloseq Object:
+```{r}
+CHeckV_bar_PHY2
+```
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## --------- Left Hand Taxa Sums -------- ##
+## -------------------------------------- ##
+############################################
+
+## Calculate the top ten most abundant identified family level taxonomy for each subject for all left hand samples
+
+CHeckV_bar_PHY2_LH<- subset_samples(CHeckV_bar_PHY2, Location=="left")
+P_01 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P01")
+TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
+P_02 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P02")
+TopNOTUs_P02 <- sort(tapply(taxa_sums(P_02), tax_table(P_02)[, "Family"], sum), TRUE)[1:10]
+P_03 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P03")
+TopNOTUs_P03 <- sort(tapply(taxa_sums(P_03), tax_table(P_03)[, "Family"], sum), TRUE)[1:10]
+P_04 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P04")
+TopNOTUs_P04 <- sort(tapply(taxa_sums(P_04), tax_table(P_04)[, "Family"], sum), TRUE)[1:10]
+P_05 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P05")
+TopNOTUs_P05 <- sort(tapply(taxa_sums(P_05), tax_table(P_05)[, "Family"], sum), TRUE)[1:10]
+P_06 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P06")
+TopNOTUs_P06 <- sort(tapply(taxa_sums(P_06), tax_table(P_06)[, "Family"], sum), TRUE)[1:10]
+P_07 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P07")
+TopNOTUs_P07 <- sort(tapply(taxa_sums(P_07), tax_table(P_07)[, "Family"], sum), TRUE)[1:10]
+P_08 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P08")
+TopNOTUs_P08 <- sort(tapply(taxa_sums(P_08), tax_table(P_08)[, "Family"], sum), TRUE)[1:10]
+P_09 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P09")
+TopNOTUs_P09 <- sort(tapply(taxa_sums(P_09), tax_table(P_09)[, "Family"], sum), TRUE)[1:10]
+P_10 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P10")
+TopNOTUs_P10 <- sort(tapply(taxa_sums(P_10), tax_table(P_10)[, "Family"], sum), TRUE)[1:10]
+P_11 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P11")
+TopNOTUs_P11 <- sort(tapply(taxa_sums(P_11), tax_table(P_11)[, "Family"], sum), TRUE)[1:10]
+P_12 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P12")
+TopNOTUs_P12 <- sort(tapply(taxa_sums(P_12), tax_table(P_12)[, "Family"], sum), TRUE)[1:10]
+P_13 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P13")
+TopNOTUs_P13 <- sort(tapply(taxa_sums(P_13), tax_table(P_13)[, "Family"], sum), TRUE)[1:10]
+P_14 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P14")
+TopNOTUs_P14 <- sort(tapply(taxa_sums(P_14), tax_table(P_14)[, "Family"], sum), TRUE)[1:10]
+P_15 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P15")
+TopNOTUs_P15 <- sort(tapply(taxa_sums(P_15), tax_table(P_15)[, "Family"], sum), TRUE)[1:10]
+P_16 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P16")
+TopNOTUs_P16 <- sort(tapply(taxa_sums(P_16), tax_table(P_16)[, "Family"], sum), TRUE)[1:10]
+P_17 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P17")
+TopNOTUs_P17 <- sort(tapply(taxa_sums(P_17), tax_table(P_17)[, "Family"], sum), TRUE)[1:10]
+P_18 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P18")
+TopNOTUs_P18 <- sort(tapply(taxa_sums(P_18), tax_table(P_18)[, "Family"], sum), TRUE)[1:10]
+P_19 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P19")
+TopNOTUs_P19 <- sort(tapply(taxa_sums(P_19), tax_table(P_19)[, "Family"], sum), TRUE)[1:10]
+P_20 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P20")
+TopNOTUs_P20 <- sort(tapply(taxa_sums(P_20), tax_table(P_20)[, "Family"], sum), TRUE)[1:10]
+P_21 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P21")
+TopNOTUs_P21 <- sort(tapply(taxa_sums(P_21), tax_table(P_21)[, "Family"], sum), TRUE)[1:10]
+P_22 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P22")
+TopNOTUs_P22 <- sort(tapply(taxa_sums(P_22), tax_table(P_22)[, "Family"], sum), TRUE)[1:10]
+P_23 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P23")
+TopNOTUs_P23 <- sort(tapply(taxa_sums(P_23), tax_table(P_23)[, "Family"], sum), TRUE)[1:10]
+P_24 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P24")
+TopNOTUs_P24 <- sort(tapply(taxa_sums(P_24), tax_table(P_24)[, "Family"], sum), TRUE)[1:10]
+P_25 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P25")
+TopNOTUs_P25 <- sort(tapply(taxa_sums(P_25), tax_table(P_25)[, "Family"], sum), TRUE)[1:10]
+P_26 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P26")
+TopNOTUs_P26 <- sort(tapply(taxa_sums(P_26), tax_table(P_26)[, "Family"], sum), TRUE)[1:10]
+P_27 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P27")
+TopNOTUs_P27 <- sort(tapply(taxa_sums(P_27), tax_table(P_27)[, "Family"], sum), TRUE)[1:10]
+P_28 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P28")
+TopNOTUs_P28 <- sort(tapply(taxa_sums(P_28), tax_table(P_28)[, "Family"], sum), TRUE)[1:10]
+P_29 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P29")
+TopNOTUs_P29 <- sort(tapply(taxa_sums(P_29), tax_table(P_29)[, "Family"], sum), TRUE)[1:10]
+P_30 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P30")
+TopNOTUs_P30 <- sort(tapply(taxa_sums(P_30), tax_table(P_30)[, "Family"], sum), TRUE)[1:10]
+P_31 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P31")
+TopNOTUs_P31 <- sort(tapply(taxa_sums(P_31), tax_table(P_31)[, "Family"], sum), TRUE)[1:10]
+P_32 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P32")
+TopNOTUs_P32 <- sort(tapply(taxa_sums(P_32), tax_table(P_32)[, "Family"], sum), TRUE)[1:10]
+P_34 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P34")
+TopNOTUs_P34 <- sort(tapply(taxa_sums(P_34), tax_table(P_34)[, "Family"], sum), TRUE)[1:10]
+P_35 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P35")
+TopNOTUs_P35 <- sort(tapply(taxa_sums(P_35), tax_table(P_35)[, "Family"], sum), TRUE)[1:10]
+P_36 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P36")
+TopNOTUs_P36 <- sort(tapply(taxa_sums(P_36), tax_table(P_36)[, "Family"], sum), TRUE)[1:10]
+P_37 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P37")
+TopNOTUs_P37 <- sort(tapply(taxa_sums(P_37), tax_table(P_37)[, "Family"], sum), TRUE)[1:10]
+P_38 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P38")
+TopNOTUs_P38 <- sort(tapply(taxa_sums(P_38), tax_table(P_38)[, "Family"], sum), TRUE)[1:10]
+P_39 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P39")
+TopNOTUs_P39 <- sort(tapply(taxa_sums(P_39), tax_table(P_39)[, "Family"], sum), TRUE)[1:10]
+P_40 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P40")
+TopNOTUs_P40 <- sort(tapply(taxa_sums(P_40), tax_table(P_40)[, "Family"], sum), TRUE)[1:10]
+P_41 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P41")
+TopNOTUs_P41 <- sort(tapply(taxa_sums(P_41), tax_table(P_41)[, "Family"], sum), TRUE)[1:10]
+P_42 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P42")
+TopNOTUs_P42 <- sort(tapply(taxa_sums(P_42), tax_table(P_42)[, "Family"], sum), TRUE)[1:10]
+P_43 <- subset_samples(CHeckV_bar_PHY2_LH, Subject=="P43")
+TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
+TopNOTUs_10_LH<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
+TopNOTUs_10_list_LH<-unique(names(TopNOTUs_10_LH))
+
+# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+TopNOTUs_10_list_noUn_LH<-TopNOTUs_10_list_LH[!grepl("Unclassified",TopNOTUs_10_list_LH)]
+TopNOTUs_10_list_noUn_LH<-TopNOTUs_10_list_noUn_LH[!grepl("Unlcassified",TopNOTUs_10_list_noUn_LH)]
+TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Cressdnaviricota")
+TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Duplodnaviria")
+TopNOTUs_10_list_noUn_LH<-c(TopNOTUs_10_list_noUn_LH,"Unclassified Monodnaviria")
+```
+
+```{r}
+# Top ten most abundant family level taxa per individual for left hand samples:
+TopNOTUs_10_list_noUn_LH
+```
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## -------- Right Hand Taxa Sums -------- ##
+## -------------------------------------- ##
+############################################
+
+## Calculate the top ten most abundant identified family level taxonomy for each subject for all right hand samples
+
+CHeckV_bar_PHY2_RH<- subset_samples(CHeckV_bar_PHY2, Location=="right")
+P_01 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P01")
+TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
+P_02 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P02")
+TopNOTUs_P02 <- sort(tapply(taxa_sums(P_02), tax_table(P_02)[, "Family"], sum), TRUE)[1:10]
+P_03 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P03")
+TopNOTUs_P03 <- sort(tapply(taxa_sums(P_03), tax_table(P_03)[, "Family"], sum), TRUE)[1:10]
+P_04 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P04")
+TopNOTUs_P04 <- sort(tapply(taxa_sums(P_04), tax_table(P_04)[, "Family"], sum), TRUE)[1:10]
+P_05 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P05")
+TopNOTUs_P05 <- sort(tapply(taxa_sums(P_05), tax_table(P_05)[, "Family"], sum), TRUE)[1:10]
+P_06 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P06")
+TopNOTUs_P06 <- sort(tapply(taxa_sums(P_06), tax_table(P_06)[, "Family"], sum), TRUE)[1:10]
+P_07 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P07")
+TopNOTUs_P07 <- sort(tapply(taxa_sums(P_07), tax_table(P_07)[, "Family"], sum), TRUE)[1:10]
+P_08 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P08")
+TopNOTUs_P08 <- sort(tapply(taxa_sums(P_08), tax_table(P_08)[, "Family"], sum), TRUE)[1:10]
+P_09 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P09")
+TopNOTUs_P09 <- sort(tapply(taxa_sums(P_09), tax_table(P_09)[, "Family"], sum), TRUE)[1:10]
+P_10 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P10")
+TopNOTUs_P10 <- sort(tapply(taxa_sums(P_10), tax_table(P_10)[, "Family"], sum), TRUE)[1:10]
+P_11 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P11")
+TopNOTUs_P11 <- sort(tapply(taxa_sums(P_11), tax_table(P_11)[, "Family"], sum), TRUE)[1:10]
+P_12 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P12")
+TopNOTUs_P12 <- sort(tapply(taxa_sums(P_12), tax_table(P_12)[, "Family"], sum), TRUE)[1:10]
+P_13 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P13")
+TopNOTUs_P13 <- sort(tapply(taxa_sums(P_13), tax_table(P_13)[, "Family"], sum), TRUE)[1:10]
+P_14 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P14")
+TopNOTUs_P14 <- sort(tapply(taxa_sums(P_14), tax_table(P_14)[, "Family"], sum), TRUE)[1:10]
+P_15 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P15")
+TopNOTUs_P15 <- sort(tapply(taxa_sums(P_15), tax_table(P_15)[, "Family"], sum), TRUE)[1:10]
+P_16 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P16")
+TopNOTUs_P16 <- sort(tapply(taxa_sums(P_16), tax_table(P_16)[, "Family"], sum), TRUE)[1:10]
+P_17 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P17")
+TopNOTUs_P17 <- sort(tapply(taxa_sums(P_17), tax_table(P_17)[, "Family"], sum), TRUE)[1:10]
+P_18 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P18")
+TopNOTUs_P18 <- sort(tapply(taxa_sums(P_18), tax_table(P_18)[, "Family"], sum), TRUE)[1:10]
+P_19 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P19")
+TopNOTUs_P19 <- sort(tapply(taxa_sums(P_19), tax_table(P_19)[, "Family"], sum), TRUE)[1:10]
+P_20 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P20")
+TopNOTUs_P20 <- sort(tapply(taxa_sums(P_20), tax_table(P_20)[, "Family"], sum), TRUE)[1:10]
+P_21 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P21")
+TopNOTUs_P21 <- sort(tapply(taxa_sums(P_21), tax_table(P_21)[, "Family"], sum), TRUE)[1:10]
+P_22 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P22")
+TopNOTUs_P22 <- sort(tapply(taxa_sums(P_22), tax_table(P_22)[, "Family"], sum), TRUE)[1:10]
+P_23 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P23")
+TopNOTUs_P23 <- sort(tapply(taxa_sums(P_23), tax_table(P_23)[, "Family"], sum), TRUE)[1:10]
+P_24 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P24")
+TopNOTUs_P24 <- sort(tapply(taxa_sums(P_24), tax_table(P_24)[, "Family"], sum), TRUE)[1:10]
+P_25 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P25")
+TopNOTUs_P25 <- sort(tapply(taxa_sums(P_25), tax_table(P_25)[, "Family"], sum), TRUE)[1:10]
+P_26 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P26")
+TopNOTUs_P26 <- sort(tapply(taxa_sums(P_26), tax_table(P_26)[, "Family"], sum), TRUE)[1:10]
+P_27 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P27")
+TopNOTUs_P27 <- sort(tapply(taxa_sums(P_27), tax_table(P_27)[, "Family"], sum), TRUE)[1:10]
+P_28 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P28")
+TopNOTUs_P28 <- sort(tapply(taxa_sums(P_28), tax_table(P_28)[, "Family"], sum), TRUE)[1:10]
+P_29 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P29")
+TopNOTUs_P29 <- sort(tapply(taxa_sums(P_29), tax_table(P_29)[, "Family"], sum), TRUE)[1:10]
+P_30 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P30")
+TopNOTUs_P30 <- sort(tapply(taxa_sums(P_30), tax_table(P_30)[, "Family"], sum), TRUE)[1:10]
+P_31 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P31")
+TopNOTUs_P31 <- sort(tapply(taxa_sums(P_31), tax_table(P_31)[, "Family"], sum), TRUE)[1:10]
+P_32 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P32")
+TopNOTUs_P32 <- sort(tapply(taxa_sums(P_32), tax_table(P_32)[, "Family"], sum), TRUE)[1:10]
+P_34 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P34")
+TopNOTUs_P34 <- sort(tapply(taxa_sums(P_34), tax_table(P_34)[, "Family"], sum), TRUE)[1:10]
+P_35 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P35")
+TopNOTUs_P35 <- sort(tapply(taxa_sums(P_35), tax_table(P_35)[, "Family"], sum), TRUE)[1:10]
+P_36 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P36")
+TopNOTUs_P36 <- sort(tapply(taxa_sums(P_36), tax_table(P_36)[, "Family"], sum), TRUE)[1:10]
+P_37 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P37")
+TopNOTUs_P37 <- sort(tapply(taxa_sums(P_37), tax_table(P_37)[, "Family"], sum), TRUE)[1:10]
+P_38 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P38")
+TopNOTUs_P38 <- sort(tapply(taxa_sums(P_38), tax_table(P_38)[, "Family"], sum), TRUE)[1:10]
+P_39 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P39")
+TopNOTUs_P39 <- sort(tapply(taxa_sums(P_39), tax_table(P_39)[, "Family"], sum), TRUE)[1:10]
+P_40 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P40")
+TopNOTUs_P40 <- sort(tapply(taxa_sums(P_40), tax_table(P_40)[, "Family"], sum), TRUE)[1:10]
+P_41 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P41")
+TopNOTUs_P41 <- sort(tapply(taxa_sums(P_41), tax_table(P_41)[, "Family"], sum), TRUE)[1:10]
+P_42 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P42")
+TopNOTUs_P42 <- sort(tapply(taxa_sums(P_42), tax_table(P_42)[, "Family"], sum), TRUE)[1:10]
+P_43 <- subset_samples(CHeckV_bar_PHY2_RH, Subject=="P43")
+TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
+TopNOTUs_10_RH<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
+TopNOTUs_10_list_RH<-unique(names(TopNOTUs_10_RH))
+
+# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+TopNOTUs_10_list_noUn_RH<-TopNOTUs_10_list_RH[!grepl("Unclassified",TopNOTUs_10_list_RH)]
+TopNOTUs_10_list_noUn_RH<-TopNOTUs_10_list_noUn_RH[!grepl("Unlcassified",TopNOTUs_10_list_noUn_RH)]
+TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Caudovirales")
+TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Cressdnaviricota")
+TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Duplodnaviria")
+TopNOTUs_10_list_noUn_RH<-c(TopNOTUs_10_list_noUn_RH,"Unclassified Monodnaviria")
+```
+
+```{r}
+# Top ten most abundant family level taxa per individual for right hand samples:
+TopNOTUs_10_list_noUn_RH
+```
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ----------  Scalp Taxa Sums ---------- ##
+## -------------------------------------- ##
+############################################
+
+## Calculate the top ten most abundant identified family level taxonomy for each subject for all scalp samples
+
+CHeckV_bar_PHY2_SC<- subset_samples(CHeckV_bar_PHY2, Location=="scalp")
+P_01 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P01")
+TopNOTUs_P01 <- sort(tapply(taxa_sums(P_01), tax_table(P_01)[, "Family"], sum), TRUE)[1:10]
+P_02 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P02")
+TopNOTUs_P02 <- sort(tapply(taxa_sums(P_02), tax_table(P_02)[, "Family"], sum), TRUE)[1:10]
+P_03 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P03")
+TopNOTUs_P03 <- sort(tapply(taxa_sums(P_03), tax_table(P_03)[, "Family"], sum), TRUE)[1:10]
+P_04 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P04")
+TopNOTUs_P04 <- sort(tapply(taxa_sums(P_04), tax_table(P_04)[, "Family"], sum), TRUE)[1:10]
+P_05 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P05")
+TopNOTUs_P05 <- sort(tapply(taxa_sums(P_05), tax_table(P_05)[, "Family"], sum), TRUE)[1:10]
+P_06 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P06")
+TopNOTUs_P06 <- sort(tapply(taxa_sums(P_06), tax_table(P_06)[, "Family"], sum), TRUE)[1:10]
+P_07 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P07")
+TopNOTUs_P07 <- sort(tapply(taxa_sums(P_07), tax_table(P_07)[, "Family"], sum), TRUE)[1:10]
+P_08 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P08")
+TopNOTUs_P08 <- sort(tapply(taxa_sums(P_08), tax_table(P_08)[, "Family"], sum), TRUE)[1:10]
+P_09 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P09")
+TopNOTUs_P09 <- sort(tapply(taxa_sums(P_09), tax_table(P_09)[, "Family"], sum), TRUE)[1:10]
+P_10 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P10")
+TopNOTUs_P10 <- sort(tapply(taxa_sums(P_10), tax_table(P_10)[, "Family"], sum), TRUE)[1:10]
+P_11 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P11")
+TopNOTUs_P11 <- sort(tapply(taxa_sums(P_11), tax_table(P_11)[, "Family"], sum), TRUE)[1:10]
+P_12 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P12")
+TopNOTUs_P12 <- sort(tapply(taxa_sums(P_12), tax_table(P_12)[, "Family"], sum), TRUE)[1:10]
+P_13 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P13")
+TopNOTUs_P13 <- sort(tapply(taxa_sums(P_13), tax_table(P_13)[, "Family"], sum), TRUE)[1:10]
+P_14 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P14")
+TopNOTUs_P14 <- sort(tapply(taxa_sums(P_14), tax_table(P_14)[, "Family"], sum), TRUE)[1:10]
+P_15 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P15")
+TopNOTUs_P15 <- sort(tapply(taxa_sums(P_15), tax_table(P_15)[, "Family"], sum), TRUE)[1:10]
+P_16 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P16")
+TopNOTUs_P16 <- sort(tapply(taxa_sums(P_16), tax_table(P_16)[, "Family"], sum), TRUE)[1:10]
+P_17 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P17")
+TopNOTUs_P17 <- sort(tapply(taxa_sums(P_17), tax_table(P_17)[, "Family"], sum), TRUE)[1:10]
+P_18 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P18")
+TopNOTUs_P18 <- sort(tapply(taxa_sums(P_18), tax_table(P_18)[, "Family"], sum), TRUE)[1:10]
+P_19 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P19")
+TopNOTUs_P19 <- sort(tapply(taxa_sums(P_19), tax_table(P_19)[, "Family"], sum), TRUE)[1:10]
+P_20 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P20")
+TopNOTUs_P20 <- sort(tapply(taxa_sums(P_20), tax_table(P_20)[, "Family"], sum), TRUE)[1:10]
+P_21 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P21")
+TopNOTUs_P21 <- sort(tapply(taxa_sums(P_21), tax_table(P_21)[, "Family"], sum), TRUE)[1:10]
+P_22 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P22")
+TopNOTUs_P22 <- sort(tapply(taxa_sums(P_22), tax_table(P_22)[, "Family"], sum), TRUE)[1:10]
+P_23 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P23")
+TopNOTUs_P23 <- sort(tapply(taxa_sums(P_23), tax_table(P_23)[, "Family"], sum), TRUE)[1:10]
+P_24 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P24")
+TopNOTUs_P24 <- sort(tapply(taxa_sums(P_24), tax_table(P_24)[, "Family"], sum), TRUE)[1:10]
+P_25 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P25")
+TopNOTUs_P25 <- sort(tapply(taxa_sums(P_25), tax_table(P_25)[, "Family"], sum), TRUE)[1:10]
+P_26 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P26")
+TopNOTUs_P26 <- sort(tapply(taxa_sums(P_26), tax_table(P_26)[, "Family"], sum), TRUE)[1:10]
+P_27 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P27")
+TopNOTUs_P27 <- sort(tapply(taxa_sums(P_27), tax_table(P_27)[, "Family"], sum), TRUE)[1:10]
+P_28 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P28")
+TopNOTUs_P28 <- sort(tapply(taxa_sums(P_28), tax_table(P_28)[, "Family"], sum), TRUE)[1:10]
+P_29 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P29")
+TopNOTUs_P29 <- sort(tapply(taxa_sums(P_29), tax_table(P_29)[, "Family"], sum), TRUE)[1:10]
+P_30 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P30")
+TopNOTUs_P30 <- sort(tapply(taxa_sums(P_30), tax_table(P_30)[, "Family"], sum), TRUE)[1:10]
+P_31 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P31")
+TopNOTUs_P31 <- sort(tapply(taxa_sums(P_31), tax_table(P_31)[, "Family"], sum), TRUE)[1:10]
+P_32 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P32")
+TopNOTUs_P32 <- sort(tapply(taxa_sums(P_32), tax_table(P_32)[, "Family"], sum), TRUE)[1:10]
+P_34 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P34")
+TopNOTUs_P34 <- sort(tapply(taxa_sums(P_34), tax_table(P_34)[, "Family"], sum), TRUE)[1:10]
+P_35 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P35")
+TopNOTUs_P35 <- sort(tapply(taxa_sums(P_35), tax_table(P_35)[, "Family"], sum), TRUE)[1:10]
+P_36 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P36")
+TopNOTUs_P36 <- sort(tapply(taxa_sums(P_36), tax_table(P_36)[, "Family"], sum), TRUE)[1:10]
+P_37 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P37")
+TopNOTUs_P37 <- sort(tapply(taxa_sums(P_37), tax_table(P_37)[, "Family"], sum), TRUE)[1:10]
+P_38 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P38")
+TopNOTUs_P38 <- sort(tapply(taxa_sums(P_38), tax_table(P_38)[, "Family"], sum), TRUE)[1:10]
+P_39 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P39")
+TopNOTUs_P39 <- sort(tapply(taxa_sums(P_39), tax_table(P_39)[, "Family"], sum), TRUE)[1:10]
+P_40 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P40")
+TopNOTUs_P40 <- sort(tapply(taxa_sums(P_40), tax_table(P_40)[, "Family"], sum), TRUE)[1:10]
+P_41 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P41")
+TopNOTUs_P41 <- sort(tapply(taxa_sums(P_41), tax_table(P_41)[, "Family"], sum), TRUE)[1:10]
+P_42 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P42")
+TopNOTUs_P42 <- sort(tapply(taxa_sums(P_42), tax_table(P_42)[, "Family"], sum), TRUE)[1:10]
+P_43 <- subset_samples(CHeckV_bar_PHY2_SC, Subject=="P43")
+TopNOTUs_P43 <- sort(tapply(taxa_sums(P_43), tax_table(P_43)[, "Family"], sum), TRUE)[1:10]
+TopNOTUs_10_SC<-c(TopNOTUs_P01,TopNOTUs_P02,TopNOTUs_P03,TopNOTUs_P04,TopNOTUs_P05,TopNOTUs_P06,TopNOTUs_P07,TopNOTUs_P08,TopNOTUs_P09,TopNOTUs_P10,TopNOTUs_P11,TopNOTUs_P12,TopNOTUs_P13,TopNOTUs_P14,TopNOTUs_P15,TopNOTUs_P16,TopNOTUs_P17,TopNOTUs_P18,TopNOTUs_P19,TopNOTUs_P20,TopNOTUs_P21,TopNOTUs_P22,TopNOTUs_P23,TopNOTUs_P24,TopNOTUs_P25,TopNOTUs_P26,TopNOTUs_P27,TopNOTUs_P28,TopNOTUs_P29,TopNOTUs_P30,TopNOTUs_P31,TopNOTUs_P32,TopNOTUs_P34,TopNOTUs_P35,TopNOTUs_P36,TopNOTUs_P37,TopNOTUs_P38,TopNOTUs_P39,TopNOTUs_P40,TopNOTUs_P41,TopNOTUs_P42,TopNOTUs_P43)
+TopNOTUs_10_list_SC<-unique(names(TopNOTUs_10_SC))
+
+# Viral Families that were not able to be taxonomically annotated (i.e. Unclassified Virus) were reduced
+TopNOTUs_10_list_noUn_SC<-TopNOTUs_10_list_SC[!grepl("Unclassified",TopNOTUs_10_list_SC)]
+TopNOTUs_10_list_noUn_SC<-TopNOTUs_10_list_noUn_SC[!grepl("Unlcassified",TopNOTUs_10_list_noUn_SC)]
+TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Caudovirales")
+TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Cressdnaviricota")
+TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Duplodnaviria")
+TopNOTUs_10_list_noUn_SC<-c(TopNOTUs_10_list_noUn_SC,"Unclassified Monodnaviria")
+```
+
+```{r}
+# Top ten most abundant family level taxa per individual for scalp samples:
+TopNOTUs_10_list_noUn_SC
+```
+
+```{r, include=FALSE}
+############################################
+## -------------------------------------- ##
+## ---------  Relative Abundance -------- ##
+## -------------------------------------- ##
+############################################
+
+## Calculation of relative abundance for the top ten most abundant taxonomy per subject for left hand 
+
+ent10_LH <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_LH)
+glom.subject_LH <- merge_samples(ent10_LH, "Subject")
+# Calculate the relative abundance for each family in set
+glom.subject.family_LH <- transform_sample_counts(glom.subject_LH, function(x) x / sum(x) )
+glom_LH <- tax_glom(glom.subject.family_LH, taxrank = 'Family')
+# Turn into a data.frame for graph generation
+data_glom_LH<- psmelt(glom_LH)
+data_glom_LH$Family <- as.character(data_glom_LH$Family)
+data_glom_LH$Location<-"Left Hand"
+data_glom_LH$Family <- factor(data_glom_LH$Family, levels = c("Siphoviridae", "Podoviridae", "Uncultured phage", "Myoviridae", "Herelleviridae", "Genomoviridae", "Microviridae", "Papillomaviridae", "Lake Sarah-associated circular molecule 3", "Pithoviridae", "Uncultured virus", "Sewage-associated circular DNA molecule", "Streptococcus satellite phage Javan305", "Caulimoviridae", "Staphylococcus phage PhiSepi-HH1", "Phycodnaviridae", "Circoviridae", "Staphylococcus phage PI-Sepi-HH2", "Baculoviridae", "Poxviridae", "Polyomaviridae", "Bovine faeces associated circular DNA virus 1", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria"))
+
+## Calculation of relative abundance for the top ten most abundant taxonomy per subject for right hand 
+
+ent10_RH <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_RH)
+glom.subject_RH <- merge_samples(ent10_RH, "Subject")
+# Calculate the relative abundance for each family in set
+glom.subject.family_RH <- transform_sample_counts(glom.subject_RH, function(x) x / sum(x) )
+glom_RH <- tax_glom(glom.subject.family_RH, taxrank = 'Family')
+# Turn into a data.frame for graph generation
+data_glom_RH<- psmelt(glom_RH)
+data_glom_RH$Family <- as.character(data_glom_RH$Family)
+data_glom_RH$Location<-"Right Hand"
+data_glom_RH$Family <- factor(data_glom_RH$Family, levels = c("Caulimoviridae", "Siphoviridae", "Microviridae", "Papillomaviridae", "Genomoviridae", "Herelleviridae", "Baculoviridae", "Circoviridae", "Uncultured phage", "Myoviridae", "Sewage-associated circular DNA molecule", "Lake Sarah-associated circular molecule 3", "Podoviridae", "Mimiviridae", "Staphylococcus phage PI-Sepi-HH2", "Staphylococcus phage PhiSepi-HH1", "Streptococcus satellite phage Javan359", "Streptococcus satellite phage Javan360", "Smacoviridae", "Uncultured human fecal virus clone E.ramosum_S04.r3.N09_4_c1", "Inoviridae", "Uncultured virus isolate Wastewater_Circular_Virus_FL54", "Unclassified Caudovirales", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria"))
+
+## Calculation of relative abundance for the top ten most abundant taxonomy per subject for scalp
+
+ent10_SC <- subset_taxa(CHeckV_bar_PHY2, Family %in% TopNOTUs_10_list_noUn_SC)
+glom.subject_SC <- merge_samples(ent10_SC, "Subject")
+# Calculate the relative abundance for each family in set
+glom.subject.family_SC <- transform_sample_counts(glom.subject_SC, function(x) x / sum(x) )
+glom_SC <- tax_glom(glom.subject.family_SC, taxrank = 'Family')
+# Turn into a data.frame for graph generation
+data_glom_SC<- psmelt(glom_SC)
+data_glom_SC$Family <- as.character(data_glom_SC$Family)
+data_glom_SC$Location<-"Scalp"
+data_glom_SC$Family <- factor(data_glom_SC$Family, levels = c("Circoviridae", "Siphoviridae", "Herelleviridae", "Genomoviridae", "Papillomaviridae", "Lake Sarah-associated circular molecule 3", "Myoviridae", "Uncultured virus", "Podoviridae", "Microviridae", "Caulimoviridae", "Sewage-associated circular DNA molecule", "Autographiviridae", "Retroviridae", "Anelloviridae", "Gopherus associated circular DNA virus 4", "Baculoviridae", "Phycodnaviridae", "Chicken virus mg4_2302", "Streptococcus satellite phage Javan361", "Unclassified Caudovirales", "Unclassified Cressdnaviricota", "Unclassified Duplodnaviria", "Unclassified Monodnaviria" ))
+
+## Combine the three autotomical location datasets
+
+data_glom_ALL<-rbind(data_glom_SC,data_glom_RH,data_glom_LH)
+
+## Generate relative abundance plot
+
+spatial_plot <- ggplot(data=data_glom_ALL, aes(x=Location, y=Abundance, fill=Family)) + facet_grid(~Sample, scales = "free")+geom_col(position = "fill")
+
+relativeabund<-spatial_plot + geom_bar(aes(), stat="identity", position="stack",colour = 'black')  +
+theme(legend.position="bottom",axis.title.x = element_text(vjust=1, hjust=2,size=12),legend.text=element_text(size=12),
+      axis.title.y = element_text(vjust=1,size=12),) + guides(fill=guide_legend(nrow=7),size=12)+theme(axis.text.x = element_text(angle = 90,size=12))+ylab("Relative Abundance")
+ggsave(plot=relativeabund,"Figures/RelativeAbundanceFIGURE.pdf",dpi = 500, width = 29,
+  height = 16, units="in",pointsize=12)
+```
+```{r}
+# Relative abundance of the top ten most abundant identified viral families per subject by location:
+relativeabund
+```
