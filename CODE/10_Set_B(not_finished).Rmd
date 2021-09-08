@@ -1,0 +1,24 @@
+---
+title: "09_Set_B"
+output: html_document
+author: "Ema H Graham"
+---
+For Questions Email: ema.graham@huskers.unl.edu
+
+## Description
+
+Input Notes: 
+Will need the following files:
+- PAPcounts.csv ()
+
+Output Notes: 
+
+```{r setup,message=FALSE}
+library(readr)
+library(dplyr)
+library(plyr)
+library(tidyr)
+library(ggplot2)
+```
+```{r,message=FALSE,warning=FALSE,results="hide"}
+PAPOTU_counts <- read.csv("PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
