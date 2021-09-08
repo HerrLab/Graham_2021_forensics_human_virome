@@ -1,3 +1,7 @@
+### Title: 01_Obtain_Virome_Data ###
+### Author: Ema H Graham ###
+### For Questions Email: ema.graham@huskers.unl.edu ###
+
 ############################################
 ## -------------------------------------- ##
 ## ------------- Description ------------ ##
