@@ -1,3 +1,7 @@
+### Title: 03_Virome_Contig_Mapping ###
+### Author: Ema H Graham ###
+### For Questions Email: ema.graham@huskers.unl.edu ###
+
 ############################################
 ## -------------------------------------- ##
 ## ------------- Description ------------ ##
