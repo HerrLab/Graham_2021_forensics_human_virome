@@ -1,0 +1,2732 @@
+---
+title: "13_Heatmap_Profile_Fig5"
+output: html_document
+author: "Ema H Graham"
+---
+For Questions Email: ema.graham@huskers.unl.edu
+
+## Description
+
+Input Notes: 
+Will need the following files:
+- 
+  
+Output Notes: 
+
+```{r setup,message=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggsignif)
+library(cowplot)
+library(phyloseq)
+```
+
+Metadata for all Phyloseq objects produced in this script
+```{r}
+Metadata2 <- read_csv("~/Desktop/Current_work/OTU_Builber/Sequencing_Data_Info_Sheet3.csv")
+Metadata3 <- Metadata2
+Metadata3$Time <- Metadata3$Time_Collected
+Metadata3$Time[which(Metadata3$Time == "T_0")] <- "00_Weeks"
+Metadata3$Time[which(Metadata3$Time == "2_week")] <- "02_Weeks"
+Metadata3$Time[which(Metadata3$Time == "1_month")] <- "04_Weeks"
+Metadata3$Time[which(Metadata3$Time == "3_month")] <- "12_Weeks"
+Metadata3$Time[which(Metadata3$Time == "6_month")] <- "24_Weeks"
+META <- sample_data(Metadata3)
+sample_names(META)= META$SampleID
+```
+
+Make Phyloseq object for stable Set A CheckV identified and annotated viral species Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CHeckV_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts2 <- merge(tax_ann, CHeckV_counts, by.x = "row.names", by.y = "row.names")
+CHeckV_counts2<- subset (CHeckV_counts2, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Family, Order,Subfamily, Genus))
+CHeckV_spec<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
+CHeckV_counts2<-subset(CHeckV_counts2, Species %in% CHeckV_spec)
+CHeckV_counts2<-ddply(CHeckV_counts2,"Species",numcolwise(sum))
+row.names(CHeckV_counts2)<- CHeckV_counts2$Species
+CHeckV_counts2<- subset (CHeckV_counts2, select = -c(Species))
+CHeckV_OTU <- otu_table(CHeckV_counts2, taxa_are_rows = TRUE)
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE,row.names=NULL)
+tax_ann<-subset(tax_ann, Species %in% CHeckV_spec)
+tax_ann<- subset (tax_ann, select = -c(contig_id))
+tax_ann<-unique(tax_ann)
+remv<-c("4","70")
+tax_ann<-subset(tax_ann, !row.names(tax_ann) %in% remv)
+row.names(tax_ann)<-tax_ann$Species
+CHeckV_tax <-as.matrix(tax_ann)
+CHeckV_tax <- tax_table(CHeckV_tax)
+CHeckV_tax <-as.matrix(CHeckV_tax)
+CHeckV_tax <- tax_table(CHeckV_tax)
+CHeckV_PHY <- phyloseq(CHeckV_OTU, CHeckV_tax, META)
+```
+
+Make Phyloseq object for stable Set B Caudovirales Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_counts <- read.csv("counts2_CAUDO.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_OTU <- merge(CAUDO_tax, CAUDO_counts, by.x="row.names", by.y="row.names")
+CAUDO_OTU<- subset (CAUDO_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+CAUDO_spec<-c("Bacillus phage Stitch","Caudovirales sp.","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage SPbeta-like","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phiJH1301-2","Uncultured Caudovirales phage")
+CAUDO_OTU<-subset(CAUDO_OTU, Species %in% CAUDO_spec)
+CAUDO_OTU<-ddply(CAUDO_OTU,"Species",numcolwise(sum))
+row.names(CAUDO_OTU)<-CAUDO_OTU$Species
+CAUDO_OTU<- subset (CAUDO_OTU, select = -c(Species))
+CAUDO_OTU <- otu_table(CAUDO_OTU, taxa_are_rows = TRUE)
+CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+CAUDO_tax<-subset(CAUDO_tax, Species %in% CAUDO_spec)
+CAUDO_tax<- subset (CAUDO_tax, select = -c(ContigID))
+CAUDO_tax<-unique(CAUDO_tax)
+row.names(CAUDO_tax)<-CAUDO_tax$Species
+CAUDO_tax <-as.matrix(CAUDO_tax)
+CAUDO_tax <- tax_table(CAUDO_tax)
+CAUDO_PHY <- phyloseq(CAUDO_OTU, CAUDO_tax, META)
+```
+
+Make Phyloseq object for stable Set B Papillomaviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+PAP_counts <- read.csv("papilloma/PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
+PAP_OTU <- merge(PAP_tax, PAP_counts, by.x="row.names", by.y="row.names")
+PAP_OTU<- subset (PAP_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+PAP_spec<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 12","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8")
+PAP_OTU<-subset(PAP_OTU, Species %in% PAP_spec)
+PAP_OTU<-ddply(PAP_OTU,"Species",numcolwise(sum))
+row.names(PAP_OTU)<-PAP_OTU$Species
+PAP_OTU<- subset (PAP_OTU, select = -c(Species))
+PAP_OTU <- otu_table(PAP_OTU, taxa_are_rows = TRUE)
+PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
+PAP_tax<-subset(PAP_tax, Species %in% PAP_spec)
+PAP_tax<- subset (PAP_tax, select = -c(ContigID))
+PAP_tax<-unique(PAP_tax)
+remv<-c("1341")
+PAP_tax<-subset(PAP_tax, !row.names(PAP_tax) %in% remv)
+row.names(PAP_tax)<-PAP_tax$Species
+PAP_tax <-as.matrix(PAP_tax)
+PAP_tax <- tax_table(PAP_tax)
+PAP_PHY <- phyloseq(PAP_OTU, PAP_tax, META)
+```
+
+Make Phyloseq object for stable Set B Baculoviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+BAC_counts <- read.csv("baculo/counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- subset(BAC_tax, select = -c(Isolate))
+BAC_OTU <- merge(BAC_tax, BAC_counts, by.x="row.names", by.y="row.names")
+BAC_OTU<- subset (BAC_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+BAC_spec<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Unclassified Baculoviridae")
+BAC_OTU<-subset(BAC_OTU, Species %in% BAC_spec)
+BAC_OTU<-ddply(BAC_OTU,"Species",numcolwise(sum))
+row.names(BAC_OTU)<-BAC_OTU$Species
+BAC_OTU<- subset (BAC_OTU, select = -c(Species))
+BAC_OTU <- otu_table(BAC_OTU, taxa_are_rows = TRUE)
+BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- subset(BAC_tax, select = -c(Isolate))
+BAC_tax<-subset(BAC_tax, Species %in% BAC_spec)
+BAC_tax<-unique(BAC_tax)
+row.names(BAC_tax)<-BAC_tax$Species
+BAC_tax <-as.matrix(BAC_tax)
+BAC_tax <- tax_table(BAC_tax)
+BAC_PHY <- phyloseq(BAC_OTU, BAC_tax, META)
+```
+
+Make Phyloseq object for stable Set B Genomoviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+GEN_counts <- read.csv("genomovir/counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- subset(GEN_tax, select = -c(Isolate))
+GEN_OTU <- merge(GEN_tax, GEN_counts, by.x="row.names", by.y="row.names")
+GEN_OTU<- subset (GEN_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+GEN_spec<-c("Genomoviridae sp.")
+GEN_OTU<-subset(GEN_OTU, Species %in% GEN_spec)
+GEN_OTU<-ddply(GEN_OTU,"Species",numcolwise(sum))
+row.names(GEN_OTU)<-GEN_OTU$Species
+GEN_OTU<- subset (GEN_OTU, select = -c(Species))
+GEN_OTU <- otu_table(GEN_OTU, taxa_are_rows = TRUE)
+GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- subset(GEN_tax, select = -c(Isolate))
+GEN_tax<-subset(GEN_tax, Species %in% GEN_spec)
+GEN_tax<-unique(GEN_tax)
+row.names(GEN_tax)<-GEN_tax$Species
+GEN_tax <-as.matrix(GEN_tax)
+GEN_tax <- tax_table(GEN_tax)
+GEN_PHY <- phyloseq(GEN_OTU, GEN_tax, META)
+```
+
+Make Phyloseq object for stable Set C contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Contigs_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+Contigs_counts  <- subset(Contigs_counts , select = -c(length))
+CONTIG_spec<-c("k127_12278877","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_699139","k127_8568361","k127_9807842","k127_9848036")
+Contigs_counts<-subset(Contigs_counts, row.names(Contigs_counts) %in% CONTIG_spec)
+CONTIG_OTU <- otu_table(Contigs_counts, taxa_are_rows = TRUE)
+Contigs_tax <- Contigs_counts
+Contigs_tax$Superkingdom<-"Viruses"
+Contigs_tax$Realm <- row.names(Contigs_tax)
+Contigs_tax <- subset(Contigs_tax, select = c(Superkingdom,Realm))
+Contigs_tax$Kingdom<-Contigs_tax$Realm
+Contigs_tax$Phylum <-Contigs_tax$Realm
+Contigs_tax$Class<-Contigs_tax$Realm
+Contigs_tax$Order<-Contigs_tax$Realm
+Contigs_tax$Family<-Contigs_tax$Realm
+Contigs_tax$Subfamily<-Contigs_tax$Realm
+Contigs_tax$Genus<-Contigs_tax$Realm
+Contigs_tax$Species<-Contigs_tax$Realm
+Contigs_tax<-subset(Contigs_tax, row.names(Contigs_tax) %in% CONTIG_spec)
+Contigs_tax <-as.matrix(Contigs_tax)
+Contigs_tax <- tax_table(Contigs_tax)
+CONTIG_PHY <- phyloseq(CONTIG_OTU, Contigs_tax, META)
+```
+
+Remove repeat samples and samples not used in this study
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Samples_toRemove <- c("HV_001_27", "HV_002_27", "HV_003_27", "HV_004_27", "HV_005_27", "HV_006_27", "HV_007_27", "HV_008_27",
+                      "HV_009_27", "HV_010_27", "HV_011_27", "HV_012_27", "HV_013_27", "HV_014_27", "HV_015_27", "HV_016_27",
+                      "HV_017_27", "HV_018_27", "HV_019_27", "HV_020_27", "HV_021_27", "HV_022_27", "HV_023_27", "HV_024_27",
+                      "HV_025_27", "HV_026_27", "HV_027_27", "HV_028_27", "HV_029_27", "HV_030_27", "HV_015_20", "HV_015_21", 
+                      "HV_020_22", "HV_027_02", "HV_027_03", "HV_027_04", "HV_027_05", "HV_027_06", "HV_027_07", "HV_020_10",
+                      "HV_021_13", "HV_027_01","HV_003_15")
+
+CAUDO_PHY2 <- subset_samples(CAUDO_PHY, !(SampleID %in% Samples_toRemove))
+CHeckV_PHY2 <- subset_samples(CHeckV_PHY, !(SampleID %in% Samples_toRemove))
+PAP_PHY2 <- subset_samples(PAP_PHY, !(SampleID %in% Samples_toRemove))
+BAC_PHY2 <- subset_samples(BAC_PHY, !(SampleID %in% Samples_toRemove))
+GEN_PHY2 <- subset_samples(GEN_PHY, !(SampleID %in% Samples_toRemove))
+CONTIG_PHY2 <- subset_samples(CONTIG_PHY, !(SampleID %in% Samples_toRemove))
+```
+Merge Phyloseq objects to make Set A Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Profile_Checkv<-CHeckV_PHY2
+```
+
+Merge Phyloseq objects to make Set B Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Profile_NCBI<-merge_phyloseq(CAUDO_PHY2,PAP_PHY2,BAC_PHY2,GEN_PHY2)
+```
+
+Merge Phyloseq objects to make Set C Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Profile_Contig<-CONTIG_PHY2
+```
+
+Merge Phyloseq objects to make an overall profile (all three sets) Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Profile<- merge_phyloseq(CAUDO_PHY2,CHeckV_PHY2,PAP_PHY2,BAC_PHY2,GEN_PHY2,CONTIG_PHY2)
+```
+Make lists of SampleID by subject for organization and within and between dissimilarity calculations for Set comparisons
+```{r,echo=FALSE}
+P01<-c("HV_001_01", "HV_001_02", "HV_001_03", "HV_002_01", "HV_002_02", "HV_002_03", "HV_003_01", "HV_003_02", "HV_003_03", "HV_004_01", "HV_004_02", "HV_004_03", "HV_005_01","HV_005_03") 
+P02<-c("HV_001_04", "HV_001_05", "HV_001_06", "HV_002_04", "HV_002_05", "HV_002_06", "HV_003_04", "HV_003_05", "HV_003_06", "HV_004_04", "HV_004_05", "HV_004_06", "HV_005_04", "HV_005_05","HV_005_06") 
+P03<-c("HV_001_07", "HV_001_08", "HV_001_09", "HV_002_07", "HV_002_08", "HV_002_09", "HV_003_07", "HV_003_08", "HV_003_09", "HV_004_07", "HV_004_08", "HV_004_09", "HV_005_07", "HV_005_08", "HV_005_09")
+P04<-c("HV_001_10", "HV_001_11", "HV_001_12", "HV_002_10", "HV_002_11", "HV_002_12", "HV_003_10", "HV_003_11", "HV_003_12", "HV_004_10", "HV_004_11", "HV_004_12", "HV_005_10", "HV_005_11","HV_005_12")
+P05<-c("HV_001_13", "HV_001_14", "HV_001_15", "HV_002_13", "HV_002_14", "HV_002_15", "HV_003_13", "HV_003_14", "HV_004_13", "HV_004_14", "HV_004_15", "HV_005_13", "HV_005_14","HV_005_15")
+P06<-c("HV_001_16", "HV_001_18", "HV_001_19", "HV_002_18", "HV_002_19", "HV_003_16", "HV_003_18", "HV_003_19", "HV_004_16", "HV_004_18", "HV_004_19", "HV_005_16", "HV_005_18") 
+P07<-c("HV_001_20",  "HV_001_21",  "HV_001_22",  "HV_002_20",  "HV_002_21",  "HV_002_22",  "HV_003_20",  "HV_003_21",  "HV_003_22",  "HV_004_20",  "HV_004_21",  "HV_004_22",  "HV_005_20", "HV_005_22") 
+P08<-c("HV_006_01", "HV_006_02", "HV_006_03", "HV_007_01", "HV_007_02", "HV_007_03", "HV_008_01", "HV_008_02", "HV_008_03", "HV_009_01", "HV_009_03", "HV_010_01", "HV_010_02","HV_010_03")
+P09<-c("HV_006_04", "HV_006_05", "HV_006_06", "HV_007_04", "HV_007_05", "HV_007_06", "HV_008_04", "HV_008_05", "HV_008_06", "HV_009_04", "HV_009_05", "HV_009_06", "HV_010_04", "HV_010_05", "HV_010_06")
+P10<-c("HV_006_07", "HV_006_08", "HV_006_09", "HV_007_07", "HV_007_08", "HV_007_09", "HV_008_07", "HV_008_08", "HV_008_09", "HV_009_07", "HV_009_08", "HV_009_09", "HV_010_07", "HV_010_08","HV_010_09")
+P11<-c("HV_006_10", "HV_006_11", "HV_006_12", "HV_007_10", "HV_007_11", "HV_007_12", "HV_008_10", "HV_008_11", "HV_008_12", "HV_009_10", "HV_009_11", "HV_009_12", "HV_010_10", "HV_010_11","HV_010_12")
+P12<-c("HV_006_13", "HV_006_14", "HV_006_15", "HV_007_13", "HV_007_14", "HV_007_15", "HV_008_13", "HV_008_14", "HV_008_15", "HV_009_13", "HV_009_14", "HV_009_15", "HV_010_13", "HV_010_14","HV_010_15")
+P13<-c("HV_006_16", "HV_006_18", "HV_006_19", "HV_007_16", "HV_007_18", "HV_007_19", "HV_008_16", "HV_008_18", "HV_008_19", "HV_009_16", "HV_009_18", "HV_009_19", "HV_010_16", "HV_010_18","HV_010_19")
+P14<-c("HV_006_20", "HV_006_21", "HV_006_22", "HV_007_20", "HV_007_21", "HV_007_22", "HV_008_20", "HV_008_21", "HV_008_22", "HV_009_20", "HV_009_21", "HV_009_22", "HV_010_20", "HV_010_21","HV_010_22")
+P15<-c("HV_011_01", "HV_011_02", "HV_011_03", "HV_012_01", "HV_012_02", "HV_012_03", "HV_013_01", "HV_013_02", "HV_013_03", "HV_014_01", "HV_014_02", "HV_014_03", "HV_015_01", "HV_015_02","HV_015_03")
+P16<-c("HV_011_04", "HV_011_05", "HV_011_06", "HV_012_04", "HV_012_05", "HV_012_06", "HV_013_04", "HV_013_05", "HV_014_04", "HV_014_05", "HV_014_06", "HV_015_04", "HV_015_05","HV_015_06")
+P17<-c("HV_011_07", "HV_011_08", "HV_011_09", "HV_012_07", "HV_012_08", "HV_012_09", "HV_013_07", "HV_013_08", "HV_013_09", "HV_014_07", "HV_014_08", "HV_014_09", "HV_015_07", "HV_015_08","HV_015_09")
+P18<-c("HV_011_10", "HV_011_11", "HV_011_12", "HV_012_10", "HV_012_11", "HV_012_12", "HV_013_10", "HV_013_11", "HV_013_12", "HV_014_10", "HV_014_11", "HV_014_12", "HV_015_10", "HV_015_11", "HV_015_12")
+P19<-c("HV_011_13", "HV_011_14", "HV_011_15", "HV_012_13", "HV_012_14", "HV_012_15", "HV_013_13", "HV_013_14", "HV_013_15", "HV_014_13", "HV_014_14", "HV_014_15", "HV_015_13", "HV_015_14","HV_015_15")
+P20<-c("HV_011_16", "HV_011_18", "HV_011_19", "HV_012_16", "HV_012_18", "HV_012_19", "HV_013_16", "HV_013_18", "HV_013_19", "HV_014_16", "HV_014_18", "HV_014_19", "HV_015_16", "HV_015_18","HV_015_19")
+P21<-c("HV_011_20", "HV_011_21", "HV_011_22", "HV_012_20", "HV_012_21", "HV_012_22", "HV_013_20", "HV_013_21", "HV_013_22", "HV_014_20", "HV_014_21","HV_014_22")
+P22<-c("HV_016_01", "HV_017_01", "HV_018_01", "HV_019_01", "HV_020_01", "HV_021_02", "HV_022_01", "HV_023_01", "HV_024_01", "HV_025_02", "HV_026_01", "HV_027_08", "HV_028_01", "HV_029_01","HV_030_01")
+P23<-c("HV_016_02", "HV_017_02", "HV_018_02", "HV_019_02", "HV_020_02", "HV_021_03", "HV_022_02", "HV_023_02", "HV_024_02", "HV_025_03", "HV_026_02", "HV_027_09", "HV_028_02", "HV_029_02","HV_030_02")
+P24<-c("HV_016_03", "HV_017_03", "HV_018_03", "HV_019_03", "HV_021_01", "HV_021_04", "HV_022_03", "HV_023_03", "HV_024_03", "HV_025_04", "HV_026_03", "HV_027_10", "HV_028_03", "HV_029_03","HV_030_03")
+P25<-c("HV_016_04", "HV_017_04", "HV_018_04", "HV_019_04", "HV_020_03", "HV_021_05", "HV_022_04", "HV_023_04", "HV_024_04", "HV_025_05", "HV_026_04", "HV_027_11", "HV_028_04", "HV_029_04","HV_030_04")
+P26<-c("HV_016_05", "HV_017_05", "HV_018_05", "HV_019_05", "HV_020_04", "HV_021_06", "HV_022_05", "HV_023_05", "HV_024_05", "HV_025_06", "HV_026_05", "HV_027_12", "HV_028_05", "HV_029_05", "HV_030_05")
+P27<-c("HV_016_06", "HV_017_06", "HV_018_06", "HV_019_06", "HV_020_05", "HV_021_07", "HV_022_06", "HV_023_06", "HV_024_06", "HV_025_07", "HV_026_06", "HV_027_13", "HV_028_06", "HV_029_06","HV_030_06")
+P28<-c("HV_016_07", "HV_017_07", "HV_018_07", "HV_019_07", "HV_020_06", "HV_021_08", "HV_022_07", "HV_023_07", "HV_024_07", "HV_025_08", "HV_026_07", "HV_027_14", "HV_028_07", "HV_029_07","HV_030_07")
+P29<-c("HV_016_08", "HV_017_08", "HV_018_08", "HV_019_08", "HV_020_07", "HV_021_09", "HV_022_08", "HV_023_08", "HV_024_08", "HV_025_09", "HV_026_08", "HV_027_15", "HV_028_08", "HV_029_08","HV_030_08")
+P30<-c("HV_016_09", "HV_017_09", "HV_018_09", "HV_019_09", "HV_020_08", "HV_021_10", "HV_022_09", "HV_023_09", "HV_024_09", "HV_025_10", "HV_026_09", "HV_027_16", "HV_028_09", "HV_029_09","HV_030_09")
+P31<-c("HV_016_10", "HV_017_10", "HV_018_10", "HV_019_10", "HV_021_11", "HV_022_10", "HV_023_10", "HV_024_10", "HV_026_10", "HV_027_18", "HV_028_10", "HV_029_10")
+P32<-c("HV_016_11", "HV_017_11", "HV_018_11", "HV_019_11", "HV_020_09", "HV_021_12", "HV_022_11", "HV_023_11", "HV_024_11", "HV_025_11", "HV_026_11", "HV_027_19", "HV_028_11", "HV_029_11","HV_030_10")
+P34<-c("HV_016_12", "HV_017_12", "HV_018_12", "HV_019_12", "HV_020_11", "HV_021_14", "HV_022_12", "HV_023_12", "HV_024_12", "HV_025_12", "HV_026_12", "HV_027_20", "HV_028_12", "HV_029_12","HV_030_11")
+P35<-c("HV_016_13", "HV_017_13", "HV_018_13", "HV_019_13", "HV_020_12", "HV_021_15", "HV_022_13", "HV_023_13", "HV_024_13", "HV_025_13", "HV_026_13", "HV_027_21", "HV_028_13", "HV_029_13","HV_030_12")
+P36<-c("HV_016_14", "HV_017_14", "HV_018_14", "HV_019_14", "HV_020_13", "HV_021_16", "HV_022_14", "HV_023_14", "HV_024_14", "HV_025_14", "HV_026_14", "HV_027_22", "HV_028_14", "HV_029_14","HV_030_13")
+P37<-c("HV_016_15", "HV_017_15", "HV_018_15", "HV_019_15", "HV_020_14", "HV_021_18", "HV_022_15", "HV_023_15", "HV_024_15", "HV_025_15", "HV_026_15", "HV_028_15", "HV_029_15", "HV_030_14","HV_030_22")
+P38<-c("HV_016_16", "HV_017_16", "HV_018_16", "HV_019_16", "HV_020_15", "HV_021_19", "HV_022_16", "HV_023_16", "HV_024_16", "HV_025_16", "HV_026_16", "HV_028_16", "HV_029_16","HV_030_15")
+P39<-c("HV_016_18", "HV_017_18", "HV_018_18", "HV_019_18", "HV_020_16", "HV_021_20", "HV_022_18", "HV_023_18", "HV_024_18", "HV_025_18", "HV_026_18", "HV_028_18", "HV_029_18","HV_030_16")
+P40<-c("HV_016_19", "HV_017_19", "HV_018_19", "HV_019_19", "HV_020_18", "HV_021_21", "HV_022_19", "HV_023_19", "HV_024_19", "HV_025_19", "HV_026_19", "HV_028_19", "HV_029_19","HV_030_18")
+P41<-c("HV_016_20", "HV_017_20", "HV_018_20", "HV_019_20", "HV_020_19", "HV_021_22", "HV_022_20", "HV_023_20", "HV_024_20", "HV_025_20", "HV_026_20", "HV_028_20", "HV_029_20","HV_030_19")
+P42<-c("HV_016_21", "HV_017_21", "HV_018_21", "HV_019_21", "HV_020_20", "HV_022_21", "HV_023_21", "HV_024_21", "HV_025_21", "HV_026_21", "HV_028_21", "HV_029_21", "HV_030_20")
+P43<-c("HV_016_22", "HV_017_22", "HV_018_22", "HV_019_22", "HV_020_21", "HV_022_22", "HV_023_22", "HV_024_22", "HV_025_01", "HV_025_22", "HV_026_22", "HV_028_22", "HV_029_22","HV_030_21")
+```
+## Set A Binary Jaccard Dissimilairty Matrix
+```{r,message=FALSE,warning=FALSE,results="hide"}
+norm_groups <- transform_sample_counts(Profile_Checkv, function(x) x / sum(x) )
+mea<-phyloseq::distance(norm_groups, method="jaccard", binary = TRUE)
+df <- melt(as.matrix(mea), varnames = c("row", "col"))
+```
+Set A Subject P01
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P01)
+df_between<-subset(df_P, !row %in% P01)
+df_within<-subset(df_P, row %in% P01)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P01_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P01_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P02
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P02)
+df_between<-subset(df_P, !row %in% P02)
+df_within<-subset(df_P, row %in% P02)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P02_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P02_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P03
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P03)
+df_between<-subset(df_P, !row %in% P03)
+df_within<-subset(df_P, row %in% P03)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P03_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P03_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P04
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P04)
+df_between<-subset(df_P, !row %in% P04)
+df_within<-subset(df_P, row %in% P04)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P04_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P04_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P05
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P05)
+df_between<-subset(df_P, !row %in% P05)
+df_within<-subset(df_P, row %in% P05)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P05_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P05_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P06
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P06)
+df_between<-subset(df_P, !row %in% P06)
+df_within<-subset(df_P, row %in% P06)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P06_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P06_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P07
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P07)
+df_between<-subset(df_P, !row %in% P07)
+df_within<-subset(df_P, row %in% P07)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P07_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P07_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P08
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P08)
+df_between<-subset(df_P, !row %in% P08)
+df_within<-subset(df_P, row %in% P08)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P08_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P08_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P09
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P09)
+df_between<-subset(df_P, !row %in% P09)
+df_within<-subset(df_P, row %in% P09)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P09_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P09_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P10
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P10)
+df_between<-subset(df_P, !row %in% P10)
+df_within<-subset(df_P, row %in% P10)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P10_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P10_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P11
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P11)
+df_between<-subset(df_P, !row %in% P11)
+df_within<-subset(df_P, row %in% P11)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P11_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P11_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P12
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P12)
+df_between<-subset(df_P, !row %in% P12)
+df_within<-subset(df_P, row %in% P12)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P12_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P12_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P13
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P13)
+df_between<-subset(df_P, !row %in% P13)
+df_within<-subset(df_P, row %in% P13)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P13_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P13_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P14
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P14)
+df_between<-subset(df_P, !row %in% P14)
+df_within<-subset(df_P, row %in% P14)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P14_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P14_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P15
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P15)
+df_between<-subset(df_P, !row %in% P15)
+df_within<-subset(df_P, row %in% P15)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P15_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P15_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P16
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P16)
+df_between<-subset(df_P, !row %in% P16)
+df_within<-subset(df_P, row %in% P16)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P16_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P16_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P17
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P17)
+df_between<-subset(df_P, !row %in% P17)
+df_within<-subset(df_P, row %in% P17)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P17_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P17_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P18
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P18)
+df_between<-subset(df_P, !row %in% P18)
+df_within<-subset(df_P, row %in% P18)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P18_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P18_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P19
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P19)
+df_between<-subset(df_P, !row %in% P19)
+df_within<-subset(df_P, row %in% P19)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P19_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P19_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P20
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P20)
+df_between<-subset(df_P, !row %in% P20)
+df_within<-subset(df_P, row %in% P20)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P20_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P20_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P21
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P21)
+df_between<-subset(df_P, !row %in% P21)
+df_within<-subset(df_P, row %in% P21)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P21_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P21_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P22
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P22)
+df_between<-subset(df_P, !row %in% P22)
+df_within<-subset(df_P, row %in% P22)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P22_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P22_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P23
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P23)
+df_between<-subset(df_P, !row %in% P23)
+df_within<-subset(df_P, row %in% P23)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P23_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P23_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P24
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P24)
+df_between<-subset(df_P, !row %in% P24)
+df_within<-subset(df_P, row %in% P24)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P24_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P24_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P25
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P25)
+df_between<-subset(df_P, !row %in% P25)
+df_within<-subset(df_P, row %in% P25)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P25_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P25_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P26
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P26)
+df_between<-subset(df_P, !row %in% P26)
+df_within<-subset(df_P, row %in% P26)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P26_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P26_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P27
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P27)
+df_between<-subset(df_P, !row %in% P27)
+df_within<-subset(df_P, row %in% P27)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P27_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P27_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P28
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P28)
+df_between<-subset(df_P, !row %in% P28)
+df_within<-subset(df_P, row %in% P28)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P28_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P28_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P29
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P29)
+df_between<-subset(df_P, !row %in% P29)
+df_within<-subset(df_P, row %in% P29)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P29_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P29_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P30
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P30)
+df_between<-subset(df_P, !row %in% P30)
+df_within<-subset(df_P, row %in% P30)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P30_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P30_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P31
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P31)
+df_between<-subset(df_P, !row %in% P31)
+df_within<-subset(df_P, row %in% P31)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P31_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P31_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P32
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P32)
+df_between<-subset(df_P, !row %in% P32)
+df_within<-subset(df_P, row %in% P32)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P32_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P32_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P34
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P34)
+df_between<-subset(df_P, !row %in% P34)
+df_within<-subset(df_P, row %in% P34)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P34_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P34_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P35
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P35)
+df_between<-subset(df_P, !row %in% P35)
+df_within<-subset(df_P, row %in% P35)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P35_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P35_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P36
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P36)
+df_between<-subset(df_P, !row %in% P36)
+df_within<-subset(df_P, row %in% P36)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P36_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P36_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P37
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P37)
+df_between<-subset(df_P, !row %in% P37)
+df_within<-subset(df_P, row %in% P37)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P37_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P37_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P38
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P38)
+df_between<-subset(df_P, !row %in% P38)
+df_within<-subset(df_P, row %in% P38)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P38_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P38_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P39
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P39)
+df_between<-subset(df_P, !row %in% P39)
+df_within<-subset(df_P, row %in% P39)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P39_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P39_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P40
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P40)
+df_between<-subset(df_P, !row %in% P40)
+df_within<-subset(df_P, row %in% P40)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P40_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P40_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P41
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P41)
+df_between<-subset(df_P, !row %in% P41)
+df_within<-subset(df_P, row %in% P41)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P41_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P41_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P42
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P42)
+df_between<-subset(df_P, !row %in% P42)
+df_within<-subset(df_P, row %in% P42)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P42_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P42_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set A Subject P43
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P43)
+df_between<-subset(df_P, !row %in% P43)
+df_within<-subset(df_P, row %in% P43)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SA_P43_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SA_P43_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+
+## Set B Binary Jaccard Dissimilairty Matrix
+```{r,message=FALSE,warning=FALSE,results="hide"}
+norm_groups <- transform_sample_counts(Profile_NCBI, function(x) x / sum(x) )
+mea<-phyloseq::distance(norm_groups, method="jaccard", binary = TRUE)
+df <- melt(as.matrix(mea), varnames = c("row", "col"))
+```
+Set B Subject P01
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P01)
+df_between<-subset(df_P, !row %in% P01)
+df_within<-subset(df_P, row %in% P01)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P01_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P01_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P02
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P02)
+df_between<-subset(df_P, !row %in% P02)
+df_within<-subset(df_P, row %in% P02)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P02_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P02_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P03
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P03)
+df_between<-subset(df_P, !row %in% P03)
+df_within<-subset(df_P, row %in% P03)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P03_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P03_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P04
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P04)
+df_between<-subset(df_P, !row %in% P04)
+df_within<-subset(df_P, row %in% P04)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P04_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P04_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P05
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P05)
+df_between<-subset(df_P, !row %in% P05)
+df_within<-subset(df_P, row %in% P05)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P05_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P05_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P06
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P06)
+df_between<-subset(df_P, !row %in% P06)
+df_within<-subset(df_P, row %in% P06)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P06_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P06_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P07
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P07)
+df_between<-subset(df_P, !row %in% P07)
+df_within<-subset(df_P, row %in% P07)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P07_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P07_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P08
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P08)
+df_between<-subset(df_P, !row %in% P08)
+df_within<-subset(df_P, row %in% P08)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P08_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P08_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P09
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P09)
+df_between<-subset(df_P, !row %in% P09)
+df_within<-subset(df_P, row %in% P09)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P09_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P09_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P10
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P10)
+df_between<-subset(df_P, !row %in% P10)
+df_within<-subset(df_P, row %in% P10)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P10_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P10_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P11
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P11)
+df_between<-subset(df_P, !row %in% P11)
+df_within<-subset(df_P, row %in% P11)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P11_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P11_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P12
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P12)
+df_between<-subset(df_P, !row %in% P12)
+df_within<-subset(df_P, row %in% P12)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P12_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P12_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P13
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P13)
+df_between<-subset(df_P, !row %in% P13)
+df_within<-subset(df_P, row %in% P13)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P13_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P13_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P14
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P14)
+df_between<-subset(df_P, !row %in% P14)
+df_within<-subset(df_P, row %in% P14)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P14_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P14_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P15
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P15)
+df_between<-subset(df_P, !row %in% P15)
+df_within<-subset(df_P, row %in% P15)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P15_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P15_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P16
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P16)
+df_between<-subset(df_P, !row %in% P16)
+df_within<-subset(df_P, row %in% P16)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P16_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P16_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P17
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P17)
+df_between<-subset(df_P, !row %in% P17)
+df_within<-subset(df_P, row %in% P17)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P17_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P17_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P18
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P18)
+df_between<-subset(df_P, !row %in% P18)
+df_within<-subset(df_P, row %in% P18)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P18_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P18_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P19
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P19)
+df_between<-subset(df_P, !row %in% P19)
+df_within<-subset(df_P, row %in% P19)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P19_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P19_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P20
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P20)
+df_between<-subset(df_P, !row %in% P20)
+df_within<-subset(df_P, row %in% P20)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P20_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P20_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P21
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P21)
+df_between<-subset(df_P, !row %in% P21)
+df_within<-subset(df_P, row %in% P21)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P21_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P21_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P22
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P22)
+df_between<-subset(df_P, !row %in% P22)
+df_within<-subset(df_P, row %in% P22)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P22_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P22_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P23
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P23)
+df_between<-subset(df_P, !row %in% P23)
+df_within<-subset(df_P, row %in% P23)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P23_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P23_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P24
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P24)
+df_between<-subset(df_P, !row %in% P24)
+df_within<-subset(df_P, row %in% P24)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P24_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P24_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P25
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P25)
+df_between<-subset(df_P, !row %in% P25)
+df_within<-subset(df_P, row %in% P25)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P25_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P25_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P26
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P26)
+df_between<-subset(df_P, !row %in% P26)
+df_within<-subset(df_P, row %in% P26)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P26_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P26_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P27
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P27)
+df_between<-subset(df_P, !row %in% P27)
+df_within<-subset(df_P, row %in% P27)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P27_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P27_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P28
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P28)
+df_between<-subset(df_P, !row %in% P28)
+df_within<-subset(df_P, row %in% P28)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P28_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P28_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P29
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P29)
+df_between<-subset(df_P, !row %in% P29)
+df_within<-subset(df_P, row %in% P29)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P29_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P29_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P30
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P30)
+df_between<-subset(df_P, !row %in% P30)
+df_within<-subset(df_P, row %in% P30)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P30_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P30_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P31
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P31)
+df_between<-subset(df_P, !row %in% P31)
+df_within<-subset(df_P, row %in% P31)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P31_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P31_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P32
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P32)
+df_between<-subset(df_P, !row %in% P32)
+df_within<-subset(df_P, row %in% P32)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P32_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P32_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P34
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P34)
+df_between<-subset(df_P, !row %in% P34)
+df_within<-subset(df_P, row %in% P34)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P34_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P34_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P35
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P35)
+df_between<-subset(df_P, !row %in% P35)
+df_within<-subset(df_P, row %in% P35)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P35_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P35_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P36
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P36)
+df_between<-subset(df_P, !row %in% P36)
+df_within<-subset(df_P, row %in% P36)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P36_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P36_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P37
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P37)
+df_between<-subset(df_P, !row %in% P37)
+df_within<-subset(df_P, row %in% P37)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P37_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P37_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P38
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P38)
+df_between<-subset(df_P, !row %in% P38)
+df_within<-subset(df_P, row %in% P38)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P38_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P38_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P39
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P39)
+df_between<-subset(df_P, !row %in% P39)
+df_within<-subset(df_P, row %in% P39)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P39_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P39_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P40
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P40)
+df_between<-subset(df_P, !row %in% P40)
+df_within<-subset(df_P, row %in% P40)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P40_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P40_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P41
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P41)
+df_between<-subset(df_P, !row %in% P41)
+df_within<-subset(df_P, row %in% P41)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P41_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P41_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P42
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P42)
+df_between<-subset(df_P, !row %in% P42)
+df_within<-subset(df_P, row %in% P42)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P42_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P42_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set B Subject P43
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P43)
+df_between<-subset(df_P, !row %in% P43)
+df_within<-subset(df_P, row %in% P43)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SB_P43_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SB_P43_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+
+## Set C Binary Jaccard Dissimilairty Matrix
+```{r,message=FALSE,warning=FALSE,results="hide"}
+norm_groups <- transform_sample_counts(Profile_Contig, function(x) x / sum(x) )
+mea<-phyloseq::distance(norm_groups, method="jaccard", binary = TRUE)
+df <- melt(as.matrix(mea), varnames = c("row", "col"))
+```
+Set C Subject P01
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P01)
+df_between<-subset(df_P, !row %in% P01)
+df_within<-subset(df_P, row %in% P01)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P01_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P01_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P02
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P02)
+df_between<-subset(df_P, !row %in% P02)
+df_within<-subset(df_P, row %in% P02)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P02_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P02_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P03
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P03)
+df_between<-subset(df_P, !row %in% P03)
+df_within<-subset(df_P, row %in% P03)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P03_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P03_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P04
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P04)
+df_between<-subset(df_P, !row %in% P04)
+df_within<-subset(df_P, row %in% P04)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P04_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P04_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P05
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P05)
+df_between<-subset(df_P, !row %in% P05)
+df_within<-subset(df_P, row %in% P05)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P05_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P05_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P06
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P06)
+df_between<-subset(df_P, !row %in% P06)
+df_within<-subset(df_P, row %in% P06)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P06_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P06_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P07
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P07)
+df_between<-subset(df_P, !row %in% P07)
+df_within<-subset(df_P, row %in% P07)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P07_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P07_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P08
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P08)
+df_between<-subset(df_P, !row %in% P08)
+df_within<-subset(df_P, row %in% P08)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P08_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P08_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P09
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P09)
+df_between<-subset(df_P, !row %in% P09)
+df_within<-subset(df_P, row %in% P09)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P09_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P09_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P10
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P10)
+df_between<-subset(df_P, !row %in% P10)
+df_within<-subset(df_P, row %in% P10)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P10_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P10_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P11
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P11)
+df_between<-subset(df_P, !row %in% P11)
+df_within<-subset(df_P, row %in% P11)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P11_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P11_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P12
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P12)
+df_between<-subset(df_P, !row %in% P12)
+df_within<-subset(df_P, row %in% P12)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P12_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P12_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P13
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P13)
+df_between<-subset(df_P, !row %in% P13)
+df_within<-subset(df_P, row %in% P13)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P13_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P13_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P14
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P14)
+df_between<-subset(df_P, !row %in% P14)
+df_within<-subset(df_P, row %in% P14)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P14_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P14_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P15
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P15)
+df_between<-subset(df_P, !row %in% P15)
+df_within<-subset(df_P, row %in% P15)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P15_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P15_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P16
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P16)
+df_between<-subset(df_P, !row %in% P16)
+df_within<-subset(df_P, row %in% P16)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P16_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P16_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P17
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P17)
+df_between<-subset(df_P, !row %in% P17)
+df_within<-subset(df_P, row %in% P17)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P17_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P17_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P18
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P18)
+df_between<-subset(df_P, !row %in% P18)
+df_within<-subset(df_P, row %in% P18)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P18_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P18_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P19
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P19)
+df_between<-subset(df_P, !row %in% P19)
+df_within<-subset(df_P, row %in% P19)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P19_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P19_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P20
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P20)
+df_between<-subset(df_P, !row %in% P20)
+df_within<-subset(df_P, row %in% P20)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P20_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P20_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P21
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P21)
+df_between<-subset(df_P, !row %in% P21)
+df_within<-subset(df_P, row %in% P21)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P21_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P21_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P22
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P22)
+df_between<-subset(df_P, !row %in% P22)
+df_within<-subset(df_P, row %in% P22)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P22_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P22_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P23
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P23)
+df_between<-subset(df_P, !row %in% P23)
+df_within<-subset(df_P, row %in% P23)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P23_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P23_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P24
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P24)
+df_between<-subset(df_P, !row %in% P24)
+df_within<-subset(df_P, row %in% P24)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P24_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P24_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P25
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P25)
+df_between<-subset(df_P, !row %in% P25)
+df_within<-subset(df_P, row %in% P25)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P25_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P25_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P26
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P26)
+df_between<-subset(df_P, !row %in% P26)
+df_within<-subset(df_P, row %in% P26)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P26_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P26_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P27
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P27)
+df_between<-subset(df_P, !row %in% P27)
+df_within<-subset(df_P, row %in% P27)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P27_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P27_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P28
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P28)
+df_between<-subset(df_P, !row %in% P28)
+df_within<-subset(df_P, row %in% P28)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P28_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P28_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P29
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P29)
+df_between<-subset(df_P, !row %in% P29)
+df_within<-subset(df_P, row %in% P29)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P29_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P29_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P30
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P30)
+df_between<-subset(df_P, !row %in% P30)
+df_within<-subset(df_P, row %in% P30)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P30_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P30_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P31
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P31)
+df_between<-subset(df_P, !row %in% P31)
+df_within<-subset(df_P, row %in% P31)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P31_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P31_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P32
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P32)
+df_between<-subset(df_P, !row %in% P32)
+df_within<-subset(df_P, row %in% P32)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P32_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P32_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P34
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P34)
+df_between<-subset(df_P, !row %in% P34)
+df_within<-subset(df_P, row %in% P34)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P34_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P34_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P35
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P35)
+df_between<-subset(df_P, !row %in% P35)
+df_within<-subset(df_P, row %in% P35)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P35_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P35_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P36
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P36)
+df_between<-subset(df_P, !row %in% P36)
+df_within<-subset(df_P, row %in% P36)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P36_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P36_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P37
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P37)
+df_between<-subset(df_P, !row %in% P37)
+df_within<-subset(df_P, row %in% P37)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P37_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P37_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P38
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P38)
+df_between<-subset(df_P, !row %in% P38)
+df_within<-subset(df_P, row %in% P38)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P38_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P38_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P39
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P39)
+df_between<-subset(df_P, !row %in% P39)
+df_within<-subset(df_P, row %in% P39)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P39_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P39_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P40
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P40)
+df_between<-subset(df_P, !row %in% P40)
+df_within<-subset(df_P, row %in% P40)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P40_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P40_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P41
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P41)
+df_between<-subset(df_P, !row %in% P41)
+df_within<-subset(df_P, row %in% P41)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P41_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P41_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P42
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P42)
+df_between<-subset(df_P, !row %in% P42)
+df_within<-subset(df_P, row %in% P42)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P42_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P42_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+Set C Subject P43
+```{r,message=FALSE,warning=FALSE,results="hide"}
+df_P<-subset(df, col %in% P43)
+df_between<-subset(df_P, !row %in% P43)
+df_within<-subset(df_P, row %in% P43)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+SC_P43_both<-c(mean(df_between$value),mean(df_within2$value))
+```
+```{r}
+SC_P43_both
+# Results were stored in an excel file named Jaccard_bw_win (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+```
+
+
+
+
+
+
+
+
+Make lists of SampleID by location within subject for organization and within and between dissimilarity calculations
+```{r,echo=FALSE}
+P01_LH<-c("HV_001_01", "HV_002_01", "HV_003_01", "HV_004_01","HV_005_01")
+P01_RH<-c("HV_001_02", "HV_002_02", "HV_003_02","HV_004_02")
+P01_SC<-c("HV_001_03", "HV_002_03", "HV_003_03", "HV_004_03","HV_005_03")
+
+P02_LH<-c("HV_001_04", "HV_002_04", "HV_003_04", "HV_004_04","HV_005_04")
+P02_RH<-c("HV_001_05", "HV_002_05", "HV_003_05", "HV_004_05","HV_005_05")
+P02_SC<-c("HV_001_06", "HV_002_06", "HV_003_06", "HV_004_06","HV_005_06")
+
+P03_LH<-c("HV_001_07", "HV_002_07", "HV_003_07", "HV_004_07","HV_005_07")
+P03_RH<-c("HV_001_08", "HV_002_08", "HV_003_08", "HV_004_08","HV_005_08")
+P03_SC<-c("HV_001_09", "HV_002_09", "HV_003_09", "HV_004_09","HV_005_09")
+
+P04_LH<-c("HV_001_10", "HV_002_10", "HV_003_10", "HV_004_10", "HV_005_10")
+P04_RH<-c("HV_001_11", "HV_002_11", "HV_003_11", "HV_004_11","HV_005_11")
+P04_SC<-c("HV_001_12", "HV_002_12", "HV_003_12", "HV_004_12","HV_005_12")
+
+P05_LH<-c("HV_001_13", "HV_002_13", "HV_003_13", "HV_004_13","HV_005_13")
+P05_RH<-c("HV_001_14", "HV_002_14", "HV_003_14", "HV_004_14", "HV_005_14")
+P05_SC<-c("HV_001_15", "HV_002_15", "HV_004_15","HV_005_15")
+
+P06_LH<-c("HV_001_16", "HV_003_16", "HV_004_16", "HV_005_16")
+P06_RH<-c("HV_001_18", "HV_002_18", "HV_003_18", "HV_004_18","HV_005_18")
+P06_SC<-c("HV_001_19", "HV_002_19", "HV_003_19", "HV_004_19","HV_005_19")
+
+P07_LH<-c("HV_001_20", "HV_002_20", "HV_003_20", "HV_004_20","HV_005_20")
+P07_RH<-c("HV_001_21", "HV_002_21", "HV_003_21","HV_004_21")
+P07_SC<-c("HV_001_22", "HV_002_22", "HV_003_22", "HV_004_22","HV_005_22")
+
+P08_LH<-c("HV_006_01", "HV_007_01", "HV_008_01", "HV_009_01","HV_010_01")
+P08_RH<-c("HV_006_02", "HV_007_02", "HV_008_02","HV_010_02")
+P08_SC<-c("HV_006_03", "HV_007_03", "HV_008_03", "HV_009_03","HV_010_03")
+
+P09_LH<-c("HV_006_04", "HV_007_04", "HV_008_04", "HV_009_04","HV_010_04")
+P09_RH<-c("HV_006_05", "HV_007_05", "HV_008_05", "HV_009_05","HV_010_05")
+P09_SC<-c("HV_006_06", "HV_007_06", "HV_008_06", "HV_009_06","HV_010_06")
+
+P10_LH<-c("HV_006_07", "HV_007_07", "HV_008_07", "HV_009_07","HV_010_07")
+P10_RH<-c("HV_006_08", "HV_007_08", "HV_008_08", "HV_009_08","HV_010_08")
+P10_SC<-c("HV_006_09", "HV_007_09", "HV_008_09", "HV_009_09","HV_010_09")
+
+P11_LH<-c("HV_006_10", "HV_007_10", "HV_008_10", "HV_009_10","HV_010_10")
+P11_RH<-c("HV_006_11", "HV_007_11", "HV_008_11", "HV_009_11","HV_010_11")
+P11_SC<-c("HV_006_12", "HV_007_12", "HV_008_12", "HV_009_12","HV_010_12")
+
+P12_LH<-c("HV_006_13", "HV_007_13", "HV_008_13", "HV_009_13","HV_010_13")
+P12_RH<-c("HV_006_14", "HV_007_14", "HV_008_14", "HV_009_14","HV_010_14")
+P12_SC<-c("HV_006_15", "HV_007_15", "HV_008_15", "HV_009_15","HV_010_15")
+
+P13_LH<-c("HV_006_16", "HV_007_16", "HV_008_16", "HV_009_16","HV_010_16")
+P13_RH<-c("HV_006_18", "HV_007_18", "HV_008_18", "HV_009_18","HV_010_18")
+P13_SC<-c("HV_006_19", "HV_007_19", "HV_008_19", "HV_009_19","HV_010_19")
+
+P14_LH<-c("HV_006_20", "HV_007_20", "HV_008_20", "HV_009_20","HV_010_20")
+P14_RH<-c("HV_006_21", "HV_007_21", "HV_008_21", "HV_009_21","HV_010_21")
+P14_SC<-c("HV_006_22", "HV_007_22", "HV_008_22", "HV_009_22","HV_010_22")
+
+P15_LH<-c("HV_011_01", "HV_012_01", "HV_013_01", "HV_014_01","HV_015_01")
+P15_RH<-c("HV_011_02", "HV_012_02", "HV_013_02", "HV_014_02","HV_015_02")
+P15_SC<-c("HV_011_03", "HV_012_03", "HV_013_03", "HV_014_03","HV_015_03")
+
+P16_LH<-c("HV_011_04", "HV_012_04", "HV_013_04", "HV_014_04","HV_015_04")
+P16_RH<-c("HV_011_05", "HV_012_05", "HV_013_05", "HV_014_05","HV_015_05")
+P16_SC<-c("HV_011_06", "HV_012_06", "HV_014_06","HV_015_06")
+
+P17_LH<-c("HV_011_07", "HV_012_07", "HV_013_07", "HV_014_07","HV_015_07")
+P17_RH<-c("HV_011_08", "HV_012_08", "HV_013_08", "HV_014_08","HV_015_08")
+P17_SC<-c("HV_011_09", "HV_012_09", "HV_013_09", "HV_014_09","HV_015_09")
+
+P18_LH<-c("HV_011_10", "HV_012_10", "HV_013_10", "HV_014_10","HV_015_10")
+P18_RH<-c("HV_011_11", "HV_012_11", "HV_013_11", "HV_014_11","HV_015_11")
+P18_SC<-c("HV_011_12", "HV_012_12", "HV_013_12", "HV_014_12","HV_015_12")
+
+P19_LH<-c("HV_011_13", "HV_012_13", "HV_013_13", "HV_014_13","HV_015_13")
+P19_RH<-c("HV_011_14", "HV_012_14", "HV_013_14", "HV_014_14","HV_015_14")
+P19_SC<-c("HV_011_15", "HV_012_15", "HV_013_15", "HV_014_15","HV_015_15")
+
+P20_LH<-c("HV_011_16", "HV_012_16", "HV_013_16", "HV_014_16","HV_015_16")
+P20_RH<-c("HV_011_18", "HV_012_18", "HV_013_18", "HV_014_18","HV_015_18")
+P20_SC<-c("HV_011_19", "HV_012_19", "HV_013_19", "HV_014_19","HV_015_19")
+
+P21_LH<-c("HV_011_20", "HV_012_20", "HV_013_20","HV_014_20")
+P21_RH<-c("HV_011_21", "HV_012_21", "HV_013_21","HV_014_21")
+P21_SC<-c("HV_011_22", "HV_012_22", "HV_013_22","HV_014_22")
+
+P22_LH<-c("HV_021_02", "HV_022_01", "HV_023_01", "HV_024_01","HV_025_02")
+P22_RH<-c("HV_026_01", "HV_027_08", "HV_028_01", "HV_029_01","HV_030_01")
+P22_SC<-c("HV_016_01", "HV_017_01", "HV_018_01", "HV_019_01","HV_020_01")
+
+P23_LH<-c("HV_021_03", "HV_022_02", "HV_023_02", "HV_024_02","HV_025_03")
+P23_RH<-c("HV_026_02", "HV_027_09", "HV_028_02", "HV_029_02","HV_030_02")
+P23_SC<-c("HV_016_02", "HV_017_02", "HV_018_02", "HV_019_02","HV_020_02")
+
+P24_LH<-c("HV_021_04", "HV_022_03", "HV_023_03", "HV_024_03","HV_025_04")
+P24_RH<-c("HV_026_03", "HV_027_10", "HV_028_03", "HV_029_03","HV_030_03")
+P24_SC<-c("HV_016_03", "HV_017_03", "HV_018_03", "HV_019_03","HV_021_01")
+
+P25_LH<-c("HV_021_05", "HV_022_04", "HV_023_04", "HV_024_04","HV_025_05")
+P25_RH<-c("HV_026_04", "HV_027_11", "HV_028_04", "HV_029_04","HV_030_04")
+P25_SC<-c("HV_016_04", "HV_017_04", "HV_018_04", "HV_019_04","HV_020_03")
+
+P26_LH<-c("HV_021_06", "HV_022_05", "HV_023_05", "HV_024_05","HV_025_06")
+P26_RH<-c("HV_026_05", "HV_027_12", "HV_028_05", "HV_029_05","HV_030_05")
+P26_SC<-c("HV_016_05", "HV_017_05", "HV_018_05", "HV_019_05","HV_020_04")
+
+P27_LH<-c("HV_021_07", "HV_022_06", "HV_023_06", "HV_024_06","HV_025_07")
+P27_RH<-c("HV_026_06", "HV_027_13", "HV_028_06", "HV_029_06","HV_030_06")
+P27_SC<-c("HV_016_06", "HV_017_06", "HV_018_06", "HV_019_06","HV_020_05")
+
+P28_LH<-c("HV_021_08", "HV_022_07", "HV_023_07", "HV_024_07","HV_025_08")
+P28_RH<-c("HV_026_07", "HV_027_14", "HV_028_07", "HV_029_07","HV_030_07")
+P28_SC<-c("HV_016_07", "HV_017_07", "HV_018_07", "HV_019_07","HV_020_06")
+
+P29_LH<-c("HV_021_09", "HV_022_08", "HV_023_08", "HV_024_08","HV_025_09")
+P29_RH<-c("HV_026_08", "HV_027_15", "HV_028_08", "HV_029_08","HV_030_08")
+P29_SC<-c("HV_016_08", "HV_017_08", "HV_018_08", "HV_019_08","HV_020_07")
+
+P30_LH<-c("HV_021_10", "HV_022_09", "HV_023_09", "HV_024_09","HV_025_10")
+P30_RH<-c("HV_026_09", "HV_027_16", "HV_028_09", "HV_029_09","HV_030_09")
+P30_SC<-c("HV_016_09", "HV_017_09", "HV_018_09", "HV_019_09","HV_020_08")
+
+P31_LH<-c("HV_021_11", "HV_022_10", "HV_023_10","HV_024_10")
+P31_RH<-c("HV_026_10", "HV_027_18", "HV_028_10","HV_029_10")
+P31_SC<-c("HV_016_10", "HV_017_10", "HV_018_10","HV_019_10")
+
+P32_LH<-c("HV_021_12", "HV_022_11", "HV_023_11", "HV_024_11","HV_025_11")
+P32_RH<-c("HV_026_11", "HV_027_19", "HV_028_11", "HV_029_11","HV_030_10")
+P32_SC<-c("HV_016_11", "HV_017_11", "HV_018_11", "HV_019_11","HV_020_09")
+
+P34_LH<-c("HV_021_14", "HV_022_12", "HV_023_12", "HV_024_12","HV_025_12")
+P34_RH<-c("V_026_12", "HV_027_20", "HV_028_12", "HV_029_12","HV_030_11")
+P34_SC<-c("HV_016_12", "HV_017_12", "HV_018_12", "HV_019_12","HV_020_11")
+
+P35_LH<-c("HV_021_15", "HV_022_13", "HV_023_13", "HV_024_13","HV_025_13")
+P35_RH<-c("HV_026_13", "HV_027_21", "HV_028_13", "HV_029_13","HV_030_12")
+P35_SC<-c("HV_016_13", "HV_017_13", "HV_018_13", "HV_019_13","HV_020_12")
+
+P36_LH<-c("HV_021_16", "HV_022_14", "HV_023_14", "HV_024_14","HV_025_14")
+P36_RH<-c("HV_026_14", "HV_027_22", "HV_028_14", "HV_029_14","HV_030_13")
+P36_SC<-c("HV_016_14", "HV_017_14", "HV_018_14", "HV_019_14","HV_020_13")
+
+P37_LH<-c("HV_021_18", "HV_022_15", "HV_023_15", "HV_024_15","HV_025_15")
+P37_RH<-c("HV_026_15", "HV_028_15", "HV_029_15", "HV_030_14","HV_030_22")
+P37_SC<-c("HV_016_15", "HV_017_15", "HV_018_15", "HV_019_15","HV_020_14")
+
+P38_LH<-c("HV_021_19", "HV_022_16", "HV_023_16", "HV_024_16","HV_025_16")
+P38_RH<-c("HV_026_16", "HV_028_16", "HV_029_16","HV_030_15")
+P38_SC<-c("HV_016_16", "HV_017_16", "HV_018_16", "HV_019_16","HV_020_15")
+
+P39_LH<-c("HV_021_20", "HV_022_18", "HV_023_18", "HV_024_18","HV_025_18")
+P39_RH<-c("HV_026_18", "HV_028_18", "HV_029_18","HV_030_16")
+P39_SC<-c("HV_016_18", "HV_017_18", "HV_018_18", "HV_019_18","HV_020_16")
+
+P40_LH<-c("HV_021_21", "HV_022_19", "HV_023_19", "HV_024_19","HV_025_19")
+P40_RH<-c("HV_026_19", "HV_028_19", "HV_029_19","HV_030_18")
+P40_SC<-c("HV_016_19", "HV_017_19", "HV_018_19", "HV_019_19","HV_020_18")
+
+P41_LH<-c("HV_021_22", "HV_022_20", "HV_023_20", "HV_024_20","HV_025_20")
+P41_RH<-c("HV_026_20", "HV_028_20", "HV_029_20","HV_030_19")
+P41_SC<-c("HV_016_20", "HV_017_20", "HV_018_20", "HV_019_20","HV_020_19")
+
+P42_LH<-c("HV_022_21", "HV_023_21", "HV_024_21","HV_025_21")
+P42_RH<-c("HV_026_21", "HV_028_21", "HV_029_21","HV_030_20")
+P42_SC<-c("HV_016_21", "HV_017_21", "HV_018_21", "HV_019_21","HV_020_20")
+
+P43_LH<-c("HV_022_22", "HV_023_22", "HV_024_22", "HV_025_01","HV_025_22")
+P43_RH<-c("HV_026_22", "HV_028_22", "HV_029_22","HV_030_21")
+P43_SC<-c("HV_016_22", "HV_017_22", "HV_018_22", "HV_019_22","HV_020_21")
+```
+\
