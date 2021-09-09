@@ -1,0 +1,314 @@
+---
+title: "15_Alpha_Beta_Diversity_Fig7"
+output: html_document
+author: "Ema H Graham"
+---
+For Questions Email: ema.graham@huskers.unl.edu
+
+## Description
+
+Input Notes: 
+Will need the following files:
+- 
+  
+Output Notes: 
+
+```{r setup,message=FALSE}
+library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(phyloseq)
+```
+## Phyloseq Object Generation for Diversity Analysis
+This is the same phyloseq object titled Profile that was generated in the 14_Within_vs_Between_Dissimilarity_Fig6.Rmd script
+
+Metadata for all Phyloseq objects produced in this script
+```{r}
+Metadata2 <- read_csv("~/Desktop/Current_work/OTU_Builber/Sequencing_Data_Info_Sheet3.csv")
+Metadata3 <- Metadata2
+Metadata3$Time <- Metadata3$Time_Collected
+Metadata3$Time[which(Metadata3$Time == "T_0")] <- "00_Weeks"
+Metadata3$Time[which(Metadata3$Time == "2_week")] <- "02_Weeks"
+Metadata3$Time[which(Metadata3$Time == "1_month")] <- "04_Weeks"
+Metadata3$Time[which(Metadata3$Time == "3_month")] <- "12_Weeks"
+Metadata3$Time[which(Metadata3$Time == "6_month")] <- "24_Weeks"
+META <- sample_data(Metadata3)
+sample_names(META)= META$SampleID
+```
+Make Phyloseq object for stable Set A CheckV identified and annotated viral species Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CHeckV_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts  <- subset(CHeckV_counts , select = -c(length))
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CHeckV_counts2 <- merge(tax_ann, CHeckV_counts, by.x = "row.names", by.y = "row.names")
+CHeckV_counts2<- subset (CHeckV_counts2, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Family, Order,Subfamily, Genus))
+CHeckV_spec<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
+CHeckV_counts2<-subset(CHeckV_counts2, Species %in% CHeckV_spec)
+CHeckV_counts2<-ddply(CHeckV_counts2,"Species",numcolwise(sum))
+row.names(CHeckV_counts2)<- CHeckV_counts2$Species
+CHeckV_counts2<- subset (CHeckV_counts2, select = -c(Species))
+CHeckV_OTU <- otu_table(CHeckV_counts2, taxa_are_rows = TRUE)
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE,row.names=NULL)
+tax_ann<-subset(tax_ann, Species %in% CHeckV_spec)
+tax_ann<- subset (tax_ann, select = -c(contig_id))
+tax_ann<-unique(tax_ann)
+remv<-c("4","70")
+tax_ann<-subset(tax_ann, !row.names(tax_ann) %in% remv)
+row.names(tax_ann)<-tax_ann$Species
+CHeckV_tax <-as.matrix(tax_ann)
+CHeckV_tax <- tax_table(CHeckV_tax)
+CHeckV_tax <-as.matrix(CHeckV_tax)
+CHeckV_tax <- tax_table(CHeckV_tax)
+CHeckV_PHY <- phyloseq(CHeckV_OTU, CHeckV_tax, META)
+```
+
+Make Phyloseq object for stable Set B Caudovirales Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_counts <- read.csv("counts2_CAUDO.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_OTU <- merge(CAUDO_tax, CAUDO_counts, by.x="row.names", by.y="row.names")
+CAUDO_OTU<- subset (CAUDO_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+CAUDO_spec<-c("Bacillus phage Stitch","Caudovirales sp.","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage SPbeta-like","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phiJH1301-2","Uncultured Caudovirales phage")
+CAUDO_OTU<-subset(CAUDO_OTU, Species %in% CAUDO_spec)
+CAUDO_OTU<-ddply(CAUDO_OTU,"Species",numcolwise(sum))
+row.names(CAUDO_OTU)<-CAUDO_OTU$Species
+CAUDO_OTU<- subset (CAUDO_OTU, select = -c(Species))
+CAUDO_OTU <- otu_table(CAUDO_OTU, taxa_are_rows = TRUE)
+CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+CAUDO_tax<-subset(CAUDO_tax, Species %in% CAUDO_spec)
+CAUDO_tax<- subset (CAUDO_tax, select = -c(ContigID))
+CAUDO_tax<-unique(CAUDO_tax)
+row.names(CAUDO_tax)<-CAUDO_tax$Species
+CAUDO_tax <-as.matrix(CAUDO_tax)
+CAUDO_tax <- tax_table(CAUDO_tax)
+CAUDO_PHY <- phyloseq(CAUDO_OTU, CAUDO_tax, META)
+```
+
+Make Phyloseq object for stable Set B Papillomaviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+PAP_counts <- read.csv("papilloma/PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
+PAP_OTU <- merge(PAP_tax, PAP_counts, by.x="row.names", by.y="row.names")
+PAP_OTU<- subset (PAP_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+PAP_spec<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 12","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8")
+PAP_OTU<-subset(PAP_OTU, Species %in% PAP_spec)
+PAP_OTU<-ddply(PAP_OTU,"Species",numcolwise(sum))
+row.names(PAP_OTU)<-PAP_OTU$Species
+PAP_OTU<- subset (PAP_OTU, select = -c(Species))
+PAP_OTU <- otu_table(PAP_OTU, taxa_are_rows = TRUE)
+PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
+PAP_tax<-subset(PAP_tax, Species %in% PAP_spec)
+PAP_tax<- subset (PAP_tax, select = -c(ContigID))
+PAP_tax<-unique(PAP_tax)
+remv<-c("1341")
+PAP_tax<-subset(PAP_tax, !row.names(PAP_tax) %in% remv)
+row.names(PAP_tax)<-PAP_tax$Species
+PAP_tax <-as.matrix(PAP_tax)
+PAP_tax <- tax_table(PAP_tax)
+PAP_PHY <- phyloseq(PAP_OTU, PAP_tax, META)
+```
+
+Make Phyloseq object for stable Set B Baculoviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+BAC_counts <- read.csv("baculo/counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- subset(BAC_tax, select = -c(Isolate))
+BAC_OTU <- merge(BAC_tax, BAC_counts, by.x="row.names", by.y="row.names")
+BAC_OTU<- subset (BAC_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+BAC_spec<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Unclassified Baculoviridae")
+BAC_OTU<-subset(BAC_OTU, Species %in% BAC_spec)
+BAC_OTU<-ddply(BAC_OTU,"Species",numcolwise(sum))
+row.names(BAC_OTU)<-BAC_OTU$Species
+BAC_OTU<- subset (BAC_OTU, select = -c(Species))
+BAC_OTU <- otu_table(BAC_OTU, taxa_are_rows = TRUE)
+BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- subset(BAC_tax, select = -c(Isolate))
+BAC_tax<-subset(BAC_tax, Species %in% BAC_spec)
+BAC_tax<-unique(BAC_tax)
+row.names(BAC_tax)<-BAC_tax$Species
+BAC_tax <-as.matrix(BAC_tax)
+BAC_tax <- tax_table(BAC_tax)
+BAC_PHY <- phyloseq(BAC_OTU, BAC_tax, META)
+```
+
+Make Phyloseq object for stable Set B Genomoviridae Makers 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+GEN_counts <- read.csv("genomovir/counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- subset(GEN_tax, select = -c(Isolate))
+GEN_OTU <- merge(GEN_tax, GEN_counts, by.x="row.names", by.y="row.names")
+GEN_OTU<- subset (GEN_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+GEN_spec<-c("Genomoviridae sp.")
+GEN_OTU<-subset(GEN_OTU, Species %in% GEN_spec)
+GEN_OTU<-ddply(GEN_OTU,"Species",numcolwise(sum))
+row.names(GEN_OTU)<-GEN_OTU$Species
+GEN_OTU<- subset (GEN_OTU, select = -c(Species))
+GEN_OTU <- otu_table(GEN_OTU, taxa_are_rows = TRUE)
+GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- subset(GEN_tax, select = -c(Isolate))
+GEN_tax<-subset(GEN_tax, Species %in% GEN_spec)
+GEN_tax<-unique(GEN_tax)
+row.names(GEN_tax)<-GEN_tax$Species
+GEN_tax <-as.matrix(GEN_tax)
+GEN_tax <- tax_table(GEN_tax)
+GEN_PHY <- phyloseq(GEN_OTU, GEN_tax, META)
+```
+
+Make Phyloseq object for stable Set C contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Contigs_counts <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+Contigs_counts  <- subset(Contigs_counts , select = -c(length))
+CONTIG_spec<-c("k127_12278877","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_699139","k127_8568361","k127_9807842","k127_9848036")
+Contigs_counts<-subset(Contigs_counts, row.names(Contigs_counts) %in% CONTIG_spec)
+CONTIG_OTU <- otu_table(Contigs_counts, taxa_are_rows = TRUE)
+Contigs_tax <- Contigs_counts
+Contigs_tax$Superkingdom<-"Viruses"
+Contigs_tax$Realm <- row.names(Contigs_tax)
+Contigs_tax <- subset(Contigs_tax, select = c(Superkingdom,Realm))
+Contigs_tax$Kingdom<-Contigs_tax$Realm
+Contigs_tax$Phylum <-Contigs_tax$Realm
+Contigs_tax$Class<-Contigs_tax$Realm
+Contigs_tax$Order<-Contigs_tax$Realm
+Contigs_tax$Family<-Contigs_tax$Realm
+Contigs_tax$Subfamily<-Contigs_tax$Realm
+Contigs_tax$Genus<-Contigs_tax$Realm
+Contigs_tax$Species<-Contigs_tax$Realm
+Contigs_tax<-subset(Contigs_tax, row.names(Contigs_tax) %in% CONTIG_spec)
+Contigs_tax <-as.matrix(Contigs_tax)
+Contigs_tax <- tax_table(Contigs_tax)
+CONTIG_PHY <- phyloseq(CONTIG_OTU, Contigs_tax, META)
+```
+
+Remove repeat samples and samples not used in this study
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Samples_toRemove <- c("HV_001_27", "HV_002_27", "HV_003_27", "HV_004_27", "HV_005_27", "HV_006_27", "HV_007_27", "HV_008_27",
+                      "HV_009_27", "HV_010_27", "HV_011_27", "HV_012_27", "HV_013_27", "HV_014_27", "HV_015_27", "HV_016_27",
+                      "HV_017_27", "HV_018_27", "HV_019_27", "HV_020_27", "HV_021_27", "HV_022_27", "HV_023_27", "HV_024_27",
+                      "HV_025_27", "HV_026_27", "HV_027_27", "HV_028_27", "HV_029_27", "HV_030_27", "HV_015_20", "HV_015_21", 
+                      "HV_020_22", "HV_027_02", "HV_027_03", "HV_027_04", "HV_027_05", "HV_027_06", "HV_027_07", "HV_020_10",
+                      "HV_021_13", "HV_027_01","HV_003_15")
+CAUDO_PHY2 <- subset_samples(CAUDO_PHY, !(SampleID %in% Samples_toRemove))
+CHeckV_PHY2 <- subset_samples(CHeckV_PHY, !(SampleID %in% Samples_toRemove))
+PAP_PHY2 <- subset_samples(PAP_PHY, !(SampleID %in% Samples_toRemove))
+BAC_PHY2 <- subset_samples(BAC_PHY, !(SampleID %in% Samples_toRemove))
+GEN_PHY2 <- subset_samples(GEN_PHY, !(SampleID %in% Samples_toRemove))
+CONTIG_PHY2 <- subset_samples(CONTIG_PHY, !(SampleID %in% Samples_toRemove))
+```
+Merge Phyloseq objects to make an overall profile (all three sets) Phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Profile<- merge_phyloseq(CAUDO_PHY2,CHeckV_PHY2,PAP_PHY2,BAC_PHY2,GEN_PHY2,CONTIG_PHY2)
+```
+
+## Alpha Diversity
+
+Alpha Diversity Box Plot for Alpha Diversity Measures Observed and Shannon
+```{r,message=FALSE,warning=FALSE,results="hide"}
+alpha_meas <- c("Observed","Shannon")
+alp<-plot_richness(Profile, x="Subject", measures=alpha_meas)+
+  geom_boxplot(alpha=0.5)+
+  theme_half_open()+
+  theme(legend.position="none",axis.text.x=element_text(angle=90,,vjust = 0.5, hjust=1,size=9))
+ggsave(plot=alp,"alpha.pdf",dpi = 600, pointsize=12, width=25, units = "cm")
+```
+```{r}
+alp
+```
+
+Extract abundance matrix from the phyloseq object
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Total_OTU <- as(otu_table(Profile), "matrix")
+```
+Transpose if necessary
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Total_OTU <- t(Total_OTU)
+```
+Coerce to data.frame
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Total_OTUdf = as.data.frame(Total_OTU)
+```
+Merge metadata file with alpha diversity measures:
+
+Remove samples from metadatafile that were removed from your phyloseq object (ie control samples, repeated samples, and other samples that are of other persons you are not using in this data set (P33, >P43))
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Metadata_stat <- Metadata2[!grepl("HV_001_27", Metadata2$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_002_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_03", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_04", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_06", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_07", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_021_13", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_01", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_020_10", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_015_21", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_05", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_020_22", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_02", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_015_20", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_003_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_004_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_005_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_006_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_007_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_008_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_009_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_010_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_011_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_012_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_013_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_014_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_015_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_016_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_017_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_018_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_019_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_020_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_021_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_022_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_023_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_024_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_025_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_026_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_027_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_028_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_029_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_030_27", Metadata_stat$SampleID),]
+Metadata_stat <- Metadata_stat[!grepl("HV_003_15", Metadata_stat$SampleID),]
+```
+Alpha Diversity Measure: Shannon
+```{r,message=FALSE,warning=FALSE,results="hide"}
+Metadata_stat$shannon.vegan <- diversity(Total_OTUdf, index = "shannon")
+```
+ANOVA of Variables Gender, Subject, and Locations within Subject Using The Shannon Index Alpha Diversity Measure
+```{r}
+model1 <- aov(shannon.vegan~ Gender+Subject/Location, data = Metadata_stat)
+summary(model1)
+```
+## Beta Diversity 
+
+Normalize
+```{r,message=FALSE,warning=FALSE,results="hide"}
+norm_groups <- transform_sample_counts(Profile, function(x) x / sum(x) )
+```
+
+PCoA ordination of binary Jaccard distances
+```{r,message=FALSE,warning=FALSE,results="hide"}
+ord.core_groups.pcoa <- ordinate(norm_groups, method="PCoA", distance="jaccard", na.rm = TRUE, binary = TRUE)
+p<-plot_ordination(norm_groups, ord.core_groups.pcoa, color = "Subject", shape = "Location") +
+  geom_point(size=1)+
+  theme_half_open()
+ggsave(plot=p,"Figures/beta.pdf",dpi = 600, width = 9,
+  height = 6, units="in",pointsize=12)
+```
+```{r}
+p
+```
+
+Adonis statistical evaluation of clustering based on Subject
+```{r}
+metadata <- as(sample_data(norm_groups), "data.frame")
+adonis(phyloseq::distance(norm_groups, method="jaccard", binary = TRUE) ~  Subject+Subject:Time_Collected,
+       data = metadata)
+```
