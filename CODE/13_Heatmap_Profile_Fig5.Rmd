@@ -15,4 +15,82 @@ Output Notes:
 
 ```{r setup,message=FALSE}
 library(readr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+```
+Set A Markers
+```{r}
+#Set A
+Overall_markers_LH<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Caribou associated gemykrogvirus 1","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
+Overall_markers_RH<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage St 134","Staphylococcus virus IPLA7","Unclassified Andhravirus","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Unclassified Staphylococcus warneri like virus","Uncultured Caudovirales phage")
+Overall_markers_SC<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Gammapapillomavirus 1","Gammapapillomavirus 24","Propionibacterium virus PAD20","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage IME1318_01","Staphylococcus phage IME1323_01","Staphylococcus phage IME1348_01","Staphylococcus phage St 134","Staphylococcus virus IPLA7","Staphylococcus virus vB_SepS_E72","Unclassified Andhravirus","Unclassified Caudovirales","Unclassified Eukaryotic like virus","Unclassified Homo sapiens like virus","Unclassified Pahexavirus","Unclassified Phietavirus","Unclassified Rosenblumvirus","Unclassified Siphoviridae","Unclassified Staphylococcus capitis like virus","Unclassified Staphylococcus like virus","Uncultured Caudovirales phage" )
+Overall_markers_Hands<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
+Overall_markers_All<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
+```
+Set B Markers
+```
+Papilloma_markers_LH<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 1","Gammapapillomavirus 12","Gammapapillomavirus 13","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8")
+Papilloma_markers_RH<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Betapapillomavirus 5","Gammapapillomavirus 10","Gammapapillomavirus 12","Gammapapillomavirus 15","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8","Gammapapillomavirus 9")
+Papilloma_markers_SC<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapaptillomavirus 12","Gammapapillomavirus 15","Gammapapillomavirus 22","Gammapapillomavirus 23","Gammapapillomavirus 7","Gammapapillomavirus 8")
+Papilloma_markers_Hands<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 12","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8" )
+Papilloma_markers_All<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 12","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8")
+
+Caudo_markers_LH<-c("Aeromonas phage AP1","Bacillus phage Stitch","Caudovirales sp.","Cellulophaga phage phi47:1","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus P1","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage CNPx","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage SPbeta-like","Staphylococcus phage Terranova","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phiJH1301-2","Stx converting phage vB_EcoS_P27","Stx converting phage vB_EcoS_P32","Uncultured Caudovirales phage" )
+Caudo_markers_RH<-c("Bacillus phage Stitch","Caudovirales sp.","Cellulophaga phage phi47:1","CrAssphage cat_SB2894","Escherichia phage 1720a-02","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus P1","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage CNPH82","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage IME1365_01","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage Pike","Staphylococcus phage Pontiff","Staphylococcus phage SPbeta-like","Staphylococcus phage StB20","Staphylococcus phage StB20-like","Staphylococcus phage Twillingate","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA5","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus St134","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phi-SsuSSJ28_rum","Streptococcus phage phiJH1301-2","Stx converting phage vB_EcoS_P22","Stx converting phage vB_EcoS_P27","Stx converting phage vB_EcoS_P32","Stx converting phage vB_EcoS_ST2-8624","Uncultured Caudovirales phage")
+Caudo_markers_SC<-c("Aeromonas phage AP1","Bacillus phage Stitch","Caudovirales sp.","CrAssphage apr34_000142F","Cutibacterium phage FD1","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Propionibacterium phage MEAK","Propionibacterium phage pa27","Propionibacterium phage PacnesP1","Propionibacterium virus Attacne","Propionibacterium virus P100D","Propionibacterium virus P101A","Propionibacterium virus P144","Propionibacterium virus PHL041M10","Propionibacterium virus PHL060L00","Propionibacterium virus PHL070N00","Propionibacterium virus PHL112N00","Propionibacterium virus PHL179M00","Propionibacterium virus SKKY","Staphylococcus phage CNPH82","Staphylococcus phage CNPx","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage IME-SA4","Staphylococcus phage IME1318_01","Staphylococcus phage IME1323_01","Staphylococcus phage IME1348_01","Staphylococcus phage IME1365_01","Staphylococcus phage JBug18","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage Pike","Staphylococcus phage Pontiff","Staphylococcus phage Quidividi","Staphylococcus phage SPbeta-like","Staphylococcus phage StB12","Staphylococcus phage StB20","Staphylococcus phage StB20-like","Staphylococcus phage StB27","Staphylococcus phage Terranova","Staphylococcus phage Twillingate","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus Andhra","Staphylococcus virus IPLA5","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus SEP1","Staphylococcus virus St134","Staphylococcus virus vB_SepS_27","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_48","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phi-SsuFJNP8_rum","Streptococcus phage phi-SsuHCJ3_rum","Streptococcus phage phi-SsuSSJ28_rum","Streptococcus phage phiJH1301-2","Uncultured Caudovirales phage")
+Caudo_markers_Hands<-c("Bacillus phage Stitch","Caudovirales sp.","Cellulophaga phage phi47:1","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus P1","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage SPbeta-like","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phiJH1301-2","Stx converting phage vB_EcoS_P27","Stx converting phage vB_EcoS_P32","Uncultured Caudovirales phage")
+Caudo_markers_All<-c("Bacillus phage Stitch","Caudovirales sp.","Escherichia phage T7","Escherichia virus DE3","Escherichia virus Lambda","Escherichia virus T7","Escherichia virus TH38","Marine virus AFVG_250M104","Marine virus AFVG_25M557","Staphylococcus phage HOB 14.1.R1","Staphylococcus phage PhiSepi-HH3","Staphylococcus phage SPbeta-like","Staphylococcus phage vB_SauH_DELF3","Staphylococcus virus IPLA7","Staphylococcus virus IPLAC1C","Staphylococcus virus PH15","Staphylococcus virus vB_SepS_456","Staphylococcus virus vB_SepS_459","Staphylococcus virus vB_SepS_E72","Streptococcus phage phi-SC181","Streptococcus phage phiJH1301-2","Uncultured Caudovirales phage")
+
+Baculo_markers_LH<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Orgyia pseudotsugata multiple nucleopolyhedrovirus","Spilosoma obliqua nucleopolyhedrosis virus","Unclassified Baculoviridae")
+Baculo_markers_RH<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Unclassified Baculoviridae")
+Baculo_markers_SC<-c("Autographa californica multiple nucleopolyhedrovirus","Dasychira pudibunda nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Orgyia pseudotsugata multiple nucleopolyhedrovirus","Spilosoma obliqua nucleopolyhedrosis virus","Unclassified Baculoviridae")
+Baculo_markers_Hands<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Unclassified Baculoviridae")
+Baculo_markers_All<-c("Autographa californica multiple nucleopolyhedrovirus","Malacosoma neustria nucleopolyhedrovirus","Unclassified Baculoviridae")
+
+Genomo_markers_LH<-c("Caribou associated gemykrogvirus 1","Genomoviridae sp.")
+Genomo_markers_RH<-c("Genomoviridae sp.")
+Genomo_markers_SC<-c("Genomoviridae sp.")
+Genomo_markers_Hands<-c("Genomoviridae sp.")
+Genomo_markers_All<-c("Genomoviridae sp.")
+```
+Set C Markers
+```{r}
+Contig_markers_LH<-c("k127_12111805","k127_12278877","k127_12339328","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_147881","k127_14874687","k127_3126920","k127_3443640","k127_4304884","k127_4343132","k127_5189512","k127_5608134","k127_5611397","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_6904675","k127_6909063","k127_699139","k127_8149250","k127_8568361","k127_9807842","k127_9848036")
+Contig_markers_RH<-c("k127_10278031","k127_10802542","k127_12278877","k127_1246730","k127_12842510","k127_12863729","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_14483676","k127_147881","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_6475725","k127_6909063","k127_699139","k127_7149975","k127_7334662","k127_8058138","k127_8086034","k127_8261143","k127_8487815","k127_8568361","k127_9807842","k127_9848036")
+Contig_markers_SC<-c("k127_10099950","k127_10802542","k127_11112126","k127_11476866","k127_12185411","k127_12278877","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_13261360","k127_14008563","k127_14145340","k127_14306111","k127_14874687","k127_1591215","k127_1771997","k127_1788076","k127_205838","k127_2105829","k127_213564","k127_2529763","k127_2661048","k127_3126920","k127_3259586","k127_3443640","k127_3912894","k127_4343132","k127_5094717","k127_5189512","k127_535004","k127_5366206","k127_5412943","k127_5608134","k127_5611397","k127_5836065","k127_5958394","k127_5988390","k127_6026611","k127_6073437","k127_639643","k127_6463225","k127_6473642","k127_6475725","k127_654357","k127_6780509","k127_6783281","k127_6809321","k127_699139","k127_71913","k127_8058138","k127_8086034","k127_8261143","k127_8261887","k127_8487815","k127_8568361","k127_8745188","k127_8999582","k127_9070193","k127_9367470","k127_9468798","k127_9807842","k127_9848036","k127_9868134")
+Contig_markers_Hands<-c("k127_12278877","k127_1246730","k127_12954","k127_13186497","k127_12842510","k127_13257999","k127_14008563","k127_147881","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_6909063","k127_699139","k127_8568361","k127_9807842","k127_9848036")
+Contig_markers_All<-c("k127_12278877","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_699139","k127_8568361","k127_9807842","k127_9848036")
+```
+
+```{r,message=FALSE,warning=FALSE,results="hide"}
+HM_GENStable <- GENStable
+HM_GENStable$Species->row.names(HM_GENStable)
+HM_GENStable<- subset (HM_GENStable, select = -c(Species))
+HM_GENStable_ALL <- subset(HM_GENStable, rownames(HM_GENStable) %in% Genomo_markers_All)
+
+HM_OVERALL_Stable <- OTU_Stable 
+HM_OVERALL_Stable$Species->row.names(HM_OVERALL_Stable)
+HM_OVERALL_Stable<- subset (HM_OVERALL_Stable, select = -c(Species))
+HM_OVERALL_Stable_ALL <- subset(HM_OVERALL_Stable, rownames(HM_OVERALL_Stable) %in% Overall_markers_All)
+
+HM_BACStable <- BACStable
+HM_BACStable$Species->row.names(HM_BACStable)
+HM_BACStable<- subset (HM_BACStable, select = -c(Species))
+HM_BACStable_ALL <- subset(HM_BACStable, rownames(HM_BACStable) %in% Baculo_markers_All)
+
+HM_Contig_Stable <- CONTIGStable
+HM_Contig_Stable$Species->row.names(HM_Contig_Stable)
+HM_Contig_Stable<- subset (HM_Contig_Stable, select = -c(Species))
+HM_Contig_Stable_ALL <- subset(HM_Contig_Stable, rownames(HM_Contig_Stable) %in% Contig_markers_All)
+
+HM_PAPStable <- PAPStable
+HM_PAPStable$Species->row.names(HM_PAPStable)
+HM_PAPStable<- subset (HM_PAPStable, select = -c(Species))
+HM_PAPStable_ALL <- subset(HM_PAPStable, rownames(HM_PAPStable) %in% Papilloma_markers_All)
+
+HM_CAUDOStable <- CAUDOStable
+HM_CAUDOStable$Species->row.names(HM_CAUDOStable)
+HM_CAUDOStable<- subset (HM_CAUDOStable, select = -c(Species))
+HM_CAUDOStable_ALL <- subset(HM_CAUDOStable, rownames(HM_CAUDOStable) %in% Caudo_markers_All)
 ```
