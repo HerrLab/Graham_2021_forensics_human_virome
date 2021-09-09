@@ -20,5 +20,2054 @@ library(plyr)
 library(tidyr)
 library(ggplot2)
 ```
+
+# Determine Stable Caudovirales Species Markers by Location for Set B
+
+Merge the reference Caudovirales taxonomy file and the count abundance table of reads mapped to the reference Caudovirales genomes
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-PAPOTU_counts <- read.csv("PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_counts <- read.csv("counts2_CAUDO.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CAUDO_OTU <- merge(CAUDO_tax, CAUDO_counts, by.x="row.names", by.y="row.names")
+```
+Subset by species and sum across species for each sample to get the total abundance of each Caudovirales species per sample
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_OTU_SUMS<- subset (CAUDO_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+CAUDO_OTU_SUMS<-ddply(CAUDO_OTU_SUMS,"Species",numcolwise(sum))
+CAUDO_OTU_SUMS<- subset (CAUDO_OTU_SUMS, select = -c(HV_027_01,HV_027_02,HV_027_03,HV_027_04,HV_027_05,HV_027_06,HV_027_07,HV_015_21, HV_015_20, HV_020_10, HV_020_22,HV_021_13, HV_015_20, HV_015_21, HV_020_10, HV_020_22, HV_021_13))
+CAUDOStable <- CAUDO_OTU_SUMS
+```
+Convert abundance into binary presence/absence 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDOStable <- CAUDOStable %>% mutate_if(is.numeric, ~1 * (. != 0))
+```
+Determine Caudovirales species prevalence over the five time points by location within a subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+#P01 Left
+CAUDOStable$P01_LH <- CAUDOStable$HV_001_01 + CAUDOStable$HV_002_01 + CAUDOStable$HV_003_01 + CAUDOStable$HV_004_01 + CAUDOStable$HV_005_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+#P01 Right
+CAUDOStable$P01_RH <- CAUDOStable$HV_001_02 + CAUDOStable$HV_002_02 + CAUDOStable$HV_003_02 + CAUDOStable$HV_004_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+#P01 Scalp
+CAUDOStable$P01_SC <- CAUDOStable$HV_001_03 + CAUDOStable$HV_004_03 + CAUDOStable$HV_003_03 + CAUDOStable$HV_005_03 + CAUDOStable$HV_002_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+
+#P02 Left
+CAUDOStable$P02_LH <- CAUDOStable$HV_001_04 + CAUDOStable$HV_002_04 + CAUDOStable$HV_003_04 + CAUDOStable$HV_004_04 + CAUDOStable$HV_005_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+#P02 Right
+CAUDOStable$P02_RH <- CAUDOStable$HV_001_05 + CAUDOStable$HV_002_05 + CAUDOStable$HV_003_05 + CAUDOStable$HV_004_05 + CAUDOStable$HV_005_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+#P02 Scalp
+CAUDOStable$P02_SC <- CAUDOStable$HV_001_06 + CAUDOStable$HV_002_06 + CAUDOStable$HV_003_06 + CAUDOStable$HV_004_06 + CAUDOStable$HV_005_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+
+#P03 Left
+CAUDOStable$P03_LH <- CAUDOStable$HV_001_07 + CAUDOStable$HV_002_07 + CAUDOStable$HV_003_07 + CAUDOStable$HV_004_07 + CAUDOStable$HV_005_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+#P03 Right
+CAUDOStable$P03_RH <- CAUDOStable$HV_001_08 + CAUDOStable$HV_002_08 + CAUDOStable$HV_003_08 + CAUDOStable$HV_004_08 + CAUDOStable$HV_005_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+#P03 Scalp
+CAUDOStable$P03_SC <- CAUDOStable$HV_001_09 + CAUDOStable$HV_002_09 + CAUDOStable$HV_003_09 + CAUDOStable$HV_004_09 + CAUDOStable$HV_005_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+
+#P04 Left
+CAUDOStable$P04_LH <- CAUDOStable$HV_001_10 + CAUDOStable$HV_002_10 + CAUDOStable$HV_003_10 + CAUDOStable$HV_004_10 + CAUDOStable$HV_005_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+#P04 Right
+CAUDOStable$P04_RH <- CAUDOStable$HV_001_11 + CAUDOStable$HV_002_11 + CAUDOStable$HV_003_11 + CAUDOStable$HV_004_11 + CAUDOStable$HV_005_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+#P04 Scalp
+CAUDOStable$P04_SC <- CAUDOStable$HV_001_12 + CAUDOStable$HV_002_12 + CAUDOStable$HV_003_12 + CAUDOStable$HV_004_12 + CAUDOStable$HV_005_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
+
+#P05 Left
+CAUDOStable$P05_LH <- CAUDOStable$HV_001_13 + CAUDOStable$HV_002_13 + CAUDOStable$HV_003_13 + CAUDOStable$HV_004_13 + CAUDOStable$HV_005_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+#P05 Right
+CAUDOStable$P05_RH <- CAUDOStable$HV_001_14 + CAUDOStable$HV_002_14 + CAUDOStable$HV_003_14 + CAUDOStable$HV_004_14 + CAUDOStable$HV_005_14
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+#P05 Scalp
+CAUDOStable$P05_SC <- CAUDOStable$HV_001_15 + CAUDOStable$HV_002_15  + CAUDOStable$HV_004_15+CAUDOStable$HV_003_15 + CAUDOStable$HV_005_15
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
+
+#P06 Left
+CAUDOStable$P06_LH <- CAUDOStable$HV_001_16 + CAUDOStable$HV_003_16 + CAUDOStable$HV_004_16 + CAUDOStable$HV_005_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+#P06 Right
+CAUDOStable$P06_RH <- CAUDOStable$HV_001_18 + CAUDOStable$HV_002_18 + CAUDOStable$HV_003_18 + CAUDOStable$HV_004_18 + CAUDOStable$HV_005_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+#P06 Scalp
+CAUDOStable$P06_SC <- CAUDOStable$HV_001_19 + CAUDOStable$HV_002_19 + CAUDOStable$HV_003_19 + CAUDOStable$HV_004_19 + CAUDOStable$HV_005_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+
+#P07 Left
+CAUDOStable$P07_LH <- CAUDOStable$HV_001_20 + CAUDOStable$HV_002_20 + CAUDOStable$HV_003_20 + CAUDOStable$HV_004_20 + CAUDOStable$HV_005_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+#P07 Right
+CAUDOStable$P07_RH <- CAUDOStable$HV_001_21 + CAUDOStable$HV_002_21 + CAUDOStable$HV_003_21 + CAUDOStable$HV_004_21 
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+#P07 Scalp
+CAUDOStable$P07_SC <- CAUDOStable$HV_001_22 + CAUDOStable$HV_002_22 + CAUDOStable$HV_003_22 + CAUDOStable$HV_004_22 + CAUDOStable$HV_005_22
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
+
+#P08 Left
+CAUDOStable$P08_LH <- CAUDOStable$HV_006_01 + CAUDOStable$HV_007_01 + CAUDOStable$HV_008_01 + CAUDOStable$HV_009_01 + CAUDOStable$HV_010_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+#P08 Right
+CAUDOStable$P08_RH <- CAUDOStable$HV_006_02 + CAUDOStable$HV_007_02 + CAUDOStable$HV_008_02 + CAUDOStable$HV_010_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+#P08 Scalp
+CAUDOStable$P08_SC <- CAUDOStable$HV_006_03 + CAUDOStable$HV_007_03 + CAUDOStable$HV_008_03 + CAUDOStable$HV_009_03 + CAUDOStable$HV_010_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+
+#P09 Left
+CAUDOStable$P09_LH <- CAUDOStable$HV_006_04 + CAUDOStable$HV_007_04 + CAUDOStable$HV_008_04 + CAUDOStable$HV_009_04 + CAUDOStable$HV_010_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+#P09 Right
+CAUDOStable$P09_RH <- CAUDOStable$HV_006_05 + CAUDOStable$HV_007_05 + CAUDOStable$HV_008_05 + CAUDOStable$HV_009_05 + CAUDOStable$HV_010_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+#P09 Scalp
+CAUDOStable$P09_SC <- CAUDOStable$HV_006_06 + CAUDOStable$HV_007_06 + CAUDOStable$HV_008_06 + CAUDOStable$HV_009_06 + CAUDOStable$HV_010_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+
+#P10 Left
+CAUDOStable$P10_LH <- CAUDOStable$HV_006_07 + CAUDOStable$HV_007_07 + CAUDOStable$HV_008_07 + CAUDOStable$HV_009_07 + CAUDOStable$HV_010_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+#P10 Right
+CAUDOStable$P10_RH <- CAUDOStable$HV_006_08 + CAUDOStable$HV_007_08 + CAUDOStable$HV_008_08 + CAUDOStable$HV_009_08 + CAUDOStable$HV_010_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+#P10 Scalp
+CAUDOStable$P10_SC <- CAUDOStable$HV_006_09 + CAUDOStable$HV_007_09 + CAUDOStable$HV_008_09 + CAUDOStable$HV_009_09 + CAUDOStable$HV_010_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+
+#P11 Left
+CAUDOStable$P11_LH <- CAUDOStable$HV_006_10 + CAUDOStable$HV_007_10 + CAUDOStable$HV_008_10 + CAUDOStable$HV_009_10 + CAUDOStable$HV_010_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+#P11 Right
+CAUDOStable$P11_RH <- CAUDOStable$HV_006_11 + CAUDOStable$HV_007_11 + CAUDOStable$HV_008_11 + CAUDOStable$HV_009_11 + CAUDOStable$HV_010_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+#P11 Scalp
+CAUDOStable$P11_SC <- CAUDOStable$HV_006_12 + CAUDOStable$HV_007_12 + CAUDOStable$HV_008_12 + CAUDOStable$HV_009_12 + CAUDOStable$HV_010_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+
+#P12 Left
+CAUDOStable$P12_LH <- CAUDOStable$HV_006_13 + CAUDOStable$HV_007_13 + CAUDOStable$HV_008_13 + CAUDOStable$HV_009_13 + CAUDOStable$HV_010_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+#P12 Right
+CAUDOStable$P12_RH <- CAUDOStable$HV_006_14 + CAUDOStable$HV_007_14 + CAUDOStable$HV_008_14 + CAUDOStable$HV_009_14 + CAUDOStable$HV_010_14
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+#P12 Scalp
+CAUDOStable$P12_SC <- CAUDOStable$HV_006_15 + CAUDOStable$HV_007_15 + CAUDOStable$HV_008_15 + CAUDOStable$HV_009_15 + CAUDOStable$HV_010_15
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+
+#P13 Left
+CAUDOStable$P13_LH <- CAUDOStable$HV_006_16 + CAUDOStable$HV_007_16 + CAUDOStable$HV_008_16 + CAUDOStable$HV_009_16 + CAUDOStable$HV_010_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+#P13 Right
+CAUDOStable$P13_RH <- CAUDOStable$HV_006_18 + CAUDOStable$HV_007_18 + CAUDOStable$HV_008_18 + CAUDOStable$HV_009_18 + CAUDOStable$HV_010_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+#P13 Scalp
+CAUDOStable$P13_SC <- CAUDOStable$HV_006_19 + CAUDOStable$HV_007_19 + CAUDOStable$HV_008_19 + CAUDOStable$HV_009_19 + CAUDOStable$HV_010_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+
+#P14 Left
+CAUDOStable$P14_LH <- CAUDOStable$HV_006_20 + CAUDOStable$HV_007_20 + CAUDOStable$HV_008_20 + CAUDOStable$HV_009_20 + CAUDOStable$HV_010_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+#P14 Right
+CAUDOStable$P14_RH <- CAUDOStable$HV_006_21 + CAUDOStable$HV_007_21 + CAUDOStable$HV_008_21 + CAUDOStable$HV_009_21 + CAUDOStable$HV_010_21
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+#P14 Scalp
+CAUDOStable$P14_SC <- CAUDOStable$HV_006_22 + CAUDOStable$HV_007_22 + CAUDOStable$HV_008_22 + CAUDOStable$HV_009_22 + CAUDOStable$HV_010_22
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+
+#P15 Left
+CAUDOStable$P15_LH <- CAUDOStable$HV_011_01 + CAUDOStable$HV_012_01 + CAUDOStable$HV_013_01 + CAUDOStable$HV_014_01 + CAUDOStable$HV_015_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+#P15 Right
+CAUDOStable$P15_RH <- CAUDOStable$HV_011_02 + CAUDOStable$HV_012_02 + CAUDOStable$HV_013_02 + CAUDOStable$HV_014_02 + CAUDOStable$HV_015_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+#P15 Scalp
+CAUDOStable$P15_SC <- CAUDOStable$HV_011_03 + CAUDOStable$HV_012_03 + CAUDOStable$HV_013_03 + CAUDOStable$HV_014_03 + CAUDOStable$HV_015_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+
+#P16 Left
+CAUDOStable$P16_LH <- CAUDOStable$HV_011_04 + CAUDOStable$HV_012_04 + CAUDOStable$HV_013_04 + CAUDOStable$HV_014_04 + CAUDOStable$HV_015_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+#P16 Right
+CAUDOStable$P16_RH <- CAUDOStable$HV_011_05 + CAUDOStable$HV_012_05 + CAUDOStable$HV_013_05 + CAUDOStable$HV_014_05 + CAUDOStable$HV_015_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+#P16 Scalp
+CAUDOStable$P16_SC <- CAUDOStable$HV_011_06 + CAUDOStable$HV_012_06 ++ CAUDOStable$HV_014_06 + CAUDOStable$HV_015_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+
+#P17 Left
+CAUDOStable$P17_LH <- CAUDOStable$HV_011_07 + CAUDOStable$HV_012_07 + CAUDOStable$HV_013_07 + CAUDOStable$HV_014_07 + CAUDOStable$HV_015_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+#P17 Right
+CAUDOStable$P17_RH <- CAUDOStable$HV_011_08 + CAUDOStable$HV_012_08 + CAUDOStable$HV_013_08 + CAUDOStable$HV_014_08 + CAUDOStable$HV_015_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+#P17 Scalp
+CAUDOStable$P17_SC <- CAUDOStable$HV_011_09 + CAUDOStable$HV_012_09 + CAUDOStable$HV_013_09 + CAUDOStable$HV_014_09 + CAUDOStable$HV_015_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+
+#P18 Left
+CAUDOStable$P18_LH <- CAUDOStable$HV_011_10 + CAUDOStable$HV_012_10 + CAUDOStable$HV_013_10 + CAUDOStable$HV_014_10 + CAUDOStable$HV_015_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+#P18 Right
+CAUDOStable$P18_RH <- CAUDOStable$HV_011_11 + CAUDOStable$HV_012_11 + CAUDOStable$HV_013_11 + CAUDOStable$HV_014_11 + CAUDOStable$HV_015_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+#P18 Scalp
+CAUDOStable$P18_SC <- CAUDOStable$HV_011_12 + CAUDOStable$HV_012_12 + CAUDOStable$HV_013_12 + CAUDOStable$HV_014_12 + CAUDOStable$HV_015_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+
+#P19 Left
+CAUDOStable$P19_LH <- CAUDOStable$HV_011_13 + CAUDOStable$HV_012_13 + CAUDOStable$HV_013_13 + CAUDOStable$HV_014_13 + CAUDOStable$HV_015_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+#P19 Right
+CAUDOStable$P19_RH <- CAUDOStable$HV_011_14 + CAUDOStable$HV_012_14 + CAUDOStable$HV_013_14 + CAUDOStable$HV_014_14 + CAUDOStable$HV_015_14
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+#P19 Scalp
+CAUDOStable$P19_SC <- CAUDOStable$HV_011_15 + CAUDOStable$HV_012_15 + CAUDOStable$HV_013_15 + CAUDOStable$HV_014_15 + CAUDOStable$HV_015_15
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+
+#P20 Left
+CAUDOStable$P20_LH <- CAUDOStable$HV_011_16 + CAUDOStable$HV_012_16 + CAUDOStable$HV_013_16 + CAUDOStable$HV_014_16 + CAUDOStable$HV_015_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+#P20 Right
+CAUDOStable$P20_RH <- CAUDOStable$HV_011_18 + CAUDOStable$HV_012_18 + CAUDOStable$HV_013_18 + CAUDOStable$HV_014_18 + CAUDOStable$HV_015_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+#P20 Scalp
+CAUDOStable$P20_SC <- CAUDOStable$HV_011_19 + CAUDOStable$HV_012_19 + CAUDOStable$HV_013_19 + CAUDOStable$HV_014_19 + CAUDOStable$HV_015_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+
+#P21 Left
+CAUDOStable$P21_LH <- CAUDOStable$HV_011_20 + CAUDOStable$HV_012_20 + CAUDOStable$HV_013_20 + CAUDOStable$HV_014_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+#P21 Right
+CAUDOStable$P21_RH <- CAUDOStable$HV_011_21 + CAUDOStable$HV_012_21 + CAUDOStable$HV_013_21 + CAUDOStable$HV_014_21
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+#P21 Scalp
+CAUDOStable$P21_SC <- CAUDOStable$HV_011_22 + CAUDOStable$HV_012_22 + CAUDOStable$HV_013_22 + CAUDOStable$HV_014_22
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+
+#P22 Left
+CAUDOStable$P22_LH <- CAUDOStable$HV_021_02 + CAUDOStable$HV_022_01 + CAUDOStable$HV_023_01 + CAUDOStable$HV_024_01 + CAUDOStable$HV_025_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+#P22 Right
+CAUDOStable$P22_RH <- CAUDOStable$HV_026_01 + CAUDOStable$HV_027_08 + CAUDOStable$HV_028_01 + CAUDOStable$HV_029_01 + CAUDOStable$HV_030_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+#P22 Scalp
+CAUDOStable$P22_SC <- CAUDOStable$HV_016_01 + CAUDOStable$HV_017_01 + CAUDOStable$HV_018_01 + CAUDOStable$HV_019_01 + CAUDOStable$HV_020_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+
+#P23 Left
+CAUDOStable$P23_LH <- CAUDOStable$HV_021_03 + CAUDOStable$HV_022_02 + CAUDOStable$HV_023_02 + CAUDOStable$HV_024_02 + CAUDOStable$HV_025_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+#P23 Right
+CAUDOStable$P23_RH <- CAUDOStable$HV_026_02 + CAUDOStable$HV_027_09 + CAUDOStable$HV_028_02 + CAUDOStable$HV_029_02 + CAUDOStable$HV_030_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+#P23 Scalp
+CAUDOStable$P23_SC <- CAUDOStable$HV_016_02 + CAUDOStable$HV_017_02 + CAUDOStable$HV_018_02 + CAUDOStable$HV_019_02 + CAUDOStable$HV_020_02
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+
+#P24 Left
+CAUDOStable$P24_LH <- CAUDOStable$HV_021_04 + CAUDOStable$HV_022_03 + CAUDOStable$HV_023_03 + CAUDOStable$HV_024_03 + CAUDOStable$HV_025_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+#P24 Right
+CAUDOStable$P24_RH <- CAUDOStable$HV_026_03 + CAUDOStable$HV_027_10 + CAUDOStable$HV_028_03 + CAUDOStable$HV_029_03 + CAUDOStable$HV_030_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+#P24 Scalp
+CAUDOStable$P24_SC <- CAUDOStable$HV_016_03 + CAUDOStable$HV_017_03 + CAUDOStable$HV_018_03 + CAUDOStable$HV_019_03 + CAUDOStable$HV_021_01
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+
+#P25 Left
+CAUDOStable$P25_LH <- CAUDOStable$HV_021_05 + CAUDOStable$HV_022_04 + CAUDOStable$HV_023_04 + CAUDOStable$HV_024_04 + CAUDOStable$HV_025_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+#P25 Right
+CAUDOStable$P25_RH <- CAUDOStable$HV_026_04 + CAUDOStable$HV_027_11 + CAUDOStable$HV_028_04 + CAUDOStable$HV_029_04 + CAUDOStable$HV_030_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+#P25 Scalp
+CAUDOStable$P25_SC <- CAUDOStable$HV_016_04 + CAUDOStable$HV_017_04 + CAUDOStable$HV_018_04 + CAUDOStable$HV_019_04 + CAUDOStable$HV_020_03
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+
+#P26 Left
+CAUDOStable$P26_LH <- CAUDOStable$HV_021_06 + CAUDOStable$HV_022_05 + CAUDOStable$HV_023_05 + CAUDOStable$HV_024_05 + CAUDOStable$HV_025_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+#P26 Right
+CAUDOStable$P26_RH <- CAUDOStable$HV_026_05 + CAUDOStable$HV_027_12 + CAUDOStable$HV_028_05 + CAUDOStable$HV_029_05 + CAUDOStable$HV_030_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+#P26 Scalp
+CAUDOStable$P26_SC <- CAUDOStable$HV_016_05 + CAUDOStable$HV_017_05 + CAUDOStable$HV_018_05 + CAUDOStable$HV_019_05 + CAUDOStable$HV_020_04
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+
+#P27 Left
+CAUDOStable$P27_LH <- CAUDOStable$HV_021_07 + CAUDOStable$HV_022_06 + CAUDOStable$HV_023_06 + CAUDOStable$HV_024_06 + CAUDOStable$HV_025_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+#P27 Right
+CAUDOStable$P27_RH <- CAUDOStable$HV_026_06 + CAUDOStable$HV_027_13 + CAUDOStable$HV_028_06 + CAUDOStable$HV_029_06 + CAUDOStable$HV_030_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+#P27 Scalp
+CAUDOStable$P27_SC <- CAUDOStable$HV_016_06 + CAUDOStable$HV_017_06 + CAUDOStable$HV_018_06 + CAUDOStable$HV_019_06 + CAUDOStable$HV_020_05
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+
+#P28 Left
+CAUDOStable$P28_LH <- CAUDOStable$HV_021_08 + CAUDOStable$HV_022_07 + CAUDOStable$HV_023_07 + CAUDOStable$HV_024_07 + CAUDOStable$HV_025_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+#P28 Right
+CAUDOStable$P28_RH <- CAUDOStable$HV_026_07 + CAUDOStable$HV_027_14 + CAUDOStable$HV_028_07 + CAUDOStable$HV_029_07 + CAUDOStable$HV_030_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+#P28 Scalp
+CAUDOStable$P28_SC <- CAUDOStable$HV_016_07 + CAUDOStable$HV_017_07 + CAUDOStable$HV_018_07 + CAUDOStable$HV_019_07 + CAUDOStable$HV_020_06
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+
+#P29 Left
+CAUDOStable$P29_LH <- CAUDOStable$HV_021_09 + CAUDOStable$HV_022_08 + CAUDOStable$HV_023_08 + CAUDOStable$HV_024_08 + CAUDOStable$HV_025_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+#P29 Right
+CAUDOStable$P29_RH <- CAUDOStable$HV_026_08 + CAUDOStable$HV_027_15 + CAUDOStable$HV_028_08 + CAUDOStable$HV_029_08 + CAUDOStable$HV_030_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+#P29 Scalp
+CAUDOStable$P29_SC <- CAUDOStable$HV_016_08 + CAUDOStable$HV_017_08 + CAUDOStable$HV_018_08 + CAUDOStable$HV_019_08 + CAUDOStable$HV_020_07
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+
+#P30 Left
+CAUDOStable$P30_LH <- CAUDOStable$HV_021_10 + CAUDOStable$HV_022_09 + CAUDOStable$HV_023_09 + CAUDOStable$HV_024_09 + CAUDOStable$HV_025_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+#P30 Right
+CAUDOStable$P30_RH <- CAUDOStable$HV_026_09 + CAUDOStable$HV_027_16 + CAUDOStable$HV_028_09 + CAUDOStable$HV_029_09 + CAUDOStable$HV_030_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+#P30 Scalp
+CAUDOStable$P30_SC <- CAUDOStable$HV_016_09 + CAUDOStable$HV_017_09 + CAUDOStable$HV_018_09 + CAUDOStable$HV_019_09 + CAUDOStable$HV_020_08
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+
+#P31 Left
+CAUDOStable$P31_LH <- CAUDOStable$HV_021_11 + CAUDOStable$HV_022_10 + CAUDOStable$HV_023_10 + CAUDOStable$HV_024_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+#P31 Right
+CAUDOStable$P31_RH <- CAUDOStable$HV_026_10 + CAUDOStable$HV_027_18 + CAUDOStable$HV_028_10 + CAUDOStable$HV_029_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+#P31 Scalp
+CAUDOStable$P31_SC <- CAUDOStable$HV_016_10 + CAUDOStable$HV_017_10 + CAUDOStable$HV_018_10 + CAUDOStable$HV_019_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+
+#P32 Left
+CAUDOStable$P32_LH <- CAUDOStable$HV_021_12 + CAUDOStable$HV_022_11 + CAUDOStable$HV_023_11 + CAUDOStable$HV_024_11 + CAUDOStable$HV_025_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+#P32 Right
+CAUDOStable$P32_RH <- CAUDOStable$HV_026_11 + CAUDOStable$HV_027_19 + CAUDOStable$HV_028_11 + CAUDOStable$HV_029_11 + CAUDOStable$HV_030_10
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+#P32 Scalp
+CAUDOStable$P32_SC <- CAUDOStable$HV_016_11 + CAUDOStable$HV_017_11 + CAUDOStable$HV_018_11 + CAUDOStable$HV_019_11 + CAUDOStable$HV_020_09
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+
+#P34 Left
+CAUDOStable$P34_LH <- CAUDOStable$HV_021_14 + CAUDOStable$HV_022_12 + CAUDOStable$HV_023_12 + CAUDOStable$HV_024_12 + CAUDOStable$HV_025_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+#P34 Right
+CAUDOStable$P34_RH <- CAUDOStable$HV_026_12 + CAUDOStable$HV_027_20 + CAUDOStable$HV_028_12 + CAUDOStable$HV_029_12 + CAUDOStable$HV_030_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+#P34 Scalp
+CAUDOStable$P34_SC <- CAUDOStable$HV_016_12 + CAUDOStable$HV_017_12 + CAUDOStable$HV_018_12 + CAUDOStable$HV_019_12 + CAUDOStable$HV_020_11
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+
+#P35 Left
+CAUDOStable$P35_LH <- CAUDOStable$HV_021_15 + CAUDOStable$HV_022_13 + CAUDOStable$HV_023_13 + CAUDOStable$HV_024_13 + CAUDOStable$HV_025_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+#P35 Right
+CAUDOStable$P35_RH <- CAUDOStable$HV_026_13 + CAUDOStable$HV_027_21 + CAUDOStable$HV_028_13 + CAUDOStable$HV_029_13 + CAUDOStable$HV_030_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+#P35 Scalp
+CAUDOStable$P35_SC <- CAUDOStable$HV_016_13 + CAUDOStable$HV_017_13 + CAUDOStable$HV_018_13 + CAUDOStable$HV_019_13 + CAUDOStable$HV_020_12
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+
+#P36 Left
+CAUDOStable$P36_LH <- CAUDOStable$HV_021_16 + CAUDOStable$HV_022_14 + CAUDOStable$HV_023_14 + CAUDOStable$HV_024_14 + CAUDOStable$HV_025_14
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+#P36 Right
+CAUDOStable$P36_RH <- CAUDOStable$HV_026_14 + CAUDOStable$HV_027_22 + CAUDOStable$HV_028_14 + CAUDOStable$HV_029_14 + CAUDOStable$HV_030_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+#P36 Scalp
+CAUDOStable$P36_SC <- CAUDOStable$HV_016_14 + CAUDOStable$HV_017_14 + CAUDOStable$HV_018_14 + CAUDOStable$HV_019_14 + CAUDOStable$HV_020_13
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+
+#P37 Left
+CAUDOStable$P37_LH <- CAUDOStable$HV_021_18 + CAUDOStable$HV_022_15 + CAUDOStable$HV_023_15 + CAUDOStable$HV_024_15 + CAUDOStable$HV_025_15
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+#P37 Right
+CAUDOStable$P37_RH <- CAUDOStable$HV_026_15 + CAUDOStable$HV_028_15 + CAUDOStable$HV_029_15 + CAUDOStable$HV_030_14 + CAUDOStable$HV_030_22
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+#P37 Scalp
+CAUDOStable$P37_SC <- CAUDOStable$HV_016_15 + CAUDOStable$HV_017_15 + CAUDOStable$HV_018_15 + CAUDOStable$HV_019_15 + CAUDOStable$HV_020_14
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+
+#P38 Left
+CAUDOStable$P38_LH <- CAUDOStable$HV_021_19 + CAUDOStable$HV_022_16 + CAUDOStable$HV_023_16 + CAUDOStable$HV_024_16 + CAUDOStable$HV_025_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+#P38 Right
+CAUDOStable$P38_RH <- CAUDOStable$HV_026_16 + CAUDOStable$HV_028_16 + CAUDOStable$HV_029_16 + CAUDOStable$HV_030_15 
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+#P38 Scalp
+CAUDOStable$P38_SC <- CAUDOStable$HV_016_16 + CAUDOStable$HV_017_16 + CAUDOStable$HV_018_16 + CAUDOStable$HV_019_16 + CAUDOStable$HV_020_15
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+
+#P39 Left
+CAUDOStable$P39_LH <- CAUDOStable$HV_021_20 + CAUDOStable$HV_022_18 + CAUDOStable$HV_023_18 + CAUDOStable$HV_024_18 + CAUDOStable$HV_025_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+#P39 Right
+CAUDOStable$P39_RH <- CAUDOStable$HV_026_18 + CAUDOStable$HV_028_18 + CAUDOStable$HV_029_18 + CAUDOStable$HV_030_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+#P39 Scalp
+CAUDOStable$P39_SC <- CAUDOStable$HV_016_18 + CAUDOStable$HV_017_18 + CAUDOStable$HV_018_18 + CAUDOStable$HV_019_18 + CAUDOStable$HV_020_16
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+
+#P40 Left
+CAUDOStable$P40_LH <- CAUDOStable$HV_021_21 + CAUDOStable$HV_022_19 + CAUDOStable$HV_023_19 + CAUDOStable$HV_024_19 + CAUDOStable$HV_025_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+#P40 Right
+CAUDOStable$P40_RH <- CAUDOStable$HV_026_19 + CAUDOStable$HV_028_19 + CAUDOStable$HV_029_19 + CAUDOStable$HV_030_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+#P40 Scalp
+CAUDOStable$P40_SC <- CAUDOStable$HV_016_19 + CAUDOStable$HV_017_19 + CAUDOStable$HV_018_19 + CAUDOStable$HV_019_19 + CAUDOStable$HV_020_18
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+
+#P41 Left
+CAUDOStable$P41_LH <- CAUDOStable$HV_021_22 + CAUDOStable$HV_022_20 + CAUDOStable$HV_023_20 + CAUDOStable$HV_024_20 + CAUDOStable$HV_025_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+#P41 Right
+CAUDOStable$P41_RH <- CAUDOStable$HV_026_20 + CAUDOStable$HV_028_20 + CAUDOStable$HV_029_20 + CAUDOStable$HV_030_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+#P41 Scalp
+CAUDOStable$P41_SC <- CAUDOStable$HV_016_20 + CAUDOStable$HV_017_20 + CAUDOStable$HV_018_20 + CAUDOStable$HV_019_20 + CAUDOStable$HV_020_19
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+
+#P42 Left
+CAUDOStable$P42_LH <- CAUDOStable$HV_022_21 + CAUDOStable$HV_023_21 + CAUDOStable$HV_024_21 + CAUDOStable$HV_025_21 
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+#P42 Right
+CAUDOStable$P42_RH <- CAUDOStable$HV_026_21 + CAUDOStable$HV_028_21 + CAUDOStable$HV_029_21 + CAUDOStable$HV_030_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+#P42 Scalp
+CAUDOStable$P42_SC <- CAUDOStable$HV_016_21 + CAUDOStable$HV_017_21 + CAUDOStable$HV_018_21 + CAUDOStable$HV_019_21 + CAUDOStable$HV_020_20
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+
+#P43 Left
+CAUDOStable$P43_LH <- CAUDOStable$HV_022_22 + CAUDOStable$HV_023_22 + CAUDOStable$HV_024_22 + CAUDOStable$HV_025_01 + CAUDOStable$HV_025_22
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+#P43 Right
+CAUDOStable$P43_RH <- CAUDOStable$HV_026_22 + CAUDOStable$HV_028_22 + CAUDOStable$HV_029_22 + CAUDOStable$HV_030_21
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+#P43 Scalp
+CAUDOStable$P43_SC <- CAUDOStable$HV_016_22 + CAUDOStable$HV_017_22 + CAUDOStable$HV_018_22 + CAUDOStable$HV_019_22 + CAUDOStable$HV_020_21
+CAUDOStable <- subset(CAUDOStable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+```
+
+## Set B Stable Left Hand Caudovirales Species
+Subset by left hand and identify Caudovirales species that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_OTU_LH <- subset(CAUDOStable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
+row.names(CAUDO_OTU_LH) <- CAUDO_OTU_LH$Species
+CAUDO_OTU_ALL_LH <- CAUDO_OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CAUDO_OTU_ALL_LH) <- CAUDO_OTU_ALL_LH$Species
+CAUDO_OTU_ALL_LH <- subset (CAUDO_OTU_ALL_LH, select = -c(Species))
+CAUDO_OTU_ALL_LH$Mean <- rowMeans(CAUDO_OTU_ALL_LH)
+CAUDO_OTU_ALL_LH$Species <- row.names(CAUDO_OTU_ALL_LH)
+CAUDOStable_LH <- CAUDO_OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CAUDOStable_LH) <- CAUDOStable_LH$Species
+CAUDOStable_LH <- subset (CAUDOStable_LH, select = -c(Species))
+CAUDOStable_LH$Mean_Stable <- rowMeans(CAUDOStable_LH)
+CAUDOStable_LH$Species <- row.names(CAUDOStable_LH)
+CAUDO_OTU_LH_Compare<- subset (CAUDOStable_LH, select = c(Mean_Stable,Species))
+CAUDO_OTU_LH_Compare<- merge(CAUDO_OTU_ALL_LH, CAUDO_OTU_LH_Compare, by= "Species")
+CAUDO_OTU_LH_Compare$Mean_temp <- CAUDO_OTU_LH_Compare$Mean - CAUDO_OTU_LH_Compare$Mean_Stable
+CAUDO_LH_Stable2 <- subset(CAUDO_OTU_LH_Compare, 0 < Mean_Stable)
+CAUDO_LH_Markers2 <- CAUDO_LH_Stable2$Species
+```
+Left hand Caudovirales species markers that are stable over time 
+```{r}
+CAUDO_LH_Markers2
+```
+
+## Set B Stable Right Hand Caudovirales Species
+Subset by right hand and identify Caudovirales species that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_OTU_RH <- subset(CAUDOStable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
+row.names(CAUDO_OTU_RH) <- CAUDO_OTU_RH$Species
+CAUDO_OTU_ALL_RH <- CAUDO_OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CAUDO_OTU_ALL_RH) <- CAUDO_OTU_ALL_RH$Species
+CAUDO_OTU_ALL_RH <- subset (CAUDO_OTU_ALL_RH, select = -c(Species))
+CAUDO_OTU_ALL_RH$Mean <- rowMeans(CAUDO_OTU_ALL_RH)
+CAUDO_OTU_ALL_RH$Species <- row.names(CAUDO_OTU_ALL_RH)
+CAUDOStable_RH <- CAUDO_OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CAUDOStable_RH) <- CAUDOStable_RH$Species
+CAUDOStable_RH <- subset (CAUDOStable_RH, select = -c(Species))
+CAUDOStable_RH$Mean_Stable <- rowMeans(CAUDOStable_RH)
+CAUDOStable_RH$Species <- row.names(CAUDOStable_RH)
+CAUDO_OTU_RH_Compare<- subset (CAUDOStable_RH, select = c(Mean_Stable,Species))
+CAUDO_OTU_RH_Compare<- merge(CAUDO_OTU_ALL_RH, CAUDO_OTU_RH_Compare, by= "Species")
+CAUDO_OTU_RH_Compare$Mean_temp <- CAUDO_OTU_RH_Compare$Mean - CAUDO_OTU_RH_Compare$Mean_Stable
+CAUDO_RH_Stable2 <- subset(CAUDO_OTU_RH_Compare, 0 < Mean_Stable)
+CAUDO_RH_Markers2 <- CAUDO_RH_Stable2$Species
+```
+Right hand Caudovirales species markers that are stable over time 
+```{r}
+CAUDO_RH_Markers2
+```
+
+## Set B Stable Scalp Caudovirales Species
+Subset by scalp and identify Caudovirales species that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_OTU_SC <- subset(CAUDOStable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
+row.names(CAUDO_OTU_SC) <- CAUDO_OTU_SC$Species
+CAUDO_OTU_ALL_SC <- CAUDO_OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CAUDO_OTU_ALL_SC) <- CAUDO_OTU_ALL_SC$Species
+CAUDO_OTU_ALL_SC <- subset (CAUDO_OTU_ALL_SC, select = -c(Species))
+CAUDO_OTU_ALL_SC$Mean <- rowMeans(CAUDO_OTU_ALL_SC)
+CAUDO_OTU_ALL_SC$Species <- row.names(CAUDO_OTU_ALL_SC)
+CAUDOStable_SC <- CAUDO_OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CAUDOStable_SC) <- CAUDOStable_SC$Species
+CAUDOStable_SC <- subset (CAUDOStable_SC, select = -c(Species))
+CAUDOStable_SC$Mean_Stable <- rowMeans(CAUDOStable_SC)
+CAUDOStable_SC$Species <- row.names(CAUDOStable_SC)
+CAUDO_OTU_SC_Compare<- subset (CAUDOStable_SC, select = c(Mean_Stable,Species))
+CAUDO_OTU_SC_Compare<- merge(CAUDO_OTU_ALL_SC, CAUDO_OTU_SC_Compare, by= "Species")
+CAUDO_OTU_SC_Compare$Mean_temp <- CAUDO_OTU_SC_Compare$Mean - CAUDO_OTU_SC_Compare$Mean_Stable
+CAUDO_SC_Stable2 <- subset(CAUDO_OTU_SC_Compare, 0 < Mean_Stable)
+CAUDO_SC_Markers2 <- CAUDO_SC_Stable2$Species
+```
+Scalp Caudovirales species markers that are stable over time 
+```{r}
+CAUDO_SC_Markers2
+```
+
+## Set B Stable Hand Caudovirales Species
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_Hand_Markers_Shared2 <- CAUDO_LH_Markers2[CAUDO_LH_Markers2 %in% CAUDO_RH_Markers2]
+```
+Hand Stable Caudovirales Species Markers
+```{r}
+CAUDO_Hand_Markers_Shared2
+```
+
+## Set B Stable Across All Locations Caudovirales Species
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CAUDO_All_Markers_Shared2 <- CAUDO_Hand_Markers_Shared2[CAUDO_Hand_Markers_Shared2 %in% CAUDO_SC_Markers2]
+```
+Overall Across All Locations Stable Species Markers
+```{r}
+CAUDO_All_Markers_Shared2
+```
+
+# Determine Stable Papillomaviridae Species Markers by Location for Set B
+
+```{r,message=FALSE,warning=FALSE,results="hide"}
+PAP_counts <- read.csv("papilloma/PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_counts <- subset(PAP_counts, select = -c(length))
+PAP_tax <- read.csv("papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
+PAP_OTU <- merge(PAP_tax, PAP_counts, by.x="row.names", by.y="row.names")
+PAP_OTU_SUMS<- subset (PAP_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+PAP_OTU_SUMS<-ddply(PAP_OTU_SUMS,"Species",numcolwise(sum))
+PAP_OTU_SUMS<- subset (PAP_OTU_SUMS, select = -c(HV_027_01,HV_027_02,HV_027_03,HV_027_04,HV_027_05,HV_027_06,HV_027_07, HV_015_20, HV_015_21, HV_020_10, HV_020_22, HV_021_13))
+PAPStable <- PAP_OTU_SUMS
+```
+```{r}
+PAPStable <- PAPStable %>% mutate_if(is.numeric, ~1 * (. != 0))
+#P01 Left
+PAPStable$P01_LH <- PAPStable$HV_001_01 + PAPStable$HV_002_01 + PAPStable$HV_003_01 + PAPStable$HV_004_01 + PAPStable$HV_005_01
+PAPStable <- subset(PAPStable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+#P01 Right
+PAPStable$P01_RH <- PAPStable$HV_001_02 + PAPStable$HV_002_02 + PAPStable$HV_003_02 + PAPStable$HV_004_02
+PAPStable <- subset(PAPStable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+#P01 Scalp
+PAPStable$P01_SC <- PAPStable$HV_001_03 + PAPStable$HV_004_03 + PAPStable$HV_003_03 + PAPStable$HV_005_03 + PAPStable$HV_002_03
+PAPStable <- subset(PAPStable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+
+#P02 Left
+PAPStable$P02_LH <- PAPStable$HV_001_04 + PAPStable$HV_002_04 + PAPStable$HV_003_04 + PAPStable$HV_004_04 + PAPStable$HV_005_04
+PAPStable <- subset(PAPStable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+#P02 Right
+PAPStable$P02_RH <- PAPStable$HV_001_05 + PAPStable$HV_002_05 + PAPStable$HV_003_05 + PAPStable$HV_004_05 + PAPStable$HV_005_05
+PAPStable <- subset(PAPStable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+#P02 Scalp
+PAPStable$P02_SC <- PAPStable$HV_001_06 + PAPStable$HV_002_06 + PAPStable$HV_003_06 + PAPStable$HV_004_06 + PAPStable$HV_005_06
+PAPStable <- subset(PAPStable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+
+#P03 Left
+PAPStable$P03_LH <- PAPStable$HV_001_07 + PAPStable$HV_002_07 + PAPStable$HV_003_07 + PAPStable$HV_004_07 + PAPStable$HV_005_07
+PAPStable <- subset(PAPStable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+#P03 Right
+PAPStable$P03_RH <- PAPStable$HV_001_08 + PAPStable$HV_002_08 + PAPStable$HV_003_08 + PAPStable$HV_004_08 + PAPStable$HV_005_08
+PAPStable <- subset(PAPStable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+#P03 Scalp
+PAPStable$P03_SC <- PAPStable$HV_001_09 + PAPStable$HV_002_09 + PAPStable$HV_003_09 + PAPStable$HV_004_09 + PAPStable$HV_005_09
+PAPStable <- subset(PAPStable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+
+#P04 Left
+PAPStable$P04_LH <- PAPStable$HV_001_10 + PAPStable$HV_002_10 + PAPStable$HV_003_10 + PAPStable$HV_004_10 + PAPStable$HV_005_10
+PAPStable <- subset(PAPStable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+#P04 Right
+PAPStable$P04_RH <- PAPStable$HV_001_11 + PAPStable$HV_002_11 + PAPStable$HV_003_11 + PAPStable$HV_004_11 + PAPStable$HV_005_11
+PAPStable <- subset(PAPStable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+#P04 Scalp
+PAPStable$P04_SC <- PAPStable$HV_001_12 + PAPStable$HV_002_12 + PAPStable$HV_003_12 + PAPStable$HV_004_12 + PAPStable$HV_005_12
+PAPStable <- subset(PAPStable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
+
+#P05 Left
+PAPStable$P05_LH <- PAPStable$HV_001_13 + PAPStable$HV_002_13 + PAPStable$HV_003_13 + PAPStable$HV_004_13 + PAPStable$HV_005_13
+PAPStable <- subset(PAPStable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+#P05 Right
+PAPStable$P05_RH <- PAPStable$HV_001_14 + PAPStable$HV_002_14 + PAPStable$HV_003_14 + PAPStable$HV_004_14 + PAPStable$HV_005_14
+PAPStable <- subset(PAPStable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+#P05 Scalp
+PAPStable$P05_SC <- PAPStable$HV_001_15 + PAPStable$HV_002_15  + PAPStable$HV_004_15+PAPStable$HV_003_15 + PAPStable$HV_005_15
+PAPStable <- subset(PAPStable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
+
+#P06 Left
+PAPStable$P06_LH <- PAPStable$HV_001_16 + PAPStable$HV_003_16 + PAPStable$HV_004_16 + PAPStable$HV_005_16
+PAPStable <- subset(PAPStable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+#P06 Right
+PAPStable$P06_RH <- PAPStable$HV_001_18 + PAPStable$HV_002_18 + PAPStable$HV_003_18 + PAPStable$HV_004_18 + PAPStable$HV_005_18
+PAPStable <- subset(PAPStable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+#P06 Scalp
+PAPStable$P06_SC <- PAPStable$HV_001_19 + PAPStable$HV_002_19 + PAPStable$HV_003_19 + PAPStable$HV_004_19 + PAPStable$HV_005_19
+PAPStable <- subset(PAPStable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+
+#P07 Left
+PAPStable$P07_LH <- PAPStable$HV_001_20 + PAPStable$HV_002_20 + PAPStable$HV_003_20 + PAPStable$HV_004_20 + PAPStable$HV_005_20
+PAPStable <- subset(PAPStable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+#P07 Right
+PAPStable$P07_RH <- PAPStable$HV_001_21 + PAPStable$HV_002_21 + PAPStable$HV_003_21 + PAPStable$HV_004_21 
+PAPStable <- subset(PAPStable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+#P07 Scalp
+PAPStable$P07_SC <- PAPStable$HV_001_22 + PAPStable$HV_002_22 + PAPStable$HV_003_22 + PAPStable$HV_004_22 + PAPStable$HV_005_22
+PAPStable <- subset(PAPStable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
+
+#P08 Left
+PAPStable$P08_LH <- PAPStable$HV_006_01 + PAPStable$HV_007_01 + PAPStable$HV_008_01 + PAPStable$HV_009_01 + PAPStable$HV_010_01
+PAPStable <- subset(PAPStable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+#P08 Right
+PAPStable$P08_RH <- PAPStable$HV_006_02 + PAPStable$HV_007_02 + PAPStable$HV_008_02 + PAPStable$HV_010_02
+PAPStable <- subset(PAPStable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+#P08 Scalp
+PAPStable$P08_SC <- PAPStable$HV_006_03 + PAPStable$HV_007_03 + PAPStable$HV_008_03 + PAPStable$HV_009_03 + PAPStable$HV_010_03
+PAPStable <- subset(PAPStable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+
+#P09 Left
+PAPStable$P09_LH <- PAPStable$HV_006_04 + PAPStable$HV_007_04 + PAPStable$HV_008_04 + PAPStable$HV_009_04 + PAPStable$HV_010_04
+PAPStable <- subset(PAPStable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+#P09 Right
+PAPStable$P09_RH <- PAPStable$HV_006_05 + PAPStable$HV_007_05 + PAPStable$HV_008_05 + PAPStable$HV_009_05 + PAPStable$HV_010_05
+PAPStable <- subset(PAPStable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+#P09 Scalp
+PAPStable$P09_SC <- PAPStable$HV_006_06 + PAPStable$HV_007_06 + PAPStable$HV_008_06 + PAPStable$HV_009_06 + PAPStable$HV_010_06
+PAPStable <- subset(PAPStable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+
+#P10 Left
+PAPStable$P10_LH <- PAPStable$HV_006_07 + PAPStable$HV_007_07 + PAPStable$HV_008_07 + PAPStable$HV_009_07 + PAPStable$HV_010_07
+PAPStable <- subset(PAPStable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+#P10 Right
+PAPStable$P10_RH <- PAPStable$HV_006_08 + PAPStable$HV_007_08 + PAPStable$HV_008_08 + PAPStable$HV_009_08 + PAPStable$HV_010_08
+PAPStable <- subset(PAPStable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+#P10 Scalp
+PAPStable$P10_SC <- PAPStable$HV_006_09 + PAPStable$HV_007_09 + PAPStable$HV_008_09 + PAPStable$HV_009_09 + PAPStable$HV_010_09
+PAPStable <- subset(PAPStable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+
+#P11 Left
+PAPStable$P11_LH <- PAPStable$HV_006_10 + PAPStable$HV_007_10 + PAPStable$HV_008_10 + PAPStable$HV_009_10 + PAPStable$HV_010_10
+PAPStable <- subset(PAPStable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+#P11 Right
+PAPStable$P11_RH <- PAPStable$HV_006_11 + PAPStable$HV_007_11 + PAPStable$HV_008_11 + PAPStable$HV_009_11 + PAPStable$HV_010_11
+PAPStable <- subset(PAPStable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+#P11 Scalp
+PAPStable$P11_SC <- PAPStable$HV_006_12 + PAPStable$HV_007_12 + PAPStable$HV_008_12 + PAPStable$HV_009_12 + PAPStable$HV_010_12
+PAPStable <- subset(PAPStable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+
+#P12 Left
+PAPStable$P12_LH <- PAPStable$HV_006_13 + PAPStable$HV_007_13 + PAPStable$HV_008_13 + PAPStable$HV_009_13 + PAPStable$HV_010_13
+PAPStable <- subset(PAPStable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+#P12 Right
+PAPStable$P12_RH <- PAPStable$HV_006_14 + PAPStable$HV_007_14 + PAPStable$HV_008_14 + PAPStable$HV_009_14 + PAPStable$HV_010_14
+PAPStable <- subset(PAPStable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+#P12 Scalp
+PAPStable$P12_SC <- PAPStable$HV_006_15 + PAPStable$HV_007_15 + PAPStable$HV_008_15 + PAPStable$HV_009_15 + PAPStable$HV_010_15
+PAPStable <- subset(PAPStable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+
+#P13 Left
+PAPStable$P13_LH <- PAPStable$HV_006_16 + PAPStable$HV_007_16 + PAPStable$HV_008_16 + PAPStable$HV_009_16 + PAPStable$HV_010_16
+PAPStable <- subset(PAPStable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+#P13 Right
+PAPStable$P13_RH <- PAPStable$HV_006_18 + PAPStable$HV_007_18 + PAPStable$HV_008_18 + PAPStable$HV_009_18 + PAPStable$HV_010_18
+PAPStable <- subset(PAPStable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+#P13 Scalp
+PAPStable$P13_SC <- PAPStable$HV_006_19 + PAPStable$HV_007_19 + PAPStable$HV_008_19 + PAPStable$HV_009_19 + PAPStable$HV_010_19
+PAPStable <- subset(PAPStable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+
+#P14 Left
+PAPStable$P14_LH <- PAPStable$HV_006_20 + PAPStable$HV_007_20 + PAPStable$HV_008_20 + PAPStable$HV_009_20 + PAPStable$HV_010_20
+PAPStable <- subset(PAPStable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+#P14 Right
+PAPStable$P14_RH <- PAPStable$HV_006_21 + PAPStable$HV_007_21 + PAPStable$HV_008_21 + PAPStable$HV_009_21 + PAPStable$HV_010_21
+PAPStable <- subset(PAPStable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+#P14 Scalp
+PAPStable$P14_SC <- PAPStable$HV_006_22 + PAPStable$HV_007_22 + PAPStable$HV_008_22 + PAPStable$HV_009_22 + PAPStable$HV_010_22
+PAPStable <- subset(PAPStable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+
+#P15 Left
+PAPStable$P15_LH <- PAPStable$HV_011_01 + PAPStable$HV_012_01 + PAPStable$HV_013_01 + PAPStable$HV_014_01 + PAPStable$HV_015_01
+PAPStable <- subset(PAPStable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+#P15 Right
+PAPStable$P15_RH <- PAPStable$HV_011_02 + PAPStable$HV_012_02 + PAPStable$HV_013_02 + PAPStable$HV_014_02 + PAPStable$HV_015_02
+PAPStable <- subset(PAPStable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+#P15 Scalp
+PAPStable$P15_SC <- PAPStable$HV_011_03 + PAPStable$HV_012_03 + PAPStable$HV_013_03 + PAPStable$HV_014_03 + PAPStable$HV_015_03
+PAPStable <- subset(PAPStable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+
+#P16 Left
+PAPStable$P16_LH <- PAPStable$HV_011_04 + PAPStable$HV_012_04 + PAPStable$HV_013_04 + PAPStable$HV_014_04 + PAPStable$HV_015_04
+PAPStable <- subset(PAPStable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+#P16 Right
+PAPStable$P16_RH <- PAPStable$HV_011_05 + PAPStable$HV_012_05 + PAPStable$HV_013_05 + PAPStable$HV_014_05 + PAPStable$HV_015_05
+PAPStable <- subset(PAPStable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+#P16 Scalp
+PAPStable$P16_SC <- PAPStable$HV_011_06 + PAPStable$HV_012_06 ++ PAPStable$HV_014_06 + PAPStable$HV_015_06
+PAPStable <- subset(PAPStable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+
+#P17 Left
+PAPStable$P17_LH <- PAPStable$HV_011_07 + PAPStable$HV_012_07 + PAPStable$HV_013_07 + PAPStable$HV_014_07 + PAPStable$HV_015_07
+PAPStable <- subset(PAPStable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+#P17 Right
+PAPStable$P17_RH <- PAPStable$HV_011_08 + PAPStable$HV_012_08 + PAPStable$HV_013_08 + PAPStable$HV_014_08 + PAPStable$HV_015_08
+PAPStable <- subset(PAPStable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+#P17 Scalp
+PAPStable$P17_SC <- PAPStable$HV_011_09 + PAPStable$HV_012_09 + PAPStable$HV_013_09 + PAPStable$HV_014_09 + PAPStable$HV_015_09
+PAPStable <- subset(PAPStable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+
+#P18 Left
+PAPStable$P18_LH <- PAPStable$HV_011_10 + PAPStable$HV_012_10 + PAPStable$HV_013_10 + PAPStable$HV_014_10 + PAPStable$HV_015_10
+PAPStable <- subset(PAPStable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+#P18 Right
+PAPStable$P18_RH <- PAPStable$HV_011_11 + PAPStable$HV_012_11 + PAPStable$HV_013_11 + PAPStable$HV_014_11 + PAPStable$HV_015_11
+PAPStable <- subset(PAPStable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+#P18 Scalp
+PAPStable$P18_SC <- PAPStable$HV_011_12 + PAPStable$HV_012_12 + PAPStable$HV_013_12 + PAPStable$HV_014_12 + PAPStable$HV_015_12
+PAPStable <- subset(PAPStable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+
+#P19 Left
+PAPStable$P19_LH <- PAPStable$HV_011_13 + PAPStable$HV_012_13 + PAPStable$HV_013_13 + PAPStable$HV_014_13 + PAPStable$HV_015_13
+PAPStable <- subset(PAPStable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+#P19 Right
+PAPStable$P19_RH <- PAPStable$HV_011_14 + PAPStable$HV_012_14 + PAPStable$HV_013_14 + PAPStable$HV_014_14 + PAPStable$HV_015_14
+PAPStable <- subset(PAPStable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+#P19 Scalp
+PAPStable$P19_SC <- PAPStable$HV_011_15 + PAPStable$HV_012_15 + PAPStable$HV_013_15 + PAPStable$HV_014_15 + PAPStable$HV_015_15
+PAPStable <- subset(PAPStable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+
+#P20 Left
+PAPStable$P20_LH <- PAPStable$HV_011_16 + PAPStable$HV_012_16 + PAPStable$HV_013_16 + PAPStable$HV_014_16 + PAPStable$HV_015_16
+PAPStable <- subset(PAPStable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+#P20 Right
+PAPStable$P20_RH <- PAPStable$HV_011_18 + PAPStable$HV_012_18 + PAPStable$HV_013_18 + PAPStable$HV_014_18 + PAPStable$HV_015_18
+PAPStable <- subset(PAPStable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+#P20 Scalp
+PAPStable$P20_SC <- PAPStable$HV_011_19 + PAPStable$HV_012_19 + PAPStable$HV_013_19 + PAPStable$HV_014_19 + PAPStable$HV_015_19
+PAPStable <- subset(PAPStable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+
+#P21 Left
+PAPStable$P21_LH <- PAPStable$HV_011_20 + PAPStable$HV_012_20 + PAPStable$HV_013_20 + PAPStable$HV_014_20
+PAPStable <- subset(PAPStable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+#P21 Right
+PAPStable$P21_RH <- PAPStable$HV_011_21 + PAPStable$HV_012_21 + PAPStable$HV_013_21 + PAPStable$HV_014_21
+PAPStable <- subset(PAPStable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+#P21 Scalp
+PAPStable$P21_SC <- PAPStable$HV_011_22 + PAPStable$HV_012_22 + PAPStable$HV_013_22 + PAPStable$HV_014_22
+PAPStable <- subset(PAPStable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+
+#P22 Left
+PAPStable$P22_LH <- PAPStable$HV_021_02 + PAPStable$HV_022_01 + PAPStable$HV_023_01 + PAPStable$HV_024_01 + PAPStable$HV_025_02
+PAPStable <- subset(PAPStable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+#P22 Right
+PAPStable$P22_RH <- PAPStable$HV_026_01 + PAPStable$HV_027_08 + PAPStable$HV_028_01 + PAPStable$HV_029_01 + PAPStable$HV_030_01
+PAPStable <- subset(PAPStable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+#P22 Scalp
+PAPStable$P22_SC <- PAPStable$HV_016_01 + PAPStable$HV_017_01 + PAPStable$HV_018_01 + PAPStable$HV_019_01 + PAPStable$HV_020_01
+PAPStable <- subset(PAPStable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+
+#P23 Left
+PAPStable$P23_LH <- PAPStable$HV_021_03 + PAPStable$HV_022_02 + PAPStable$HV_023_02 + PAPStable$HV_024_02 + PAPStable$HV_025_03
+PAPStable <- subset(PAPStable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+#P23 Right
+PAPStable$P23_RH <- PAPStable$HV_026_02 + PAPStable$HV_027_09 + PAPStable$HV_028_02 + PAPStable$HV_029_02 + PAPStable$HV_030_02
+PAPStable <- subset(PAPStable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+#P23 Scalp
+PAPStable$P23_SC <- PAPStable$HV_016_02 + PAPStable$HV_017_02 + PAPStable$HV_018_02 + PAPStable$HV_019_02 + PAPStable$HV_020_02
+PAPStable <- subset(PAPStable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+
+#P24 Left
+PAPStable$P24_LH <- PAPStable$HV_021_04 + PAPStable$HV_022_03 + PAPStable$HV_023_03 + PAPStable$HV_024_03 + PAPStable$HV_025_04
+PAPStable <- subset(PAPStable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+#P24 Right
+PAPStable$P24_RH <- PAPStable$HV_026_03 + PAPStable$HV_027_10 + PAPStable$HV_028_03 + PAPStable$HV_029_03 + PAPStable$HV_030_03
+PAPStable <- subset(PAPStable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+#P24 Scalp
+PAPStable$P24_SC <- PAPStable$HV_016_03 + PAPStable$HV_017_03 + PAPStable$HV_018_03 + PAPStable$HV_019_03 + PAPStable$HV_021_01
+PAPStable <- subset(PAPStable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+
+#P25 Left
+PAPStable$P25_LH <- PAPStable$HV_021_05 + PAPStable$HV_022_04 + PAPStable$HV_023_04 + PAPStable$HV_024_04 + PAPStable$HV_025_05
+PAPStable <- subset(PAPStable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+#P25 Right
+PAPStable$P25_RH <- PAPStable$HV_026_04 + PAPStable$HV_027_11 + PAPStable$HV_028_04 + PAPStable$HV_029_04 + PAPStable$HV_030_04
+PAPStable <- subset(PAPStable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+#P25 Scalp
+PAPStable$P25_SC <- PAPStable$HV_016_04 + PAPStable$HV_017_04 + PAPStable$HV_018_04 + PAPStable$HV_019_04 + PAPStable$HV_020_03
+PAPStable <- subset(PAPStable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+
+#P26 Left
+PAPStable$P26_LH <- PAPStable$HV_021_06 + PAPStable$HV_022_05 + PAPStable$HV_023_05 + PAPStable$HV_024_05 + PAPStable$HV_025_06
+PAPStable <- subset(PAPStable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+#P26 Right
+PAPStable$P26_RH <- PAPStable$HV_026_05 + PAPStable$HV_027_12 + PAPStable$HV_028_05 + PAPStable$HV_029_05 + PAPStable$HV_030_05
+PAPStable <- subset(PAPStable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+#P26 Scalp
+PAPStable$P26_SC <- PAPStable$HV_016_05 + PAPStable$HV_017_05 + PAPStable$HV_018_05 + PAPStable$HV_019_05 + PAPStable$HV_020_04
+PAPStable <- subset(PAPStable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+
+#P27 Left
+PAPStable$P27_LH <- PAPStable$HV_021_07 + PAPStable$HV_022_06 + PAPStable$HV_023_06 + PAPStable$HV_024_06 + PAPStable$HV_025_07
+PAPStable <- subset(PAPStable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+#P27 Right
+PAPStable$P27_RH <- PAPStable$HV_026_06 + PAPStable$HV_027_13 + PAPStable$HV_028_06 + PAPStable$HV_029_06 + PAPStable$HV_030_06
+PAPStable <- subset(PAPStable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+#P27 Scalp
+PAPStable$P27_SC <- PAPStable$HV_016_06 + PAPStable$HV_017_06 + PAPStable$HV_018_06 + PAPStable$HV_019_06 + PAPStable$HV_020_05
+PAPStable <- subset(PAPStable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+
+#P28 Left
+PAPStable$P28_LH <- PAPStable$HV_021_08 + PAPStable$HV_022_07 + PAPStable$HV_023_07 + PAPStable$HV_024_07 + PAPStable$HV_025_08
+PAPStable <- subset(PAPStable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+#P28 Right
+PAPStable$P28_RH <- PAPStable$HV_026_07 + PAPStable$HV_027_14 + PAPStable$HV_028_07 + PAPStable$HV_029_07 + PAPStable$HV_030_07
+PAPStable <- subset(PAPStable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+#P28 Scalp
+PAPStable$P28_SC <- PAPStable$HV_016_07 + PAPStable$HV_017_07 + PAPStable$HV_018_07 + PAPStable$HV_019_07 + PAPStable$HV_020_06
+PAPStable <- subset(PAPStable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+
+#P29 Left
+PAPStable$P29_LH <- PAPStable$HV_021_09 + PAPStable$HV_022_08 + PAPStable$HV_023_08 + PAPStable$HV_024_08 + PAPStable$HV_025_09
+PAPStable <- subset(PAPStable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+#P29 Right
+PAPStable$P29_RH <- PAPStable$HV_026_08 + PAPStable$HV_027_15 + PAPStable$HV_028_08 + PAPStable$HV_029_08 + PAPStable$HV_030_08
+PAPStable <- subset(PAPStable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+#P29 Scalp
+PAPStable$P29_SC <- PAPStable$HV_016_08 + PAPStable$HV_017_08 + PAPStable$HV_018_08 + PAPStable$HV_019_08 + PAPStable$HV_020_07
+PAPStable <- subset(PAPStable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+
+#P30 Left
+PAPStable$P30_LH <- PAPStable$HV_021_10 + PAPStable$HV_022_09 + PAPStable$HV_023_09 + PAPStable$HV_024_09 + PAPStable$HV_025_10
+PAPStable <- subset(PAPStable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+#P30 Right
+PAPStable$P30_RH <- PAPStable$HV_026_09 + PAPStable$HV_027_16 + PAPStable$HV_028_09 + PAPStable$HV_029_09 + PAPStable$HV_030_09
+PAPStable <- subset(PAPStable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+#P30 Scalp
+PAPStable$P30_SC <- PAPStable$HV_016_09 + PAPStable$HV_017_09 + PAPStable$HV_018_09 + PAPStable$HV_019_09 + PAPStable$HV_020_08
+PAPStable <- subset(PAPStable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+
+#P31 Left
+PAPStable$P31_LH <- PAPStable$HV_021_11 + PAPStable$HV_022_10 + PAPStable$HV_023_10 + PAPStable$HV_024_10
+PAPStable <- subset(PAPStable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+#P31 Right
+PAPStable$P31_RH <- PAPStable$HV_026_10 + PAPStable$HV_027_18 + PAPStable$HV_028_10 + PAPStable$HV_029_10
+PAPStable <- subset(PAPStable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+#P31 Scalp
+PAPStable$P31_SC <- PAPStable$HV_016_10 + PAPStable$HV_017_10 + PAPStable$HV_018_10 + PAPStable$HV_019_10
+PAPStable <- subset(PAPStable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+
+#P32 Left
+PAPStable$P32_LH <- PAPStable$HV_021_12 + PAPStable$HV_022_11 + PAPStable$HV_023_11 + PAPStable$HV_024_11 + PAPStable$HV_025_11
+PAPStable <- subset(PAPStable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+#P32 Right
+PAPStable$P32_RH <- PAPStable$HV_026_11 + PAPStable$HV_027_19 + PAPStable$HV_028_11 + PAPStable$HV_029_11 + PAPStable$HV_030_10
+PAPStable <- subset(PAPStable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+#P32 Scalp
+PAPStable$P32_SC <- PAPStable$HV_016_11 + PAPStable$HV_017_11 + PAPStable$HV_018_11 + PAPStable$HV_019_11 + PAPStable$HV_020_09
+PAPStable <- subset(PAPStable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+
+#P34 Left
+PAPStable$P34_LH <- PAPStable$HV_021_14 + PAPStable$HV_022_12 + PAPStable$HV_023_12 + PAPStable$HV_024_12 + PAPStable$HV_025_12
+PAPStable <- subset(PAPStable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+#P34 Right
+PAPStable$P34_RH <- PAPStable$HV_026_12 + PAPStable$HV_027_20 + PAPStable$HV_028_12 + PAPStable$HV_029_12 + PAPStable$HV_030_11
+PAPStable <- subset(PAPStable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+#P34 Scalp
+PAPStable$P34_SC <- PAPStable$HV_016_12 + PAPStable$HV_017_12 + PAPStable$HV_018_12 + PAPStable$HV_019_12 + PAPStable$HV_020_11
+PAPStable <- subset(PAPStable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+
+#P35 Left
+PAPStable$P35_LH <- PAPStable$HV_021_15 + PAPStable$HV_022_13 + PAPStable$HV_023_13 + PAPStable$HV_024_13 + PAPStable$HV_025_13
+PAPStable <- subset(PAPStable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+#P35 Right
+PAPStable$P35_RH <- PAPStable$HV_026_13 + PAPStable$HV_027_21 + PAPStable$HV_028_13 + PAPStable$HV_029_13 + PAPStable$HV_030_12
+PAPStable <- subset(PAPStable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+#P35 Scalp
+PAPStable$P35_SC <- PAPStable$HV_016_13 + PAPStable$HV_017_13 + PAPStable$HV_018_13 + PAPStable$HV_019_13 + PAPStable$HV_020_12
+PAPStable <- subset(PAPStable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+
+#P36 Left
+PAPStable$P36_LH <- PAPStable$HV_021_16 + PAPStable$HV_022_14 + PAPStable$HV_023_14 + PAPStable$HV_024_14 + PAPStable$HV_025_14
+PAPStable <- subset(PAPStable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+#P36 Right
+PAPStable$P36_RH <- PAPStable$HV_026_14 + PAPStable$HV_027_22 + PAPStable$HV_028_14 + PAPStable$HV_029_14 + PAPStable$HV_030_13
+PAPStable <- subset(PAPStable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+#P36 Scalp
+PAPStable$P36_SC <- PAPStable$HV_016_14 + PAPStable$HV_017_14 + PAPStable$HV_018_14 + PAPStable$HV_019_14 + PAPStable$HV_020_13
+PAPStable <- subset(PAPStable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+
+#P37 Left
+PAPStable$P37_LH <- PAPStable$HV_021_18 + PAPStable$HV_022_15 + PAPStable$HV_023_15 + PAPStable$HV_024_15 + PAPStable$HV_025_15
+PAPStable <- subset(PAPStable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+#P37 Right
+PAPStable$P37_RH <- PAPStable$HV_026_15 + PAPStable$HV_028_15 + PAPStable$HV_029_15 + PAPStable$HV_030_14 + PAPStable$HV_030_22
+PAPStable <- subset(PAPStable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+#P37 Scalp
+PAPStable$P37_SC <- PAPStable$HV_016_15 + PAPStable$HV_017_15 + PAPStable$HV_018_15 + PAPStable$HV_019_15 + PAPStable$HV_020_14
+PAPStable <- subset(PAPStable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+
+#P38 Left
+PAPStable$P38_LH <- PAPStable$HV_021_19 + PAPStable$HV_022_16 + PAPStable$HV_023_16 + PAPStable$HV_024_16 + PAPStable$HV_025_16
+PAPStable <- subset(PAPStable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+#P38 Right
+PAPStable$P38_RH <- PAPStable$HV_026_16 + PAPStable$HV_028_16 + PAPStable$HV_029_16 + PAPStable$HV_030_15 
+PAPStable <- subset(PAPStable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+#P38 Scalp
+PAPStable$P38_SC <- PAPStable$HV_016_16 + PAPStable$HV_017_16 + PAPStable$HV_018_16 + PAPStable$HV_019_16 + PAPStable$HV_020_15
+PAPStable <- subset(PAPStable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+
+#P39 Left
+PAPStable$P39_LH <- PAPStable$HV_021_20 + PAPStable$HV_022_18 + PAPStable$HV_023_18 + PAPStable$HV_024_18 + PAPStable$HV_025_18
+PAPStable <- subset(PAPStable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+#P39 Right
+PAPStable$P39_RH <- PAPStable$HV_026_18 + PAPStable$HV_028_18 + PAPStable$HV_029_18 + PAPStable$HV_030_16
+PAPStable <- subset(PAPStable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+#P39 Scalp
+PAPStable$P39_SC <- PAPStable$HV_016_18 + PAPStable$HV_017_18 + PAPStable$HV_018_18 + PAPStable$HV_019_18 + PAPStable$HV_020_16
+PAPStable <- subset(PAPStable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+
+#P40 Left
+PAPStable$P40_LH <- PAPStable$HV_021_21 + PAPStable$HV_022_19 + PAPStable$HV_023_19 + PAPStable$HV_024_19 + PAPStable$HV_025_19
+PAPStable <- subset(PAPStable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+#P40 Right
+PAPStable$P40_RH <- PAPStable$HV_026_19 + PAPStable$HV_028_19 + PAPStable$HV_029_19 + PAPStable$HV_030_18
+PAPStable <- subset(PAPStable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+#P40 Scalp
+PAPStable$P40_SC <- PAPStable$HV_016_19 + PAPStable$HV_017_19 + PAPStable$HV_018_19 + PAPStable$HV_019_19 + PAPStable$HV_020_18
+PAPStable <- subset(PAPStable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+
+#P41 Left
+PAPStable$P41_LH <- PAPStable$HV_021_22 + PAPStable$HV_022_20 + PAPStable$HV_023_20 + PAPStable$HV_024_20 + PAPStable$HV_025_20
+PAPStable <- subset(PAPStable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+#P41 Right
+PAPStable$P41_RH <- PAPStable$HV_026_20 + PAPStable$HV_028_20 + PAPStable$HV_029_20 + PAPStable$HV_030_19
+PAPStable <- subset(PAPStable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+#P41 Scalp
+PAPStable$P41_SC <- PAPStable$HV_016_20 + PAPStable$HV_017_20 + PAPStable$HV_018_20 + PAPStable$HV_019_20 + PAPStable$HV_020_19
+PAPStable <- subset(PAPStable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+
+#P42 Left
+PAPStable$P42_LH <- PAPStable$HV_022_21 + PAPStable$HV_023_21 + PAPStable$HV_024_21 + PAPStable$HV_025_21 
+PAPStable <- subset(PAPStable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+#P42 Right
+PAPStable$P42_RH <- PAPStable$HV_026_21 + PAPStable$HV_028_21 + PAPStable$HV_029_21 + PAPStable$HV_030_20
+PAPStable <- subset(PAPStable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+#P42 Scalp
+PAPStable$P42_SC <- PAPStable$HV_016_21 + PAPStable$HV_017_21 + PAPStable$HV_018_21 + PAPStable$HV_019_21 + PAPStable$HV_020_20
+PAPStable <- subset(PAPStable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+
+#P43 Left
+PAPStable$P43_LH <- PAPStable$HV_022_22 + PAPStable$HV_023_22 + PAPStable$HV_024_22 + PAPStable$HV_025_01 + PAPStable$HV_025_22
+PAPStable <- subset(PAPStable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+#P43 Right
+PAPStable$P43_RH <- PAPStable$HV_026_22 + PAPStable$HV_028_22 + PAPStable$HV_029_22 + PAPStable$HV_030_21
+PAPStable <- subset(PAPStable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+#P43 Scalp
+PAPStable$P43_SC <- PAPStable$HV_016_22 + PAPStable$HV_017_22 + PAPStable$HV_018_22 + PAPStable$HV_019_22 + PAPStable$HV_020_21
+PAPStable <- subset(PAPStable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+```
+#LH
+```{r}
+PAP_OTU_LH <- subset(PAPStable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
+row.names(PAP_OTU_LH) <- PAP_OTU_LH$Species
+PAP_OTU_ALL_LH <- PAP_OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(PAP_OTU_ALL_LH) <- PAP_OTU_ALL_LH$Species
+PAP_OTU_ALL_LH <- subset (PAP_OTU_ALL_LH, select = -c(Species))
+PAP_OTU_ALL_LH$Mean <- rowMeans(PAP_OTU_ALL_LH)
+PAP_OTU_ALL_LH$Species <- row.names(PAP_OTU_ALL_LH)
+PAPStable_LH <- PAP_OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(PAPStable_LH) <- PAPStable_LH$Species
+PAPStable_LH <- subset (PAPStable_LH, select = -c(Species))
+PAPStable_LH$Mean_Stable <- rowMeans(PAPStable_LH)
+PAPStable_LH$Species <- row.names(PAPStable_LH)
+PAP_OTU_LH_Compare<- subset (PAPStable_LH, select = c(Mean_Stable,Species))
+PAP_OTU_LH_Compare<- merge(PAP_OTU_ALL_LH, PAP_OTU_LH_Compare, by= "Species")
+PAP_OTU_LH_Compare$Mean_temp <- PAP_OTU_LH_Compare$Mean - PAP_OTU_LH_Compare$Mean_Stable
+PAP_LH_Stable2 <- subset(PAP_OTU_LH_Compare, 0 < Mean_Stable)
+PAP_LH_Markers2 <- PAP_LH_Stable2$Species
+PAP_LH_Markers2
+```
+#RH
+```{r}
+PAP_OTU_RH <- subset(PAPStable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
+row.names(PAP_OTU_RH) <- PAP_OTU_RH$Species
+PAP_OTU_ALL_RH <- PAP_OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(PAP_OTU_ALL_RH) <- PAP_OTU_ALL_RH$Species
+PAP_OTU_ALL_RH <- subset (PAP_OTU_ALL_RH, select = -c(Species))
+PAP_OTU_ALL_RH$Mean <- rowMeans(PAP_OTU_ALL_RH)
+PAP_OTU_ALL_RH$Species <- row.names(PAP_OTU_ALL_RH)
+PAPStable_RH <- PAP_OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(PAPStable_RH) <- PAPStable_RH$Species
+PAPStable_RH <- subset (PAPStable_RH, select = -c(Species))
+PAPStable_RH$Mean_Stable <- rowMeans(PAPStable_RH)
+PAPStable_RH$Species <- row.names(PAPStable_RH)
+PAP_OTU_RH_Compare<- subset (PAPStable_RH, select = c(Mean_Stable,Species))
+PAP_OTU_RH_Compare<- merge(PAP_OTU_ALL_RH, PAP_OTU_RH_Compare, by= "Species")
+PAP_OTU_RH_Compare$Mean_temp <- PAP_OTU_RH_Compare$Mean - PAP_OTU_RH_Compare$Mean_Stable
+PAP_RH_Stable2 <- subset(PAP_OTU_RH_Compare, 0 < Mean_Stable)
+PAP_RH_Markers2 <- PAP_RH_Stable2$Species
+PAP_RH_Markers2
+```
+#SC
+```{r}
+PAP_OTU_SC <- subset(PAPStable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
+row.names(PAP_OTU_SC) <- PAP_OTU_SC$Species
+PAP_OTU_ALL_SC <- PAP_OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(PAP_OTU_ALL_SC) <- PAP_OTU_ALL_SC$Species
+PAP_OTU_ALL_SC <- subset (PAP_OTU_ALL_SC, select = -c(Species))
+PAP_OTU_ALL_SC$Mean <- rowMeans(PAP_OTU_ALL_SC)
+PAP_OTU_ALL_SC$Species <- row.names(PAP_OTU_ALL_SC)
+PAPStable_SC <- PAP_OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(PAPStable_SC) <- PAPStable_SC$Species
+PAPStable_SC <- subset (PAPStable_SC, select = -c(Species))
+PAPStable_SC$Mean_Stable <- rowMeans(PAPStable_SC)
+PAPStable_SC$Species <- row.names(PAPStable_SC)
+PAP_OTU_SC_Compare<- subset (PAPStable_SC, select = c(Mean_Stable,Species))
+PAP_OTU_SC_Compare<- merge(PAP_OTU_ALL_SC, PAP_OTU_SC_Compare, by= "Species")
+PAP_OTU_SC_Compare$Mean_temp <- PAP_OTU_SC_Compare$Mean - PAP_OTU_SC_Compare$Mean_Stable
+PAP_SC_Stable2 <- subset(PAP_OTU_SC_Compare, 0 < Mean_Stable)
+PAP_SC_Markers2 <- PAP_SC_Stable2$Species
+PAP_SC_Markers2
+```
+#Combined
+```{r}
+PAP_Hand_Markers_Shared2 <- PAP_LH_Markers2[PAP_LH_Markers2 %in% PAP_RH_Markers2]
+PAP_Hand_Markers_Shared2
+PAP_All_Markers_Shared2 <- PAP_Hand_Markers_Shared2[PAP_Hand_Markers_Shared2 %in% PAP_SC_Markers2]
+```
+
+## Determine Stable Genomoviridae Species Markers by Location for Set B
+
+```{r,message=FALSE,warning=FALSE,results="hide"}
+GEN_counts <- read.csv("genomovir/counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- subset(GEN_tax, select = -c(Isolate))
+GEN_OTU <- merge(GEN_tax, GEN_counts, by.x="row.names", by.y="row.names")
+GEN_OTU_SUMS<- subset (GEN_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+GEN_OTU_SUMS<-ddply(GEN_OTU_SUMS,"Species",numcolwise(sum))
+GEN_OTU_SUMS<- subset (GEN_OTU_SUMS, select = -c(HV_027_01,HV_027_02,HV_027_03,HV_027_04,HV_027_05,HV_027_06,HV_027_07,HV_015_20, HV_015_21, HV_020_10, HV_020_22, HV_021_13))
+GENStable <- GEN_OTU_SUMS
+```
+```{r}
+GENStable <- GENStable %>% mutate_if(is.numeric, ~1 * (. != 0))
+#P01 Left
+GENStable$P01_LH <- GENStable$HV_001_01 + GENStable$HV_002_01 + GENStable$HV_003_01 + GENStable$HV_004_01 + GENStable$HV_005_01
+GENStable <- subset(GENStable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+#P01 Right
+GENStable$P01_RH <- GENStable$HV_001_02 + GENStable$HV_002_02 + GENStable$HV_003_02 + GENStable$HV_004_02
+GENStable <- subset(GENStable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+#P01 Scalp
+GENStable$P01_SC <- GENStable$HV_001_03 + GENStable$HV_004_03 + GENStable$HV_003_03 + GENStable$HV_005_03 + GENStable$HV_002_03
+GENStable <- subset(GENStable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+
+#P02 Left
+GENStable$P02_LH <- GENStable$HV_001_04 + GENStable$HV_002_04 + GENStable$HV_003_04 + GENStable$HV_004_04 + GENStable$HV_005_04
+GENStable <- subset(GENStable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+#P02 Right
+GENStable$P02_RH <- GENStable$HV_001_05 + GENStable$HV_002_05 + GENStable$HV_003_05 + GENStable$HV_004_05 + GENStable$HV_005_05
+GENStable <- subset(GENStable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+#P02 Scalp
+GENStable$P02_SC <- GENStable$HV_001_06 + GENStable$HV_002_06 + GENStable$HV_003_06 + GENStable$HV_004_06 + GENStable$HV_005_06
+GENStable <- subset(GENStable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+
+#P03 Left
+GENStable$P03_LH <- GENStable$HV_001_07 + GENStable$HV_002_07 + GENStable$HV_003_07 + GENStable$HV_004_07 + GENStable$HV_005_07
+GENStable <- subset(GENStable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+#P03 Right
+GENStable$P03_RH <- GENStable$HV_001_08 + GENStable$HV_002_08 + GENStable$HV_003_08 + GENStable$HV_004_08 + GENStable$HV_005_08
+GENStable <- subset(GENStable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+#P03 Scalp
+GENStable$P03_SC <- GENStable$HV_001_09 + GENStable$HV_002_09 + GENStable$HV_003_09 + GENStable$HV_004_09 + GENStable$HV_005_09
+GENStable <- subset(GENStable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+
+#P04 Left
+GENStable$P04_LH <- GENStable$HV_001_10 + GENStable$HV_002_10 + GENStable$HV_003_10 + GENStable$HV_004_10 + GENStable$HV_005_10
+GENStable <- subset(GENStable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+#P04 Right
+GENStable$P04_RH <- GENStable$HV_001_11 + GENStable$HV_002_11 + GENStable$HV_003_11 + GENStable$HV_004_11 + GENStable$HV_005_11
+GENStable <- subset(GENStable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+#P04 Scalp
+GENStable$P04_SC <- GENStable$HV_001_12 + GENStable$HV_002_12 + GENStable$HV_003_12 + GENStable$HV_004_12 + GENStable$HV_005_12
+GENStable <- subset(GENStable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
+
+#P05 Left
+GENStable$P05_LH <- GENStable$HV_001_13 + GENStable$HV_002_13 + GENStable$HV_003_13 + GENStable$HV_004_13 + GENStable$HV_005_13
+GENStable <- subset(GENStable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+#P05 Right
+GENStable$P05_RH <- GENStable$HV_001_14 + GENStable$HV_002_14 + GENStable$HV_003_14 + GENStable$HV_004_14 + GENStable$HV_005_14
+GENStable <- subset(GENStable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+#P05 Scalp
+GENStable$P05_SC <- GENStable$HV_001_15 + GENStable$HV_002_15  + GENStable$HV_004_15+GENStable$HV_003_15 + GENStable$HV_005_15
+GENStable <- subset(GENStable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
+
+#P06 Left
+GENStable$P06_LH <- GENStable$HV_001_16 + GENStable$HV_003_16 + GENStable$HV_004_16 + GENStable$HV_005_16
+GENStable <- subset(GENStable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+#P06 Right
+GENStable$P06_RH <- GENStable$HV_001_18 + GENStable$HV_002_18 + GENStable$HV_003_18 + GENStable$HV_004_18 + GENStable$HV_005_18
+GENStable <- subset(GENStable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+#P06 Scalp
+GENStable$P06_SC <- GENStable$HV_001_19 + GENStable$HV_002_19 + GENStable$HV_003_19 + GENStable$HV_004_19 + GENStable$HV_005_19
+GENStable <- subset(GENStable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+
+#P07 Left
+GENStable$P07_LH <- GENStable$HV_001_20 + GENStable$HV_002_20 + GENStable$HV_003_20 + GENStable$HV_004_20 + GENStable$HV_005_20
+GENStable <- subset(GENStable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+#P07 Right
+GENStable$P07_RH <- GENStable$HV_001_21 + GENStable$HV_002_21 + GENStable$HV_003_21 + GENStable$HV_004_21 
+GENStable <- subset(GENStable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+#P07 Scalp
+GENStable$P07_SC <- GENStable$HV_001_22 + GENStable$HV_002_22 + GENStable$HV_003_22 + GENStable$HV_004_22 + GENStable$HV_005_22
+GENStable <- subset(GENStable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
+
+#P08 Left
+GENStable$P08_LH <- GENStable$HV_006_01 + GENStable$HV_007_01 + GENStable$HV_008_01 + GENStable$HV_009_01 + GENStable$HV_010_01
+GENStable <- subset(GENStable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+#P08 Right
+GENStable$P08_RH <- GENStable$HV_006_02 + GENStable$HV_007_02 + GENStable$HV_008_02 + GENStable$HV_010_02
+GENStable <- subset(GENStable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+#P08 Scalp
+GENStable$P08_SC <- GENStable$HV_006_03 + GENStable$HV_007_03 + GENStable$HV_008_03 + GENStable$HV_009_03 + GENStable$HV_010_03
+GENStable <- subset(GENStable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+
+#P09 Left
+GENStable$P09_LH <- GENStable$HV_006_04 + GENStable$HV_007_04 + GENStable$HV_008_04 + GENStable$HV_009_04 + GENStable$HV_010_04
+GENStable <- subset(GENStable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+#P09 Right
+GENStable$P09_RH <- GENStable$HV_006_05 + GENStable$HV_007_05 + GENStable$HV_008_05 + GENStable$HV_009_05 + GENStable$HV_010_05
+GENStable <- subset(GENStable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+#P09 Scalp
+GENStable$P09_SC <- GENStable$HV_006_06 + GENStable$HV_007_06 + GENStable$HV_008_06 + GENStable$HV_009_06 + GENStable$HV_010_06
+GENStable <- subset(GENStable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+
+#P10 Left
+GENStable$P10_LH <- GENStable$HV_006_07 + GENStable$HV_007_07 + GENStable$HV_008_07 + GENStable$HV_009_07 + GENStable$HV_010_07
+GENStable <- subset(GENStable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+#P10 Right
+GENStable$P10_RH <- GENStable$HV_006_08 + GENStable$HV_007_08 + GENStable$HV_008_08 + GENStable$HV_009_08 + GENStable$HV_010_08
+GENStable <- subset(GENStable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+#P10 Scalp
+GENStable$P10_SC <- GENStable$HV_006_09 + GENStable$HV_007_09 + GENStable$HV_008_09 + GENStable$HV_009_09 + GENStable$HV_010_09
+GENStable <- subset(GENStable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+
+#P11 Left
+GENStable$P11_LH <- GENStable$HV_006_10 + GENStable$HV_007_10 + GENStable$HV_008_10 + GENStable$HV_009_10 + GENStable$HV_010_10
+GENStable <- subset(GENStable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+#P11 Right
+GENStable$P11_RH <- GENStable$HV_006_11 + GENStable$HV_007_11 + GENStable$HV_008_11 + GENStable$HV_009_11 + GENStable$HV_010_11
+GENStable <- subset(GENStable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+#P11 Scalp
+GENStable$P11_SC <- GENStable$HV_006_12 + GENStable$HV_007_12 + GENStable$HV_008_12 + GENStable$HV_009_12 + GENStable$HV_010_12
+GENStable <- subset(GENStable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+
+#P12 Left
+GENStable$P12_LH <- GENStable$HV_006_13 + GENStable$HV_007_13 + GENStable$HV_008_13 + GENStable$HV_009_13 + GENStable$HV_010_13
+GENStable <- subset(GENStable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+#P12 Right
+GENStable$P12_RH <- GENStable$HV_006_14 + GENStable$HV_007_14 + GENStable$HV_008_14 + GENStable$HV_009_14 + GENStable$HV_010_14
+GENStable <- subset(GENStable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+#P12 Scalp
+GENStable$P12_SC <- GENStable$HV_006_15 + GENStable$HV_007_15 + GENStable$HV_008_15 + GENStable$HV_009_15 + GENStable$HV_010_15
+GENStable <- subset(GENStable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+
+#P13 Left
+GENStable$P13_LH <- GENStable$HV_006_16 + GENStable$HV_007_16 + GENStable$HV_008_16 + GENStable$HV_009_16 + GENStable$HV_010_16
+GENStable <- subset(GENStable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+#P13 Right
+GENStable$P13_RH <- GENStable$HV_006_18 + GENStable$HV_007_18 + GENStable$HV_008_18 + GENStable$HV_009_18 + GENStable$HV_010_18
+GENStable <- subset(GENStable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+#P13 Scalp
+GENStable$P13_SC <- GENStable$HV_006_19 + GENStable$HV_007_19 + GENStable$HV_008_19 + GENStable$HV_009_19 + GENStable$HV_010_19
+GENStable <- subset(GENStable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+
+#P14 Left
+GENStable$P14_LH <- GENStable$HV_006_20 + GENStable$HV_007_20 + GENStable$HV_008_20 + GENStable$HV_009_20 + GENStable$HV_010_20
+GENStable <- subset(GENStable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+#P14 Right
+GENStable$P14_RH <- GENStable$HV_006_21 + GENStable$HV_007_21 + GENStable$HV_008_21 + GENStable$HV_009_21 + GENStable$HV_010_21
+GENStable <- subset(GENStable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+#P14 Scalp
+GENStable$P14_SC <- GENStable$HV_006_22 + GENStable$HV_007_22 + GENStable$HV_008_22 + GENStable$HV_009_22 + GENStable$HV_010_22
+GENStable <- subset(GENStable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+
+#P15 Left
+GENStable$P15_LH <- GENStable$HV_011_01 + GENStable$HV_012_01 + GENStable$HV_013_01 + GENStable$HV_014_01 + GENStable$HV_015_01
+GENStable <- subset(GENStable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+#P15 Right
+GENStable$P15_RH <- GENStable$HV_011_02 + GENStable$HV_012_02 + GENStable$HV_013_02 + GENStable$HV_014_02 + GENStable$HV_015_02
+GENStable <- subset(GENStable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+#P15 Scalp
+GENStable$P15_SC <- GENStable$HV_011_03 + GENStable$HV_012_03 + GENStable$HV_013_03 + GENStable$HV_014_03 + GENStable$HV_015_03
+GENStable <- subset(GENStable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+
+#P16 Left
+GENStable$P16_LH <- GENStable$HV_011_04 + GENStable$HV_012_04 + GENStable$HV_013_04 + GENStable$HV_014_04 + GENStable$HV_015_04
+GENStable <- subset(GENStable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+#P16 Right
+GENStable$P16_RH <- GENStable$HV_011_05 + GENStable$HV_012_05 + GENStable$HV_013_05 + GENStable$HV_014_05 + GENStable$HV_015_05
+GENStable <- subset(GENStable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+#P16 Scalp
+GENStable$P16_SC <- GENStable$HV_011_06 + GENStable$HV_012_06 ++ GENStable$HV_014_06 + GENStable$HV_015_06
+GENStable <- subset(GENStable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+
+#P17 Left
+GENStable$P17_LH <- GENStable$HV_011_07 + GENStable$HV_012_07 + GENStable$HV_013_07 + GENStable$HV_014_07 + GENStable$HV_015_07
+GENStable <- subset(GENStable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+#P17 Right
+GENStable$P17_RH <- GENStable$HV_011_08 + GENStable$HV_012_08 + GENStable$HV_013_08 + GENStable$HV_014_08 + GENStable$HV_015_08
+GENStable <- subset(GENStable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+#P17 Scalp
+GENStable$P17_SC <- GENStable$HV_011_09 + GENStable$HV_012_09 + GENStable$HV_013_09 + GENStable$HV_014_09 + GENStable$HV_015_09
+GENStable <- subset(GENStable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+
+#P18 Left
+GENStable$P18_LH <- GENStable$HV_011_10 + GENStable$HV_012_10 + GENStable$HV_013_10 + GENStable$HV_014_10 + GENStable$HV_015_10
+GENStable <- subset(GENStable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+#P18 Right
+GENStable$P18_RH <- GENStable$HV_011_11 + GENStable$HV_012_11 + GENStable$HV_013_11 + GENStable$HV_014_11 + GENStable$HV_015_11
+GENStable <- subset(GENStable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+#P18 Scalp
+GENStable$P18_SC <- GENStable$HV_011_12 + GENStable$HV_012_12 + GENStable$HV_013_12 + GENStable$HV_014_12 + GENStable$HV_015_12
+GENStable <- subset(GENStable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+
+#P19 Left
+GENStable$P19_LH <- GENStable$HV_011_13 + GENStable$HV_012_13 + GENStable$HV_013_13 + GENStable$HV_014_13 + GENStable$HV_015_13
+GENStable <- subset(GENStable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+#P19 Right
+GENStable$P19_RH <- GENStable$HV_011_14 + GENStable$HV_012_14 + GENStable$HV_013_14 + GENStable$HV_014_14 + GENStable$HV_015_14
+GENStable <- subset(GENStable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+#P19 Scalp
+GENStable$P19_SC <- GENStable$HV_011_15 + GENStable$HV_012_15 + GENStable$HV_013_15 + GENStable$HV_014_15 + GENStable$HV_015_15
+GENStable <- subset(GENStable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+
+#P20 Left
+GENStable$P20_LH <- GENStable$HV_011_16 + GENStable$HV_012_16 + GENStable$HV_013_16 + GENStable$HV_014_16 + GENStable$HV_015_16
+GENStable <- subset(GENStable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+#P20 Right
+GENStable$P20_RH <- GENStable$HV_011_18 + GENStable$HV_012_18 + GENStable$HV_013_18 + GENStable$HV_014_18 + GENStable$HV_015_18
+GENStable <- subset(GENStable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+#P20 Scalp
+GENStable$P20_SC <- GENStable$HV_011_19 + GENStable$HV_012_19 + GENStable$HV_013_19 + GENStable$HV_014_19 + GENStable$HV_015_19
+GENStable <- subset(GENStable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+
+#P21 Left
+GENStable$P21_LH <- GENStable$HV_011_20 + GENStable$HV_012_20 + GENStable$HV_013_20 + GENStable$HV_014_20
+GENStable <- subset(GENStable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+#P21 Right
+GENStable$P21_RH <- GENStable$HV_011_21 + GENStable$HV_012_21 + GENStable$HV_013_21 + GENStable$HV_014_21
+GENStable <- subset(GENStable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+#P21 Scalp
+GENStable$P21_SC <- GENStable$HV_011_22 + GENStable$HV_012_22 + GENStable$HV_013_22 + GENStable$HV_014_22
+GENStable <- subset(GENStable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+
+#P22 Left
+GENStable$P22_LH <- GENStable$HV_021_02 + GENStable$HV_022_01 + GENStable$HV_023_01 + GENStable$HV_024_01 + GENStable$HV_025_02
+GENStable <- subset(GENStable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+#P22 Right
+GENStable$P22_RH <- GENStable$HV_026_01 + GENStable$HV_027_08 + GENStable$HV_028_01 + GENStable$HV_029_01 + GENStable$HV_030_01
+GENStable <- subset(GENStable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+#P22 Scalp
+GENStable$P22_SC <- GENStable$HV_016_01 + GENStable$HV_017_01 + GENStable$HV_018_01 + GENStable$HV_019_01 + GENStable$HV_020_01
+GENStable <- subset(GENStable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+
+#P23 Left
+GENStable$P23_LH <- GENStable$HV_021_03 + GENStable$HV_022_02 + GENStable$HV_023_02 + GENStable$HV_024_02 + GENStable$HV_025_03
+GENStable <- subset(GENStable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+#P23 Right
+GENStable$P23_RH <- GENStable$HV_026_02 + GENStable$HV_027_09 + GENStable$HV_028_02 + GENStable$HV_029_02 + GENStable$HV_030_02
+GENStable <- subset(GENStable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+#P23 Scalp
+GENStable$P23_SC <- GENStable$HV_016_02 + GENStable$HV_017_02 + GENStable$HV_018_02 + GENStable$HV_019_02 + GENStable$HV_020_02
+GENStable <- subset(GENStable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+
+#P24 Left
+GENStable$P24_LH <- GENStable$HV_021_04 + GENStable$HV_022_03 + GENStable$HV_023_03 + GENStable$HV_024_03 + GENStable$HV_025_04
+GENStable <- subset(GENStable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+#P24 Right
+GENStable$P24_RH <- GENStable$HV_026_03 + GENStable$HV_027_10 + GENStable$HV_028_03 + GENStable$HV_029_03 + GENStable$HV_030_03
+GENStable <- subset(GENStable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+#P24 Scalp
+GENStable$P24_SC <- GENStable$HV_016_03 + GENStable$HV_017_03 + GENStable$HV_018_03 + GENStable$HV_019_03 + GENStable$HV_021_01
+GENStable <- subset(GENStable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+
+#P25 Left
+GENStable$P25_LH <- GENStable$HV_021_05 + GENStable$HV_022_04 + GENStable$HV_023_04 + GENStable$HV_024_04 + GENStable$HV_025_05
+GENStable <- subset(GENStable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+#P25 Right
+GENStable$P25_RH <- GENStable$HV_026_04 + GENStable$HV_027_11 + GENStable$HV_028_04 + GENStable$HV_029_04 + GENStable$HV_030_04
+GENStable <- subset(GENStable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+#P25 Scalp
+GENStable$P25_SC <- GENStable$HV_016_04 + GENStable$HV_017_04 + GENStable$HV_018_04 + GENStable$HV_019_04 + GENStable$HV_020_03
+GENStable <- subset(GENStable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+
+#P26 Left
+GENStable$P26_LH <- GENStable$HV_021_06 + GENStable$HV_022_05 + GENStable$HV_023_05 + GENStable$HV_024_05 + GENStable$HV_025_06
+GENStable <- subset(GENStable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+#P26 Right
+GENStable$P26_RH <- GENStable$HV_026_05 + GENStable$HV_027_12 + GENStable$HV_028_05 + GENStable$HV_029_05 + GENStable$HV_030_05
+GENStable <- subset(GENStable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+#P26 Scalp
+GENStable$P26_SC <- GENStable$HV_016_05 + GENStable$HV_017_05 + GENStable$HV_018_05 + GENStable$HV_019_05 + GENStable$HV_020_04
+GENStable <- subset(GENStable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+
+#P27 Left
+GENStable$P27_LH <- GENStable$HV_021_07 + GENStable$HV_022_06 + GENStable$HV_023_06 + GENStable$HV_024_06 + GENStable$HV_025_07
+GENStable <- subset(GENStable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+#P27 Right
+GENStable$P27_RH <- GENStable$HV_026_06 + GENStable$HV_027_13 + GENStable$HV_028_06 + GENStable$HV_029_06 + GENStable$HV_030_06
+GENStable <- subset(GENStable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+#P27 Scalp
+GENStable$P27_SC <- GENStable$HV_016_06 + GENStable$HV_017_06 + GENStable$HV_018_06 + GENStable$HV_019_06 + GENStable$HV_020_05
+GENStable <- subset(GENStable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+
+#P28 Left
+GENStable$P28_LH <- GENStable$HV_021_08 + GENStable$HV_022_07 + GENStable$HV_023_07 + GENStable$HV_024_07 + GENStable$HV_025_08
+GENStable <- subset(GENStable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+#P28 Right
+GENStable$P28_RH <- GENStable$HV_026_07 + GENStable$HV_027_14 + GENStable$HV_028_07 + GENStable$HV_029_07 + GENStable$HV_030_07
+GENStable <- subset(GENStable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+#P28 Scalp
+GENStable$P28_SC <- GENStable$HV_016_07 + GENStable$HV_017_07 + GENStable$HV_018_07 + GENStable$HV_019_07 + GENStable$HV_020_06
+GENStable <- subset(GENStable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+
+#P29 Left
+GENStable$P29_LH <- GENStable$HV_021_09 + GENStable$HV_022_08 + GENStable$HV_023_08 + GENStable$HV_024_08 + GENStable$HV_025_09
+GENStable <- subset(GENStable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+#P29 Right
+GENStable$P29_RH <- GENStable$HV_026_08 + GENStable$HV_027_15 + GENStable$HV_028_08 + GENStable$HV_029_08 + GENStable$HV_030_08
+GENStable <- subset(GENStable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+#P29 Scalp
+GENStable$P29_SC <- GENStable$HV_016_08 + GENStable$HV_017_08 + GENStable$HV_018_08 + GENStable$HV_019_08 + GENStable$HV_020_07
+GENStable <- subset(GENStable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+
+#P30 Left
+GENStable$P30_LH <- GENStable$HV_021_10 + GENStable$HV_022_09 + GENStable$HV_023_09 + GENStable$HV_024_09 + GENStable$HV_025_10
+GENStable <- subset(GENStable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+#P30 Right
+GENStable$P30_RH <- GENStable$HV_026_09 + GENStable$HV_027_16 + GENStable$HV_028_09 + GENStable$HV_029_09 + GENStable$HV_030_09
+GENStable <- subset(GENStable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+#P30 Scalp
+GENStable$P30_SC <- GENStable$HV_016_09 + GENStable$HV_017_09 + GENStable$HV_018_09 + GENStable$HV_019_09 + GENStable$HV_020_08
+GENStable <- subset(GENStable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+
+#P31 Left
+GENStable$P31_LH <- GENStable$HV_021_11 + GENStable$HV_022_10 + GENStable$HV_023_10 + GENStable$HV_024_10
+GENStable <- subset(GENStable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+#P31 Right
+GENStable$P31_RH <- GENStable$HV_026_10 + GENStable$HV_027_18 + GENStable$HV_028_10 + GENStable$HV_029_10
+GENStable <- subset(GENStable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+#P31 Scalp
+GENStable$P31_SC <- GENStable$HV_016_10 + GENStable$HV_017_10 + GENStable$HV_018_10 + GENStable$HV_019_10
+GENStable <- subset(GENStable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+
+#P32 Left
+GENStable$P32_LH <- GENStable$HV_021_12 + GENStable$HV_022_11 + GENStable$HV_023_11 + GENStable$HV_024_11 + GENStable$HV_025_11
+GENStable <- subset(GENStable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+#P32 Right
+GENStable$P32_RH <- GENStable$HV_026_11 + GENStable$HV_027_19 + GENStable$HV_028_11 + GENStable$HV_029_11 + GENStable$HV_030_10
+GENStable <- subset(GENStable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+#P32 Scalp
+GENStable$P32_SC <- GENStable$HV_016_11 + GENStable$HV_017_11 + GENStable$HV_018_11 + GENStable$HV_019_11 + GENStable$HV_020_09
+GENStable <- subset(GENStable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+
+#P34 Left
+GENStable$P34_LH <- GENStable$HV_021_14 + GENStable$HV_022_12 + GENStable$HV_023_12 + GENStable$HV_024_12 + GENStable$HV_025_12
+GENStable <- subset(GENStable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+#P34 Right
+GENStable$P34_RH <- GENStable$HV_026_12 + GENStable$HV_027_20 + GENStable$HV_028_12 + GENStable$HV_029_12 + GENStable$HV_030_11
+GENStable <- subset(GENStable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+#P34 Scalp
+GENStable$P34_SC <- GENStable$HV_016_12 + GENStable$HV_017_12 + GENStable$HV_018_12 + GENStable$HV_019_12 + GENStable$HV_020_11
+GENStable <- subset(GENStable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+
+#P35 Left
+GENStable$P35_LH <- GENStable$HV_021_15 + GENStable$HV_022_13 + GENStable$HV_023_13 + GENStable$HV_024_13 + GENStable$HV_025_13
+GENStable <- subset(GENStable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+#P35 Right
+GENStable$P35_RH <- GENStable$HV_026_13 + GENStable$HV_027_21 + GENStable$HV_028_13 + GENStable$HV_029_13 + GENStable$HV_030_12
+GENStable <- subset(GENStable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+#P35 Scalp
+GENStable$P35_SC <- GENStable$HV_016_13 + GENStable$HV_017_13 + GENStable$HV_018_13 + GENStable$HV_019_13 + GENStable$HV_020_12
+GENStable <- subset(GENStable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+
+#P36 Left
+GENStable$P36_LH <- GENStable$HV_021_16 + GENStable$HV_022_14 + GENStable$HV_023_14 + GENStable$HV_024_14 + GENStable$HV_025_14
+GENStable <- subset(GENStable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+#P36 Right
+GENStable$P36_RH <- GENStable$HV_026_14 + GENStable$HV_027_22 + GENStable$HV_028_14 + GENStable$HV_029_14 + GENStable$HV_030_13
+GENStable <- subset(GENStable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+#P36 Scalp
+GENStable$P36_SC <- GENStable$HV_016_14 + GENStable$HV_017_14 + GENStable$HV_018_14 + GENStable$HV_019_14 + GENStable$HV_020_13
+GENStable <- subset(GENStable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+
+#P37 Left
+GENStable$P37_LH <- GENStable$HV_021_18 + GENStable$HV_022_15 + GENStable$HV_023_15 + GENStable$HV_024_15 + GENStable$HV_025_15
+GENStable <- subset(GENStable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+#P37 Right
+GENStable$P37_RH <- GENStable$HV_026_15 + GENStable$HV_028_15 + GENStable$HV_029_15 + GENStable$HV_030_14 + GENStable$HV_030_22
+GENStable <- subset(GENStable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+#P37 Scalp
+GENStable$P37_SC <- GENStable$HV_016_15 + GENStable$HV_017_15 + GENStable$HV_018_15 + GENStable$HV_019_15 + GENStable$HV_020_14
+GENStable <- subset(GENStable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+
+#P38 Left
+GENStable$P38_LH <- GENStable$HV_021_19 + GENStable$HV_022_16 + GENStable$HV_023_16 + GENStable$HV_024_16 + GENStable$HV_025_16
+GENStable <- subset(GENStable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+#P38 Right
+GENStable$P38_RH <- GENStable$HV_026_16 + GENStable$HV_028_16 + GENStable$HV_029_16 + GENStable$HV_030_15 
+GENStable <- subset(GENStable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+#P38 Scalp
+GENStable$P38_SC <- GENStable$HV_016_16 + GENStable$HV_017_16 + GENStable$HV_018_16 + GENStable$HV_019_16 + GENStable$HV_020_15
+GENStable <- subset(GENStable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+
+#P39 Left
+GENStable$P39_LH <- GENStable$HV_021_20 + GENStable$HV_022_18 + GENStable$HV_023_18 + GENStable$HV_024_18 + GENStable$HV_025_18
+GENStable <- subset(GENStable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+#P39 Right
+GENStable$P39_RH <- GENStable$HV_026_18 + GENStable$HV_028_18 + GENStable$HV_029_18 + GENStable$HV_030_16
+GENStable <- subset(GENStable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+#P39 Scalp
+GENStable$P39_SC <- GENStable$HV_016_18 + GENStable$HV_017_18 + GENStable$HV_018_18 + GENStable$HV_019_18 + GENStable$HV_020_16
+GENStable <- subset(GENStable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+
+#P40 Left
+GENStable$P40_LH <- GENStable$HV_021_21 + GENStable$HV_022_19 + GENStable$HV_023_19 + GENStable$HV_024_19 + GENStable$HV_025_19
+GENStable <- subset(GENStable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+#P40 Right
+GENStable$P40_RH <- GENStable$HV_026_19 + GENStable$HV_028_19 + GENStable$HV_029_19 + GENStable$HV_030_18
+GENStable <- subset(GENStable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+#P40 Scalp
+GENStable$P40_SC <- GENStable$HV_016_19 + GENStable$HV_017_19 + GENStable$HV_018_19 + GENStable$HV_019_19 + GENStable$HV_020_18
+GENStable <- subset(GENStable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+
+#P41 Left
+GENStable$P41_LH <- GENStable$HV_021_22 + GENStable$HV_022_20 + GENStable$HV_023_20 + GENStable$HV_024_20 + GENStable$HV_025_20
+GENStable <- subset(GENStable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+#P41 Right
+GENStable$P41_RH <- GENStable$HV_026_20 + GENStable$HV_028_20 + GENStable$HV_029_20 + GENStable$HV_030_19
+GENStable <- subset(GENStable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+#P41 Scalp
+GENStable$P41_SC <- GENStable$HV_016_20 + GENStable$HV_017_20 + GENStable$HV_018_20 + GENStable$HV_019_20 + GENStable$HV_020_19
+GENStable <- subset(GENStable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+
+#P42 Left
+GENStable$P42_LH <- GENStable$HV_022_21 + GENStable$HV_023_21 + GENStable$HV_024_21 + GENStable$HV_025_21 
+GENStable <- subset(GENStable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+#P42 Right
+GENStable$P42_RH <- GENStable$HV_026_21 + GENStable$HV_028_21 + GENStable$HV_029_21 + GENStable$HV_030_20
+GENStable <- subset(GENStable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+#P42 Scalp
+GENStable$P42_SC <- GENStable$HV_016_21 + GENStable$HV_017_21 + GENStable$HV_018_21 + GENStable$HV_019_21 + GENStable$HV_020_20
+GENStable <- subset(GENStable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+
+#P43 Left
+GENStable$P43_LH <- GENStable$HV_022_22 + GENStable$HV_023_22 + GENStable$HV_024_22 + GENStable$HV_025_01 + GENStable$HV_025_22
+GENStable <- subset(GENStable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+#P43 Right
+GENStable$P43_RH <- GENStable$HV_026_22 + GENStable$HV_028_22 + GENStable$HV_029_22 + GENStable$HV_030_21
+GENStable <- subset(GENStable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+#P43 Scalp
+GENStable$P43_SC <- GENStable$HV_016_22 + GENStable$HV_017_22 + GENStable$HV_018_22 + GENStable$HV_019_22 + GENStable$HV_020_21
+GENStable <- subset(GENStable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+```
+#LH
+```{r}
+GEN_OTU_LH <- subset(GENStable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
+row.names(GEN_OTU_LH) <- GEN_OTU_LH$Species
+GEN_OTU_ALL_LH <- GEN_OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(GEN_OTU_ALL_LH) <- GEN_OTU_ALL_LH$Species
+GEN_OTU_ALL_LH <- subset (GEN_OTU_ALL_LH, select = -c(Species))
+GEN_OTU_ALL_LH$Mean <- rowMeans(GEN_OTU_ALL_LH)
+GEN_OTU_ALL_LH$Species <- row.names(GEN_OTU_ALL_LH)
+GENStable_LH <- GEN_OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(GENStable_LH) <- GENStable_LH$Species
+GENStable_LH <- subset (GENStable_LH, select = -c(Species))
+GENStable_LH$Mean_Stable <- rowMeans(GENStable_LH)
+GENStable_LH$Species <- row.names(GENStable_LH)
+GEN_OTU_LH_Compare<- subset (GENStable_LH, select = c(Mean_Stable,Species))
+GEN_OTU_LH_Compare<- merge(GEN_OTU_ALL_LH, GEN_OTU_LH_Compare, by= "Species")
+GEN_OTU_LH_Compare$Mean_temp <- GEN_OTU_LH_Compare$Mean - GEN_OTU_LH_Compare$Mean_Stable
+GEN_LH_Stable2 <- subset(GEN_OTU_LH_Compare, 0 < Mean_Stable)
+GEN_LH_Markers2 <- GEN_LH_Stable2$Species
+GEN_LH_Markers2
+```
+#RH
+```{r}
+GEN_OTU_RH <- subset(GENStable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
+row.names(GEN_OTU_RH) <- GEN_OTU_RH$Species
+GEN_OTU_ALL_RH <- GEN_OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(GEN_OTU_ALL_RH) <- GEN_OTU_ALL_RH$Species
+GEN_OTU_ALL_RH <- subset (GEN_OTU_ALL_RH, select = -c(Species))
+GEN_OTU_ALL_RH$Mean <- rowMeans(GEN_OTU_ALL_RH)
+GEN_OTU_ALL_RH$Species <- row.names(GEN_OTU_ALL_RH)
+GENStable_RH <- GEN_OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(GENStable_RH) <- GENStable_RH$Species
+GENStable_RH <- subset (GENStable_RH, select = -c(Species))
+GENStable_RH$Mean_Stable <- rowMeans(GENStable_RH)
+GENStable_RH$Species <- row.names(GENStable_RH)
+GEN_OTU_RH_Compare<- subset (GENStable_RH, select = c(Mean_Stable,Species))
+GEN_OTU_RH_Compare<- merge(GEN_OTU_ALL_RH, GEN_OTU_RH_Compare, by= "Species")
+GEN_OTU_RH_Compare$Mean_temp <- GEN_OTU_RH_Compare$Mean - GEN_OTU_RH_Compare$Mean_Stable
+GEN_RH_Stable2 <- subset(GEN_OTU_RH_Compare, 0 < Mean_Stable)
+GEN_RH_Markers2 <- GEN_RH_Stable2$Species
+GEN_RH_Markers2
+```
+#SC
+```{r}
+GEN_OTU_SC <- subset(GENStable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
+row.names(GEN_OTU_SC) <- GEN_OTU_SC$Species
+GEN_OTU_ALL_SC <- GEN_OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(GEN_OTU_ALL_SC) <- GEN_OTU_ALL_SC$Species
+GEN_OTU_ALL_SC <- subset (GEN_OTU_ALL_SC, select = -c(Species))
+GEN_OTU_ALL_SC$Mean <- rowMeans(GEN_OTU_ALL_SC)
+GEN_OTU_ALL_SC$Species <- row.names(GEN_OTU_ALL_SC)
+GENStable_SC <- GEN_OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(GENStable_SC) <- GENStable_SC$Species
+GENStable_SC <- subset (GENStable_SC, select = -c(Species))
+GENStable_SC$Mean_Stable <- rowMeans(GENStable_SC)
+GENStable_SC$Species <- row.names(GENStable_SC)
+GEN_OTU_SC_Compare<- subset (GENStable_SC, select = c(Mean_Stable,Species))
+GEN_OTU_SC_Compare<- merge(GEN_OTU_ALL_SC, GEN_OTU_SC_Compare, by= "Species")
+GEN_OTU_SC_Compare$Mean_temp <- GEN_OTU_SC_Compare$Mean - GEN_OTU_SC_Compare$Mean_Stable
+GEN_SC_Stable2 <- subset(GEN_OTU_SC_Compare, 0 < Mean_Stable)
+GEN_SC_Markers2 <- GEN_SC_Stable2$Species
+GEN_SC_Markers2
+```
+#Combined
+```{r}
+GEN_Hand_Markers_Shared2 <- GEN_LH_Markers2[GEN_LH_Markers2 %in% GEN_RH_Markers2]
+GEN_Hand_Markers_Shared2
+GEN_All_Markers_Shared2 <- GEN_Hand_Markers_Shared2[GEN_Hand_Markers_Shared2 %in% GEN_SC_Markers2]
+```
+
+## Determine Stable Baculoviridae Species Markers by Location for Set B
+
+```{r,message=FALSE,warning=FALSE,results="hide"}
+BAC_counts <- read.csv("baculo/counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- subset(BAC_tax, select = -c(Isolate))
+BAC_OTU <- merge(BAC_tax, BAC_counts, by.x="row.names", by.y="row.names")
+BAC_OTU_SUMS <- subset (BAC_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
+BAC_OTU_SUMS <- ddply(BAC_OTU_SUMS,"Species",numcolwise(sum))
+BAC_OTU_SUMS<- subset (BAC_OTU_SUMS, select = -c(HV_027_01,HV_027_02,HV_027_03,HV_027_04,HV_027_05,HV_027_06,HV_027_07,HV_015_20, HV_015_21, HV_020_10, HV_020_22, HV_021_13))
+BACStable <- BAC_OTU_SUMS
+```
+```{r}
+BACStable <- BACStable %>% mutate_if(is.numeric, ~1 * (. != 0))
+#P01 Left
+BACStable$P01_LH <- BACStable$HV_001_01 + BACStable$HV_002_01 + BACStable$HV_003_01 + BACStable$HV_004_01 + BACStable$HV_005_01
+BACStable <- subset(BACStable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+#P01 Right
+BACStable$P01_RH <- BACStable$HV_001_02 + BACStable$HV_002_02 + BACStable$HV_003_02 + BACStable$HV_004_02
+BACStable <- subset(BACStable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+#P01 Scalp
+BACStable$P01_SC <- BACStable$HV_001_03 + BACStable$HV_004_03 + BACStable$HV_003_03 + BACStable$HV_005_03 + BACStable$HV_002_03
+BACStable <- subset(BACStable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+
+#P02 Left
+BACStable$P02_LH <- BACStable$HV_001_04 + BACStable$HV_002_04 + BACStable$HV_003_04 + BACStable$HV_004_04 + BACStable$HV_005_04
+BACStable <- subset(BACStable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+#P02 Right
+BACStable$P02_RH <- BACStable$HV_001_05 + BACStable$HV_002_05 + BACStable$HV_003_05 + BACStable$HV_004_05 + BACStable$HV_005_05
+BACStable <- subset(BACStable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+#P02 Scalp
+BACStable$P02_SC <- BACStable$HV_001_06 + BACStable$HV_002_06 + BACStable$HV_003_06 + BACStable$HV_004_06 + BACStable$HV_005_06
+BACStable <- subset(BACStable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+
+#P03 Left
+BACStable$P03_LH <- BACStable$HV_001_07 + BACStable$HV_002_07 + BACStable$HV_003_07 + BACStable$HV_004_07 + BACStable$HV_005_07
+BACStable <- subset(BACStable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+#P03 Right
+BACStable$P03_RH <- BACStable$HV_001_08 + BACStable$HV_002_08 + BACStable$HV_003_08 + BACStable$HV_004_08 + BACStable$HV_005_08
+BACStable <- subset(BACStable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+#P03 Scalp
+BACStable$P03_SC <- BACStable$HV_001_09 + BACStable$HV_002_09 + BACStable$HV_003_09 + BACStable$HV_004_09 + BACStable$HV_005_09
+BACStable <- subset(BACStable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+
+#P04 Left
+BACStable$P04_LH <- BACStable$HV_001_10 + BACStable$HV_002_10 + BACStable$HV_003_10 + BACStable$HV_004_10 + BACStable$HV_005_10
+BACStable <- subset(BACStable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+#P04 Right
+BACStable$P04_RH <- BACStable$HV_001_11 + BACStable$HV_002_11 + BACStable$HV_003_11 + BACStable$HV_004_11 + BACStable$HV_005_11
+BACStable <- subset(BACStable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+#P04 Scalp
+BACStable$P04_SC <- BACStable$HV_001_12 + BACStable$HV_002_12 + BACStable$HV_003_12 + BACStable$HV_004_12 + BACStable$HV_005_12
+BACStable <- subset(BACStable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
+
+#P05 Left
+BACStable$P05_LH <- BACStable$HV_001_13 + BACStable$HV_002_13 + BACStable$HV_003_13 + BACStable$HV_004_13 + BACStable$HV_005_13
+BACStable <- subset(BACStable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+#P05 Right
+BACStable$P05_RH <- BACStable$HV_001_14 + BACStable$HV_002_14 + BACStable$HV_003_14 + BACStable$HV_004_14 + BACStable$HV_005_14
+BACStable <- subset(BACStable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+#P05 Scalp
+BACStable$P05_SC <- BACStable$HV_001_15 + BACStable$HV_002_15  + BACStable$HV_004_15+BACStable$HV_003_15 + BACStable$HV_005_15
+BACStable <- subset(BACStable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
+
+#P06 Left
+BACStable$P06_LH <- BACStable$HV_001_16 + BACStable$HV_003_16 + BACStable$HV_004_16 + BACStable$HV_005_16
+BACStable <- subset(BACStable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+#P06 Right
+BACStable$P06_RH <- BACStable$HV_001_18 + BACStable$HV_002_18 + BACStable$HV_003_18 + BACStable$HV_004_18 + BACStable$HV_005_18
+BACStable <- subset(BACStable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+#P06 Scalp
+BACStable$P06_SC <- BACStable$HV_001_19 + BACStable$HV_002_19 + BACStable$HV_003_19 + BACStable$HV_004_19 + BACStable$HV_005_19
+BACStable <- subset(BACStable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+
+#P07 Left
+BACStable$P07_LH <- BACStable$HV_001_20 + BACStable$HV_002_20 + BACStable$HV_003_20 + BACStable$HV_004_20 + BACStable$HV_005_20
+BACStable <- subset(BACStable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+#P07 Right
+BACStable$P07_RH <- BACStable$HV_001_21 + BACStable$HV_002_21 + BACStable$HV_003_21 + BACStable$HV_004_21 
+BACStable <- subset(BACStable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+#P07 Scalp
+BACStable$P07_SC <- BACStable$HV_001_22 + BACStable$HV_002_22 + BACStable$HV_003_22 + BACStable$HV_004_22 + BACStable$HV_005_22
+BACStable <- subset(BACStable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
+
+#P08 Left
+BACStable$P08_LH <- BACStable$HV_006_01 + BACStable$HV_007_01 + BACStable$HV_008_01 + BACStable$HV_009_01 + BACStable$HV_010_01
+BACStable <- subset(BACStable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+#P08 Right
+BACStable$P08_RH <- BACStable$HV_006_02 + BACStable$HV_007_02 + BACStable$HV_008_02 + BACStable$HV_010_02
+BACStable <- subset(BACStable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+#P08 Scalp
+BACStable$P08_SC <- BACStable$HV_006_03 + BACStable$HV_007_03 + BACStable$HV_008_03 + BACStable$HV_009_03 + BACStable$HV_010_03
+BACStable <- subset(BACStable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+
+#P09 Left
+BACStable$P09_LH <- BACStable$HV_006_04 + BACStable$HV_007_04 + BACStable$HV_008_04 + BACStable$HV_009_04 + BACStable$HV_010_04
+BACStable <- subset(BACStable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+#P09 Right
+BACStable$P09_RH <- BACStable$HV_006_05 + BACStable$HV_007_05 + BACStable$HV_008_05 + BACStable$HV_009_05 + BACStable$HV_010_05
+BACStable <- subset(BACStable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+#P09 Scalp
+BACStable$P09_SC <- BACStable$HV_006_06 + BACStable$HV_007_06 + BACStable$HV_008_06 + BACStable$HV_009_06 + BACStable$HV_010_06
+BACStable <- subset(BACStable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+
+#P10 Left
+BACStable$P10_LH <- BACStable$HV_006_07 + BACStable$HV_007_07 + BACStable$HV_008_07 + BACStable$HV_009_07 + BACStable$HV_010_07
+BACStable <- subset(BACStable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+#P10 Right
+BACStable$P10_RH <- BACStable$HV_006_08 + BACStable$HV_007_08 + BACStable$HV_008_08 + BACStable$HV_009_08 + BACStable$HV_010_08
+BACStable <- subset(BACStable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+#P10 Scalp
+BACStable$P10_SC <- BACStable$HV_006_09 + BACStable$HV_007_09 + BACStable$HV_008_09 + BACStable$HV_009_09 + BACStable$HV_010_09
+BACStable <- subset(BACStable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+
+#P11 Left
+BACStable$P11_LH <- BACStable$HV_006_10 + BACStable$HV_007_10 + BACStable$HV_008_10 + BACStable$HV_009_10 + BACStable$HV_010_10
+BACStable <- subset(BACStable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+#P11 Right
+BACStable$P11_RH <- BACStable$HV_006_11 + BACStable$HV_007_11 + BACStable$HV_008_11 + BACStable$HV_009_11 + BACStable$HV_010_11
+BACStable <- subset(BACStable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+#P11 Scalp
+BACStable$P11_SC <- BACStable$HV_006_12 + BACStable$HV_007_12 + BACStable$HV_008_12 + BACStable$HV_009_12 + BACStable$HV_010_12
+BACStable <- subset(BACStable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+
+#P12 Left
+BACStable$P12_LH <- BACStable$HV_006_13 + BACStable$HV_007_13 + BACStable$HV_008_13 + BACStable$HV_009_13 + BACStable$HV_010_13
+BACStable <- subset(BACStable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+#P12 Right
+BACStable$P12_RH <- BACStable$HV_006_14 + BACStable$HV_007_14 + BACStable$HV_008_14 + BACStable$HV_009_14 + BACStable$HV_010_14
+BACStable <- subset(BACStable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+#P12 Scalp
+BACStable$P12_SC <- BACStable$HV_006_15 + BACStable$HV_007_15 + BACStable$HV_008_15 + BACStable$HV_009_15 + BACStable$HV_010_15
+BACStable <- subset(BACStable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+
+#P13 Left
+BACStable$P13_LH <- BACStable$HV_006_16 + BACStable$HV_007_16 + BACStable$HV_008_16 + BACStable$HV_009_16 + BACStable$HV_010_16
+BACStable <- subset(BACStable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+#P13 Right
+BACStable$P13_RH <- BACStable$HV_006_18 + BACStable$HV_007_18 + BACStable$HV_008_18 + BACStable$HV_009_18 + BACStable$HV_010_18
+BACStable <- subset(BACStable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+#P13 Scalp
+BACStable$P13_SC <- BACStable$HV_006_19 + BACStable$HV_007_19 + BACStable$HV_008_19 + BACStable$HV_009_19 + BACStable$HV_010_19
+BACStable <- subset(BACStable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+
+#P14 Left
+BACStable$P14_LH <- BACStable$HV_006_20 + BACStable$HV_007_20 + BACStable$HV_008_20 + BACStable$HV_009_20 + BACStable$HV_010_20
+BACStable <- subset(BACStable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+#P14 Right
+BACStable$P14_RH <- BACStable$HV_006_21 + BACStable$HV_007_21 + BACStable$HV_008_21 + BACStable$HV_009_21 + BACStable$HV_010_21
+BACStable <- subset(BACStable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+#P14 Scalp
+BACStable$P14_SC <- BACStable$HV_006_22 + BACStable$HV_007_22 + BACStable$HV_008_22 + BACStable$HV_009_22 + BACStable$HV_010_22
+BACStable <- subset(BACStable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+
+#P15 Left
+BACStable$P15_LH <- BACStable$HV_011_01 + BACStable$HV_012_01 + BACStable$HV_013_01 + BACStable$HV_014_01 + BACStable$HV_015_01
+BACStable <- subset(BACStable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+#P15 Right
+BACStable$P15_RH <- BACStable$HV_011_02 + BACStable$HV_012_02 + BACStable$HV_013_02 + BACStable$HV_014_02 + BACStable$HV_015_02
+BACStable <- subset(BACStable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+#P15 Scalp
+BACStable$P15_SC <- BACStable$HV_011_03 + BACStable$HV_012_03 + BACStable$HV_013_03 + BACStable$HV_014_03 + BACStable$HV_015_03
+BACStable <- subset(BACStable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+
+#P16 Left
+BACStable$P16_LH <- BACStable$HV_011_04 + BACStable$HV_012_04 + BACStable$HV_013_04 + BACStable$HV_014_04 + BACStable$HV_015_04
+BACStable <- subset(BACStable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+#P16 Right
+BACStable$P16_RH <- BACStable$HV_011_05 + BACStable$HV_012_05 + BACStable$HV_013_05 + BACStable$HV_014_05 + BACStable$HV_015_05
+BACStable <- subset(BACStable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+#P16 Scalp
+BACStable$P16_SC <- BACStable$HV_011_06 + BACStable$HV_012_06 ++ BACStable$HV_014_06 + BACStable$HV_015_06
+BACStable <- subset(BACStable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+
+#P17 Left
+BACStable$P17_LH <- BACStable$HV_011_07 + BACStable$HV_012_07 + BACStable$HV_013_07 + BACStable$HV_014_07 + BACStable$HV_015_07
+BACStable <- subset(BACStable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+#P17 Right
+BACStable$P17_RH <- BACStable$HV_011_08 + BACStable$HV_012_08 + BACStable$HV_013_08 + BACStable$HV_014_08 + BACStable$HV_015_08
+BACStable <- subset(BACStable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+#P17 Scalp
+BACStable$P17_SC <- BACStable$HV_011_09 + BACStable$HV_012_09 + BACStable$HV_013_09 + BACStable$HV_014_09 + BACStable$HV_015_09
+BACStable <- subset(BACStable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+
+#P18 Left
+BACStable$P18_LH <- BACStable$HV_011_10 + BACStable$HV_012_10 + BACStable$HV_013_10 + BACStable$HV_014_10 + BACStable$HV_015_10
+BACStable <- subset(BACStable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+#P18 Right
+BACStable$P18_RH <- BACStable$HV_011_11 + BACStable$HV_012_11 + BACStable$HV_013_11 + BACStable$HV_014_11 + BACStable$HV_015_11
+BACStable <- subset(BACStable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+#P18 Scalp
+BACStable$P18_SC <- BACStable$HV_011_12 + BACStable$HV_012_12 + BACStable$HV_013_12 + BACStable$HV_014_12 + BACStable$HV_015_12
+BACStable <- subset(BACStable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+
+#P19 Left
+BACStable$P19_LH <- BACStable$HV_011_13 + BACStable$HV_012_13 + BACStable$HV_013_13 + BACStable$HV_014_13 + BACStable$HV_015_13
+BACStable <- subset(BACStable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+#P19 Right
+BACStable$P19_RH <- BACStable$HV_011_14 + BACStable$HV_012_14 + BACStable$HV_013_14 + BACStable$HV_014_14 + BACStable$HV_015_14
+BACStable <- subset(BACStable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+#P19 Scalp
+BACStable$P19_SC <- BACStable$HV_011_15 + BACStable$HV_012_15 + BACStable$HV_013_15 + BACStable$HV_014_15 + BACStable$HV_015_15
+BACStable <- subset(BACStable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+
+#P20 Left
+BACStable$P20_LH <- BACStable$HV_011_16 + BACStable$HV_012_16 + BACStable$HV_013_16 + BACStable$HV_014_16 + BACStable$HV_015_16
+BACStable <- subset(BACStable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+#P20 Right
+BACStable$P20_RH <- BACStable$HV_011_18 + BACStable$HV_012_18 + BACStable$HV_013_18 + BACStable$HV_014_18 + BACStable$HV_015_18
+BACStable <- subset(BACStable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+#P20 Scalp
+BACStable$P20_SC <- BACStable$HV_011_19 + BACStable$HV_012_19 + BACStable$HV_013_19 + BACStable$HV_014_19 + BACStable$HV_015_19
+BACStable <- subset(BACStable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+
+#P21 Left
+BACStable$P21_LH <- BACStable$HV_011_20 + BACStable$HV_012_20 + BACStable$HV_013_20 + BACStable$HV_014_20
+BACStable <- subset(BACStable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+#P21 Right
+BACStable$P21_RH <- BACStable$HV_011_21 + BACStable$HV_012_21 + BACStable$HV_013_21 + BACStable$HV_014_21
+BACStable <- subset(BACStable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+#P21 Scalp
+BACStable$P21_SC <- BACStable$HV_011_22 + BACStable$HV_012_22 + BACStable$HV_013_22 + BACStable$HV_014_22
+BACStable <- subset(BACStable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+
+#P22 Left
+BACStable$P22_LH <- BACStable$HV_021_02 + BACStable$HV_022_01 + BACStable$HV_023_01 + BACStable$HV_024_01 + BACStable$HV_025_02
+BACStable <- subset(BACStable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+#P22 Right
+BACStable$P22_RH <- BACStable$HV_026_01 + BACStable$HV_027_08 + BACStable$HV_028_01 + BACStable$HV_029_01 + BACStable$HV_030_01
+BACStable <- subset(BACStable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+#P22 Scalp
+BACStable$P22_SC <- BACStable$HV_016_01 + BACStable$HV_017_01 + BACStable$HV_018_01 + BACStable$HV_019_01 + BACStable$HV_020_01
+BACStable <- subset(BACStable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+
+#P23 Left
+BACStable$P23_LH <- BACStable$HV_021_03 + BACStable$HV_022_02 + BACStable$HV_023_02 + BACStable$HV_024_02 + BACStable$HV_025_03
+BACStable <- subset(BACStable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+#P23 Right
+BACStable$P23_RH <- BACStable$HV_026_02 + BACStable$HV_027_09 + BACStable$HV_028_02 + BACStable$HV_029_02 + BACStable$HV_030_02
+BACStable <- subset(BACStable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+#P23 Scalp
+BACStable$P23_SC <- BACStable$HV_016_02 + BACStable$HV_017_02 + BACStable$HV_018_02 + BACStable$HV_019_02 + BACStable$HV_020_02
+BACStable <- subset(BACStable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+
+#P24 Left
+BACStable$P24_LH <- BACStable$HV_021_04 + BACStable$HV_022_03 + BACStable$HV_023_03 + BACStable$HV_024_03 + BACStable$HV_025_04
+BACStable <- subset(BACStable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+#P24 Right
+BACStable$P24_RH <- BACStable$HV_026_03 + BACStable$HV_027_10 + BACStable$HV_028_03 + BACStable$HV_029_03 + BACStable$HV_030_03
+BACStable <- subset(BACStable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+#P24 Scalp
+BACStable$P24_SC <- BACStable$HV_016_03 + BACStable$HV_017_03 + BACStable$HV_018_03 + BACStable$HV_019_03 + BACStable$HV_021_01
+BACStable <- subset(BACStable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+
+#P25 Left
+BACStable$P25_LH <- BACStable$HV_021_05 + BACStable$HV_022_04 + BACStable$HV_023_04 + BACStable$HV_024_04 + BACStable$HV_025_05
+BACStable <- subset(BACStable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+#P25 Right
+BACStable$P25_RH <- BACStable$HV_026_04 + BACStable$HV_027_11 + BACStable$HV_028_04 + BACStable$HV_029_04 + BACStable$HV_030_04
+BACStable <- subset(BACStable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+#P25 Scalp
+BACStable$P25_SC <- BACStable$HV_016_04 + BACStable$HV_017_04 + BACStable$HV_018_04 + BACStable$HV_019_04 + BACStable$HV_020_03
+BACStable <- subset(BACStable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+
+#P26 Left
+BACStable$P26_LH <- BACStable$HV_021_06 + BACStable$HV_022_05 + BACStable$HV_023_05 + BACStable$HV_024_05 + BACStable$HV_025_06
+BACStable <- subset(BACStable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+#P26 Right
+BACStable$P26_RH <- BACStable$HV_026_05 + BACStable$HV_027_12 + BACStable$HV_028_05 + BACStable$HV_029_05 + BACStable$HV_030_05
+BACStable <- subset(BACStable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+#P26 Scalp
+BACStable$P26_SC <- BACStable$HV_016_05 + BACStable$HV_017_05 + BACStable$HV_018_05 + BACStable$HV_019_05 + BACStable$HV_020_04
+BACStable <- subset(BACStable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+
+#P27 Left
+BACStable$P27_LH <- BACStable$HV_021_07 + BACStable$HV_022_06 + BACStable$HV_023_06 + BACStable$HV_024_06 + BACStable$HV_025_07
+BACStable <- subset(BACStable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+#P27 Right
+BACStable$P27_RH <- BACStable$HV_026_06 + BACStable$HV_027_13 + BACStable$HV_028_06 + BACStable$HV_029_06 + BACStable$HV_030_06
+BACStable <- subset(BACStable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+#P27 Scalp
+BACStable$P27_SC <- BACStable$HV_016_06 + BACStable$HV_017_06 + BACStable$HV_018_06 + BACStable$HV_019_06 + BACStable$HV_020_05
+BACStable <- subset(BACStable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+
+#P28 Left
+BACStable$P28_LH <- BACStable$HV_021_08 + BACStable$HV_022_07 + BACStable$HV_023_07 + BACStable$HV_024_07 + BACStable$HV_025_08
+BACStable <- subset(BACStable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+#P28 Right
+BACStable$P28_RH <- BACStable$HV_026_07 + BACStable$HV_027_14 + BACStable$HV_028_07 + BACStable$HV_029_07 + BACStable$HV_030_07
+BACStable <- subset(BACStable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+#P28 Scalp
+BACStable$P28_SC <- BACStable$HV_016_07 + BACStable$HV_017_07 + BACStable$HV_018_07 + BACStable$HV_019_07 + BACStable$HV_020_06
+BACStable <- subset(BACStable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+
+#P29 Left
+BACStable$P29_LH <- BACStable$HV_021_09 + BACStable$HV_022_08 + BACStable$HV_023_08 + BACStable$HV_024_08 + BACStable$HV_025_09
+BACStable <- subset(BACStable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+#P29 Right
+BACStable$P29_RH <- BACStable$HV_026_08 + BACStable$HV_027_15 + BACStable$HV_028_08 + BACStable$HV_029_08 + BACStable$HV_030_08
+BACStable <- subset(BACStable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+#P29 Scalp
+BACStable$P29_SC <- BACStable$HV_016_08 + BACStable$HV_017_08 + BACStable$HV_018_08 + BACStable$HV_019_08 + BACStable$HV_020_07
+BACStable <- subset(BACStable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+
+#P30 Left
+BACStable$P30_LH <- BACStable$HV_021_10 + BACStable$HV_022_09 + BACStable$HV_023_09 + BACStable$HV_024_09 + BACStable$HV_025_10
+BACStable <- subset(BACStable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+#P30 Right
+BACStable$P30_RH <- BACStable$HV_026_09 + BACStable$HV_027_16 + BACStable$HV_028_09 + BACStable$HV_029_09 + BACStable$HV_030_09
+BACStable <- subset(BACStable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+#P30 Scalp
+BACStable$P30_SC <- BACStable$HV_016_09 + BACStable$HV_017_09 + BACStable$HV_018_09 + BACStable$HV_019_09 + BACStable$HV_020_08
+BACStable <- subset(BACStable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+
+#P31 Left
+BACStable$P31_LH <- BACStable$HV_021_11 + BACStable$HV_022_10 + BACStable$HV_023_10 + BACStable$HV_024_10
+BACStable <- subset(BACStable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+#P31 Right
+BACStable$P31_RH <- BACStable$HV_026_10 + BACStable$HV_027_18 + BACStable$HV_028_10 + BACStable$HV_029_10
+BACStable <- subset(BACStable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+#P31 Scalp
+BACStable$P31_SC <- BACStable$HV_016_10 + BACStable$HV_017_10 + BACStable$HV_018_10 + BACStable$HV_019_10
+BACStable <- subset(BACStable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+
+#P32 Left
+BACStable$P32_LH <- BACStable$HV_021_12 + BACStable$HV_022_11 + BACStable$HV_023_11 + BACStable$HV_024_11 + BACStable$HV_025_11
+BACStable <- subset(BACStable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+#P32 Right
+BACStable$P32_RH <- BACStable$HV_026_11 + BACStable$HV_027_19 + BACStable$HV_028_11 + BACStable$HV_029_11 + BACStable$HV_030_10
+BACStable <- subset(BACStable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+#P32 Scalp
+BACStable$P32_SC <- BACStable$HV_016_11 + BACStable$HV_017_11 + BACStable$HV_018_11 + BACStable$HV_019_11 + BACStable$HV_020_09
+BACStable <- subset(BACStable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+
+#P34 Left
+BACStable$P34_LH <- BACStable$HV_021_14 + BACStable$HV_022_12 + BACStable$HV_023_12 + BACStable$HV_024_12 + BACStable$HV_025_12
+BACStable <- subset(BACStable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+#P34 Right
+BACStable$P34_RH <- BACStable$HV_026_12 + BACStable$HV_027_20 + BACStable$HV_028_12 + BACStable$HV_029_12 + BACStable$HV_030_11
+BACStable <- subset(BACStable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+#P34 Scalp
+BACStable$P34_SC <- BACStable$HV_016_12 + BACStable$HV_017_12 + BACStable$HV_018_12 + BACStable$HV_019_12 + BACStable$HV_020_11
+BACStable <- subset(BACStable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+
+#P35 Left
+BACStable$P35_LH <- BACStable$HV_021_15 + BACStable$HV_022_13 + BACStable$HV_023_13 + BACStable$HV_024_13 + BACStable$HV_025_13
+BACStable <- subset(BACStable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+#P35 Right
+BACStable$P35_RH <- BACStable$HV_026_13 + BACStable$HV_027_21 + BACStable$HV_028_13 + BACStable$HV_029_13 + BACStable$HV_030_12
+BACStable <- subset(BACStable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+#P35 Scalp
+BACStable$P35_SC <- BACStable$HV_016_13 + BACStable$HV_017_13 + BACStable$HV_018_13 + BACStable$HV_019_13 + BACStable$HV_020_12
+BACStable <- subset(BACStable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+
+#P36 Left
+BACStable$P36_LH <- BACStable$HV_021_16 + BACStable$HV_022_14 + BACStable$HV_023_14 + BACStable$HV_024_14 + BACStable$HV_025_14
+BACStable <- subset(BACStable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+#P36 Right
+BACStable$P36_RH <- BACStable$HV_026_14 + BACStable$HV_027_22 + BACStable$HV_028_14 + BACStable$HV_029_14 + BACStable$HV_030_13
+BACStable <- subset(BACStable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+#P36 Scalp
+BACStable$P36_SC <- BACStable$HV_016_14 + BACStable$HV_017_14 + BACStable$HV_018_14 + BACStable$HV_019_14 + BACStable$HV_020_13
+BACStable <- subset(BACStable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+
+#P37 Left
+BACStable$P37_LH <- BACStable$HV_021_18 + BACStable$HV_022_15 + BACStable$HV_023_15 + BACStable$HV_024_15 + BACStable$HV_025_15
+BACStable <- subset(BACStable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+#P37 Right
+BACStable$P37_RH <- BACStable$HV_026_15 + BACStable$HV_028_15 + BACStable$HV_029_15 + BACStable$HV_030_14 + BACStable$HV_030_22
+BACStable <- subset(BACStable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+#P37 Scalp
+BACStable$P37_SC <- BACStable$HV_016_15 + BACStable$HV_017_15 + BACStable$HV_018_15 + BACStable$HV_019_15 + BACStable$HV_020_14
+BACStable <- subset(BACStable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+
+#P38 Left
+BACStable$P38_LH <- BACStable$HV_021_19 + BACStable$HV_022_16 + BACStable$HV_023_16 + BACStable$HV_024_16 + BACStable$HV_025_16
+BACStable <- subset(BACStable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+#P38 Right
+BACStable$P38_RH <- BACStable$HV_026_16 + BACStable$HV_028_16 + BACStable$HV_029_16 + BACStable$HV_030_15 
+BACStable <- subset(BACStable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+#P38 Scalp
+BACStable$P38_SC <- BACStable$HV_016_16 + BACStable$HV_017_16 + BACStable$HV_018_16 + BACStable$HV_019_16 + BACStable$HV_020_15
+BACStable <- subset(BACStable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+
+#P39 Left
+BACStable$P39_LH <- BACStable$HV_021_20 + BACStable$HV_022_18 + BACStable$HV_023_18 + BACStable$HV_024_18 + BACStable$HV_025_18
+BACStable <- subset(BACStable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+#P39 Right
+BACStable$P39_RH <- BACStable$HV_026_18 + BACStable$HV_028_18 + BACStable$HV_029_18 + BACStable$HV_030_16
+BACStable <- subset(BACStable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+#P39 Scalp
+BACStable$P39_SC <- BACStable$HV_016_18 + BACStable$HV_017_18 + BACStable$HV_018_18 + BACStable$HV_019_18 + BACStable$HV_020_16
+BACStable <- subset(BACStable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+
+#P40 Left
+BACStable$P40_LH <- BACStable$HV_021_21 + BACStable$HV_022_19 + BACStable$HV_023_19 + BACStable$HV_024_19 + BACStable$HV_025_19
+BACStable <- subset(BACStable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+#P40 Right
+BACStable$P40_RH <- BACStable$HV_026_19 + BACStable$HV_028_19 + BACStable$HV_029_19 + BACStable$HV_030_18
+BACStable <- subset(BACStable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+#P40 Scalp
+BACStable$P40_SC <- BACStable$HV_016_19 + BACStable$HV_017_19 + BACStable$HV_018_19 + BACStable$HV_019_19 + BACStable$HV_020_18
+BACStable <- subset(BACStable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+
+#P41 Left
+BACStable$P41_LH <- BACStable$HV_021_22 + BACStable$HV_022_20 + BACStable$HV_023_20 + BACStable$HV_024_20 + BACStable$HV_025_20
+BACStable <- subset(BACStable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+#P41 Right
+BACStable$P41_RH <- BACStable$HV_026_20 + BACStable$HV_028_20 + BACStable$HV_029_20 + BACStable$HV_030_19
+BACStable <- subset(BACStable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+#P41 Scalp
+BACStable$P41_SC <- BACStable$HV_016_20 + BACStable$HV_017_20 + BACStable$HV_018_20 + BACStable$HV_019_20 + BACStable$HV_020_19
+BACStable <- subset(BACStable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+
+#P42 Left
+BACStable$P42_LH <- BACStable$HV_022_21 + BACStable$HV_023_21 + BACStable$HV_024_21 + BACStable$HV_025_21 
+BACStable <- subset(BACStable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+#P42 Right
+BACStable$P42_RH <- BACStable$HV_026_21 + BACStable$HV_028_21 + BACStable$HV_029_21 + BACStable$HV_030_20
+BACStable <- subset(BACStable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+#P42 Scalp
+BACStable$P42_SC <- BACStable$HV_016_21 + BACStable$HV_017_21 + BACStable$HV_018_21 + BACStable$HV_019_21 + BACStable$HV_020_20
+BACStable <- subset(BACStable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+
+#P43 Left
+BACStable$P43_LH <- BACStable$HV_022_22 + BACStable$HV_023_22 + BACStable$HV_024_22 + BACStable$HV_025_01 + BACStable$HV_025_22
+BACStable <- subset(BACStable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+#P43 Right
+BACStable$P43_RH <- BACStable$HV_026_22 + BACStable$HV_028_22 + BACStable$HV_029_22 + BACStable$HV_030_21
+BACStable <- subset(BACStable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+#P43 Scalp
+BACStable$P43_SC <- BACStable$HV_016_22 + BACStable$HV_017_22 + BACStable$HV_018_22 + BACStable$HV_019_22 + BACStable$HV_020_21
+BACStable <- subset(BACStable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+```
+#LH
+```{r}
+BAC_OTU_LH <- subset(BACStable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
+row.names(BAC_OTU_LH) <- BAC_OTU_LH$Species
+BAC_OTU_ALL_LH <- BAC_OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(BAC_OTU_ALL_LH) <- BAC_OTU_ALL_LH$Species
+BAC_OTU_ALL_LH <- subset (BAC_OTU_ALL_LH, select = -c(Species))
+BAC_OTU_ALL_LH$Mean <- rowMeans(BAC_OTU_ALL_LH)
+BAC_OTU_ALL_LH$Species <- row.names(BAC_OTU_ALL_LH)
+BACStable_LH <- BAC_OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(BACStable_LH) <- BACStable_LH$Species
+BACStable_LH <- subset (BACStable_LH, select = -c(Species))
+BACStable_LH$Mean_Stable <- rowMeans(BACStable_LH)
+BACStable_LH$Species <- row.names(BACStable_LH)
+BAC_OTU_LH_Compare<- subset (BACStable_LH, select = c(Mean_Stable,Species))
+BAC_OTU_LH_Compare<- merge(BAC_OTU_ALL_LH, BAC_OTU_LH_Compare, by= "Species")
+BAC_OTU_LH_Compare$Mean_temp <- BAC_OTU_LH_Compare$Mean - BAC_OTU_LH_Compare$Mean_Stable
+BAC_LH_Stable2 <- subset(BAC_OTU_LH_Compare, 0 < Mean_Stable)
+BAC_LH_Markers2 <- BAC_LH_Stable2$Species
+BAC_LH_Markers2
+```
+#RH
+```{r}
+BAC_OTU_RH <- subset(BACStable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
+row.names(BAC_OTU_RH) <- BAC_OTU_RH$Species
+BAC_OTU_ALL_RH <- BAC_OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(BAC_OTU_ALL_RH) <- BAC_OTU_ALL_RH$Species
+BAC_OTU_ALL_RH <- subset (BAC_OTU_ALL_RH, select = -c(Species))
+BAC_OTU_ALL_RH$Mean <- rowMeans(BAC_OTU_ALL_RH)
+BAC_OTU_ALL_RH$Species <- row.names(BAC_OTU_ALL_RH)
+BACStable_RH <- BAC_OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(BACStable_RH) <- BACStable_RH$Species
+BACStable_RH <- subset (BACStable_RH, select = -c(Species))
+BACStable_RH$Mean_Stable <- rowMeans(BACStable_RH)
+BACStable_RH$Species <- row.names(BACStable_RH)
+BAC_OTU_RH_Compare<- subset (BACStable_RH, select = c(Mean_Stable,Species))
+BAC_OTU_RH_Compare<- merge(BAC_OTU_ALL_RH, BAC_OTU_RH_Compare, by= "Species")
+BAC_OTU_RH_Compare$Mean_temp <- BAC_OTU_RH_Compare$Mean - BAC_OTU_RH_Compare$Mean_Stable
+BAC_RH_Stable2 <- subset(BAC_OTU_RH_Compare, 0 < Mean_Stable)
+BAC_RH_Markers2 <- BAC_RH_Stable2$Species
+BAC_RH_Markers2
+```
+#SC
+```{r}
+BAC_OTU_SC <- subset(BACStable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
+row.names(BAC_OTU_SC) <- BAC_OTU_SC$Species
+BAC_OTU_ALL_SC <- BAC_OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(BAC_OTU_ALL_SC) <- BAC_OTU_ALL_SC$Species
+BAC_OTU_ALL_SC <- subset (BAC_OTU_ALL_SC, select = -c(Species))
+BAC_OTU_ALL_SC$Mean <- rowMeans(BAC_OTU_ALL_SC)
+BAC_OTU_ALL_SC$Species <- row.names(BAC_OTU_ALL_SC)
+BACStable_SC <- BAC_OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(BACStable_SC) <- BACStable_SC$Species
+BACStable_SC <- subset (BACStable_SC, select = -c(Species))
+BACStable_SC$Mean_Stable <- rowMeans(BACStable_SC)
+BACStable_SC$Species <- row.names(BACStable_SC)
+BAC_OTU_SC_Compare<- subset (BACStable_SC, select = c(Mean_Stable,Species))
+BAC_OTU_SC_Compare<- merge(BAC_OTU_ALL_SC, BAC_OTU_SC_Compare, by= "Species")
+BAC_OTU_SC_Compare$Mean_temp <- BAC_OTU_SC_Compare$Mean - BAC_OTU_SC_Compare$Mean_Stable
+BAC_SC_Stable2 <- subset(BAC_OTU_SC_Compare, 0 < Mean_Stable)
+BAC_SC_Markers2 <- BAC_SC_Stable2$Species
+BAC_SC_Markers2
+```
+#Combined
+```{r}
+BAC_Hand_Markers_Shared2 <- BAC_LH_Markers2[BAC_LH_Markers2 %in% BAC_RH_Markers2]
+BAC_Hand_Markers_Shared2
+BAC_All_Markers_Shared2 <- BAC_Hand_Markers_Shared2[BAC_Hand_Markers_Shared2 %in% BAC_SC_Markers2]
+```
