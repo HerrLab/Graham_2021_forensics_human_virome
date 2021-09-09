@@ -18,6 +18,7 @@ library(readr)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
+library(grid)
 ```
 Set A Markers
 ```{r}
@@ -63,6 +64,7 @@ Contig_markers_Hands<-c("k127_12278877","k127_1246730","k127_12954","k127_131864
 Contig_markers_All<-c("k127_12278877","k127_1246730","k127_12842510","k127_12954","k127_13186497","k127_13257999","k127_14008563","k127_14874687","k127_3126920","k127_3443640","k127_4343132","k127_5189512","k127_5608134","k127_5988390","k127_6026611","k127_639643","k127_6473642","k127_699139","k127_8568361","k127_9807842","k127_9848036")
 ```
 
+Subset stable markers from each prevalence by location within subject table
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 HM_GENStable <- GENStable
 HM_GENStable$Species->row.names(HM_GENStable)
@@ -94,3 +96,16 @@ HM_CAUDOStable$Species->row.names(HM_CAUDOStable)
 HM_CAUDOStable<- subset (HM_CAUDOStable, select = -c(Species))
 HM_CAUDOStable_ALL <- subset(HM_CAUDOStable, rownames(HM_CAUDOStable) %in% Caudo_markers_All)
 ```
+## Generate profile heatmap
+
+The heatmap will be saved as a pdf titled "Heatmap.pdf" in the working directory and can be viewed there
+```{r,message=FALSE,warning=FALSE,results="hide"}
+profile <- rbind(HM_GENStable_ALL,HM_OVERALL_Stable_ALL,HM_BACStable_ALL,HM_Contig_Stable_ALL,HM_PAPStable_ALL,HM_CAUDOStable_ALL)
+profile2<-as.matrix(profile)
+pheatmaps.obj<-pheatmap(profile2, cluster_cols = FALSE,cellheight = 11,cellwidth = 11,fontsize = 12,gaps_col = c(3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90,93,96,99,102,105,108,111,114,117,120,123) ,filename = "Heatmap.pdf")
+```
+Then in Adobe Illustrator:
+- Column cluster titles by subject were added
+- Titles were added to the legend
+- The legend was centered 
+- The bottom titles for each column were editied (ie P01_LH was changed to Left) 
