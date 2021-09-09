@@ -493,8 +493,7 @@ Scalp Stable Species Markers
 SC_Markers
 ```
 
-## Stable Hand Viral Species
-
+## Set A Stable Hand Viral Species
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 Hand_Markers_Shared <- LH_Markers[LH_Markers %in% RH_Markers]
 ```
@@ -503,8 +502,7 @@ Hand Stable Species Markers
 Hand_Markers_Shared
 ```
 
-## Stable Across All Locations Viral Species
-
+## Set A Stable Across All Locations Viral Species
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 Overall_Markers_Shared <- Hand_Markers_Shared[Hand_Markers_Shared  %in% SC_Markers]
 ```
