@@ -26,6 +26,7 @@ library(ggplot2)
 OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
+OTU_SUMS<- subset (OTU_SUMS, select = -c(Row.names,length))
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
 OTU_SUMS<-ddply(OTU_SUMS,"Species",numcolwise(sum))
 OTU_SUMS<- subset (OTU_SUMS, select = -c(HV_001_27,HV_004_27,HV_005_27,HV_006_27,HV_007_27,HV_008_27,HV_009_27,HV_010_27,HV_011_27,HV_012_27,HV_013_27,HV_014_27,HV_015_20,HV_015_27,HV_016_27,HV_017_27,HV_018_27,HV_019_27,HV_020_10,HV_020_22,HV_020_27,HV_021_13,HV_021_27,HV_022_27,HV_023_27,HV_024_27,HV_025_27,HV_026_27,HV_027_01,HV_027_02,HV_027_05,HV_027_06,HV_027_07,HV_027_27,HV_028_27,HV_029_27,HV_030_27,HV_015_21,HV_027_03,HV_027_04))
@@ -434,7 +435,7 @@ OTU_LH_Compare <- subset (OTU_Stable_LH, select = c(Mean_Stable,Species))
 OTU_LH_Compare<- merge(OTU_ALL_LH, OTU_LH_Compare, by= "Species")
 OTU_LH_Compare$Mean_temp <- OTU_LH_Compare$Mean - OTU_LH_Compare$Mean_Stable
 LH_Stable <- subset(OTU_LH_Compare, 0 < Mean_Stable)
-LH_Markers <- LH_Stable2$Species
+LH_Markers <- LH_Stable$Species
 ```
 Left Hand Stable Species Markers
 ```{r}
@@ -460,7 +461,7 @@ OTU_RH_Compare <- subset (OTU_Stable_RH, select = c(Mean_Stable,Species))
 OTU_RH_Compare<- merge(OTU_ALL_RH, OTU_RH_Compare, by= "Species")
 OTU_RH_Compare$Mean_temp <- OTU_RH_Compare$Mean - OTU_RH_Compare$Mean_Stable
 RH_Stable <- subset(OTU_RH_Compare, 0 < Mean_Stable)
-RH_Markers <- RH_Stable2$Species
+RH_Markers <- RH_Stable$Species
 ```
 Right Hand Stable Species Markers
 ```{r}
@@ -486,7 +487,7 @@ OTU_SC_Compare <- subset (OTU_Stable_SC, select = c(Mean_Stable,Species))
 OTU_SC_Compare<- merge(OTU_ALL_SC, OTU_SC_Compare, by= "Species")
 OTU_SC_Compare$Mean_temp <- OTU_SC_Compare$Mean - OTU_SC_Compare$Mean_Stable
 SC_Stable <- subset(OTU_SC_Compare, 0 < Mean_Stable)
-SC_Markers <- SC_Stable2$Species
+SC_Markers <- SC_Stable$Species
 ```
 Scalp Stable Species Markers
 ```{r}
