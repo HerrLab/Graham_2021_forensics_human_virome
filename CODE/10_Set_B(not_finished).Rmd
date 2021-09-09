@@ -28,6 +28,7 @@ Merge the reference Caudovirales taxonomy file and the count abundance table of 
 CAUDO_counts <- read.csv("counts2_CAUDO.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 CAUDO_tax <- read.csv("CAUDO_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 CAUDO_OTU <- merge(CAUDO_tax, CAUDO_counts, by.x="row.names", by.y="row.names")
+CAUDO_OTU<- subset (CAUDO_OTU, select = -c(Row.names))
 ```
 Subset by species and sum across species for each sample to get the total abundance of each Caudovirales species per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
@@ -563,11 +564,12 @@ CAUDO_All_Markers_Shared2
 
 Merge the reference Papillomaviridae taxonomy file and the count abundance table of reads mapped to the reference Papillomaviridae genomes
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-PAP_counts <- read.csv("papilloma/PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_counts <- read.csv("PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 PAP_counts <- subset(PAP_counts, select = -c(length))
 PAP_tax <- read.csv("papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
 PAP_OTU <- merge(PAP_tax, PAP_counts, by.x="row.names", by.y="row.names")
+PAP_OTU<- subset (PAP_OTU, select = -c(Row.names))
 ```
 Subset by species and sum across species for each sample to get the total abundance of each Papillomaviridae species per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
@@ -1103,10 +1105,11 @@ PAP_All_Markers_Shared2
 
 Merge the reference Genomoviridae taxonomy file and the count abundance table of reads mapped to the reference Genomoviridae genomes
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-GEN_counts <- read.csv("genomovir/counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_counts <- read.csv("counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 GEN_tax <- subset(GEN_tax, select = -c(Isolate))
 GEN_OTU <- merge(GEN_tax, GEN_counts, by.x="row.names", by.y="row.names")
+GEN_OTU<- subset (GEN_OTU, select = -c(Row.names))
 ```
 Subset by species and sum across species for each sample to get the total abundance of each Genomoviridae species per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
@@ -1642,10 +1645,11 @@ GEN_All_Markers_Shared2
 
 Merge the reference Baculoviridae taxonomy file and the count abundance table of reads mapped to the reference Baculoviridae genomes
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-BAC_counts <- read.csv("baculo/counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_counts <- read.csv("counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 BAC_tax <- subset(BAC_tax, select = -c(Isolate))
 BAC_OTU <- merge(BAC_tax, BAC_counts, by.x="row.names", by.y="row.names")
+BAC_OTU<- subset (BAC_OTU, select = -c(Row.names))
 ```
 Subset by species and sum across species for each sample to get the total abundance of each Baculoviridae species per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
