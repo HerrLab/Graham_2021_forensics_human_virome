@@ -20,510 +20,593 @@ library(tidyr)
 library(ggplot2)
 ```
 
-```{r}
-OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-OTU$Species <- row.names(OTU)
-OTU  <- subset(OTU , select = -c(length))
-OTU_SUMS<-OTU
-OTU_SUMS<- subset (OTU_SUMS, select = -c(HV_001_27,HV_004_27,HV_005_27,HV_006_27,HV_007_27,HV_008_27,HV_009_27,HV_010_27,HV_011_27,HV_012_27,HV_013_27,HV_014_27,HV_015_20,HV_015_27,HV_016_27,HV_017_27,HV_018_27,HV_019_27,HV_020_10,HV_020_22,HV_020_27,HV_021_13,HV_021_27,HV_022_27,HV_023_27,HV_024_27,HV_025_27,HV_026_27,HV_027_01,HV_027_02,HV_027_05,HV_027_06,HV_027_07,HV_027_27,HV_028_27,HV_029_27,HV_030_27,HV_015_21,HV_027_03,HV_027_04))
-#Contig_Stable <-OTU_Stable
+# Determine Stable Unclassified Contig Markers by Location for Set C
+
+Sum across all contigs for each sample to get the total abundance of each contig per sample 
+(This will incorporate all contigs including those idenfied as viral for Set A. They will be removed later.)
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+CONTIG_OTU$Species <- row.names(CONTIG_OTU)
+CONTIG_OTU <- subset(CONTIG_OTU , select = -c(length))
+CONTIG_OTU_SUMS<-CONTIG_OTU
+CONTIG_OTU_SUMS<- subset (CONTIG_OTU_SUMS, select = -c(HV_001_27,HV_004_27,HV_005_27,HV_006_27,HV_007_27,HV_008_27,HV_009_27,HV_010_27,HV_011_27,HV_012_27,HV_013_27,HV_014_27,HV_015_20,HV_015_27,HV_016_27,HV_017_27,HV_018_27,HV_019_27,HV_020_10,HV_020_22,HV_020_27,HV_021_13,HV_021_27,HV_022_27,HV_023_27,HV_024_27,HV_025_27,HV_026_27,HV_027_01,HV_027_02,HV_027_05,HV_027_06,HV_027_07,HV_027_27,HV_028_27,HV_029_27,HV_030_27,HV_015_21,HV_027_03,HV_027_04))
+CONTIGStable <- CONTIG_OTU_SUMS
 ```
-```{r}
-OTU_SUMS -> OTU_Stable 
-OTU_Stable <- OTU_Stable %>% mutate_if(is.numeric, ~1 * (. != 0))
+Convert abundance into binary presence/absence 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIGStable <- CONTIGStable %>% mutate_if(is.numeric, ~1 * (. != 0))
+```
+Determine contig prevalence over the five time points by location within a subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
 #P01 Left
-OTU_Stable$P01_LH <- OTU_Stable$HV_001_01 + OTU_Stable$HV_002_01 + OTU_Stable$HV_003_01 + OTU_Stable$HV_004_01 + OTU_Stable$HV_005_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
+CONTIGStable$P01_LH <- CONTIGStable$HV_001_01 + CONTIGStable$HV_002_01 + CONTIGStable$HV_003_01 + CONTIGStable$HV_004_01 + CONTIGStable$HV_005_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_01,HV_002_01,HV_003_01,HV_004_01,HV_005_01 ))
 #P01 Right
-OTU_Stable$P01_RH <- OTU_Stable$HV_001_02 + OTU_Stable$HV_002_02 + OTU_Stable$HV_003_02 + OTU_Stable$HV_004_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
+CONTIGStable$P01_RH <- CONTIGStable$HV_001_02 + CONTIGStable$HV_002_02 + CONTIGStable$HV_003_02 + CONTIGStable$HV_004_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_02,HV_002_02,HV_003_02,HV_004_02 ))
 #P01 Scalp
-OTU_Stable$P01_SC <- OTU_Stable$HV_001_03 + OTU_Stable$HV_004_03 + OTU_Stable$HV_003_03 + OTU_Stable$HV_005_03 + OTU_Stable$HV_002_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
+CONTIGStable$P01_SC <- CONTIGStable$HV_001_03 + CONTIGStable$HV_004_03 + CONTIGStable$HV_003_03 + CONTIGStable$HV_005_03 + CONTIGStable$HV_002_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_03,HV_002_03,HV_003_03,HV_004_03,HV_005_03 ))
 
 #P02 Left
-OTU_Stable$P02_LH <- OTU_Stable$HV_001_04 + OTU_Stable$HV_002_04 + OTU_Stable$HV_003_04 + OTU_Stable$HV_004_04 + OTU_Stable$HV_005_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
+CONTIGStable$P02_LH <- CONTIGStable$HV_001_04 + CONTIGStable$HV_002_04 + CONTIGStable$HV_003_04 + CONTIGStable$HV_004_04 + CONTIGStable$HV_005_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_04,HV_002_04,HV_003_04,HV_004_04,HV_005_04 ))
 #P02 Right
-OTU_Stable$P02_RH <- OTU_Stable$HV_001_05 + OTU_Stable$HV_002_05 + OTU_Stable$HV_003_05 + OTU_Stable$HV_004_05 + OTU_Stable$HV_005_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
+CONTIGStable$P02_RH <- CONTIGStable$HV_001_05 + CONTIGStable$HV_002_05 + CONTIGStable$HV_003_05 + CONTIGStable$HV_004_05 + CONTIGStable$HV_005_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_05,HV_002_05,HV_003_05,HV_004_05,HV_005_05 ))
 #P02 Scalp
-OTU_Stable$P02_SC <- OTU_Stable$HV_001_06 + OTU_Stable$HV_002_06 + OTU_Stable$HV_003_06 + OTU_Stable$HV_004_06 + OTU_Stable$HV_005_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
+CONTIGStable$P02_SC <- CONTIGStable$HV_001_06 + CONTIGStable$HV_002_06 + CONTIGStable$HV_003_06 + CONTIGStable$HV_004_06 + CONTIGStable$HV_005_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_06,HV_002_06,HV_003_06,HV_004_06,HV_005_06 ))
 
 #P03 Left
-OTU_Stable$P03_LH <- OTU_Stable$HV_001_07 + OTU_Stable$HV_002_07 + OTU_Stable$HV_003_07 + OTU_Stable$HV_004_07 + OTU_Stable$HV_005_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
+CONTIGStable$P03_LH <- CONTIGStable$HV_001_07 + CONTIGStable$HV_002_07 + CONTIGStable$HV_003_07 + CONTIGStable$HV_004_07 + CONTIGStable$HV_005_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_07,HV_002_07,HV_003_07,HV_004_07,HV_005_07 ))
 #P03 Right
-OTU_Stable$P03_RH <- OTU_Stable$HV_001_08 + OTU_Stable$HV_002_08 + OTU_Stable$HV_003_08 + OTU_Stable$HV_004_08 + OTU_Stable$HV_005_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
+CONTIGStable$P03_RH <- CONTIGStable$HV_001_08 + CONTIGStable$HV_002_08 + CONTIGStable$HV_003_08 + CONTIGStable$HV_004_08 + CONTIGStable$HV_005_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_08,HV_002_08,HV_003_08,HV_004_08,HV_005_08 ))
 #P03 Scalp
-OTU_Stable$P03_SC <- OTU_Stable$HV_001_09 + OTU_Stable$HV_002_09 + OTU_Stable$HV_003_09 + OTU_Stable$HV_004_09 + OTU_Stable$HV_005_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
+CONTIGStable$P03_SC <- CONTIGStable$HV_001_09 + CONTIGStable$HV_002_09 + CONTIGStable$HV_003_09 + CONTIGStable$HV_004_09 + CONTIGStable$HV_005_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_09,HV_002_09,HV_003_09,HV_004_09,HV_005_09 ))
 
 #P04 Left
-OTU_Stable$P04_LH <- OTU_Stable$HV_001_10 + OTU_Stable$HV_002_10 + OTU_Stable$HV_003_10 + OTU_Stable$HV_004_10 + OTU_Stable$HV_005_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
+CONTIGStable$P04_LH <- CONTIGStable$HV_001_10 + CONTIGStable$HV_002_10 + CONTIGStable$HV_003_10 + CONTIGStable$HV_004_10 + CONTIGStable$HV_005_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_10,HV_002_10,HV_003_10,HV_004_10,HV_005_10 ))
 #P04 Right
-OTU_Stable$P04_RH <- OTU_Stable$HV_001_11 + OTU_Stable$HV_002_11 + OTU_Stable$HV_003_11 + OTU_Stable$HV_004_11 + OTU_Stable$HV_005_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
+CONTIGStable$P04_RH <- CONTIGStable$HV_001_11 + CONTIGStable$HV_002_11 + CONTIGStable$HV_003_11 + CONTIGStable$HV_004_11 + CONTIGStable$HV_005_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_11,HV_002_11,HV_003_11,HV_004_11,HV_005_11 ))
 #P04 Scalp
-OTU_Stable$P04_SC <- OTU_Stable$HV_001_12 + OTU_Stable$HV_002_12 + OTU_Stable$HV_003_12 + OTU_Stable$HV_004_12 + OTU_Stable$HV_005_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
-
+CONTIGStable$P04_SC <- CONTIGStable$HV_001_12 + CONTIGStable$HV_002_12 + CONTIGStable$HV_003_12 + CONTIGStable$HV_004_12 + CONTIGStable$HV_005_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_12,HV_002_12,HV_003_12,HV_004_12,HV_005_12 ))
 
 #P05 Left
-OTU_Stable$P05_LH <- OTU_Stable$HV_001_13 + OTU_Stable$HV_002_13 + OTU_Stable$HV_003_13 + OTU_Stable$HV_004_13 + OTU_Stable$HV_005_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
+CONTIGStable$P05_LH <- CONTIGStable$HV_001_13 + CONTIGStable$HV_002_13 + CONTIGStable$HV_003_13 + CONTIGStable$HV_004_13 + CONTIGStable$HV_005_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_13,HV_002_13,HV_003_13,HV_004_13,HV_005_13 ))
 #P05 Right
-OTU_Stable$P05_RH <- OTU_Stable$HV_001_14 + OTU_Stable$HV_002_14 + OTU_Stable$HV_003_14 + OTU_Stable$HV_004_14 + OTU_Stable$HV_005_14
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
+CONTIGStable$P05_RH <- CONTIGStable$HV_001_14 + CONTIGStable$HV_002_14 + CONTIGStable$HV_003_14 + CONTIGStable$HV_004_14 + CONTIGStable$HV_005_14
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_14,HV_002_14,HV_003_14,HV_004_14,HV_005_14 ))
 #P05 Scalp
-OTU_Stable$P05_SC <- OTU_Stable$HV_001_15 + OTU_Stable$HV_002_15  + OTU_Stable$HV_004_15+OTU_Stable$HV_003_15 + OTU_Stable$HV_005_15
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
-# removed OTU_Stable$HV_003_15
+CONTIGStable$P05_SC <- CONTIGStable$HV_001_15 + CONTIGStable$HV_002_15  + CONTIGStable$HV_004_15+CONTIGStable$HV_003_15 + CONTIGStable$HV_005_15
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_15,HV_002_15,HV_004_15,HV_005_15,HV_003_15 ))
 
 #P06 Left
-OTU_Stable$P06_LH <- OTU_Stable$HV_001_16 + OTU_Stable$HV_003_16 + OTU_Stable$HV_004_16 + OTU_Stable$HV_005_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
+CONTIGStable$P06_LH <- CONTIGStable$HV_001_16 + CONTIGStable$HV_003_16 + CONTIGStable$HV_004_16 + CONTIGStable$HV_005_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_16,HV_003_16,HV_004_16,HV_005_16 ))
 #P06 Right
-OTU_Stable$P06_RH <- OTU_Stable$HV_001_18 + OTU_Stable$HV_002_18 + OTU_Stable$HV_003_18 + OTU_Stable$HV_004_18 + OTU_Stable$HV_005_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
+CONTIGStable$P06_RH <- CONTIGStable$HV_001_18 + CONTIGStable$HV_002_18 + CONTIGStable$HV_003_18 + CONTIGStable$HV_004_18 + CONTIGStable$HV_005_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_18,HV_002_18,HV_003_18,HV_004_18,HV_005_18 ))
 #P06 Scalp
-OTU_Stable$P06_SC <- OTU_Stable$HV_001_19 + OTU_Stable$HV_002_19 + OTU_Stable$HV_003_19 + OTU_Stable$HV_004_19 + OTU_Stable$HV_005_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
+CONTIGStable$P06_SC <- CONTIGStable$HV_001_19 + CONTIGStable$HV_002_19 + CONTIGStable$HV_003_19 + CONTIGStable$HV_004_19 + CONTIGStable$HV_005_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_19,HV_002_19,HV_003_19,HV_004_19,HV_005_19 ))
 
 #P07 Left
-OTU_Stable$P07_LH <- OTU_Stable$HV_001_20 + OTU_Stable$HV_002_20 + OTU_Stable$HV_003_20 + OTU_Stable$HV_004_20 + OTU_Stable$HV_005_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
+CONTIGStable$P07_LH <- CONTIGStable$HV_001_20 + CONTIGStable$HV_002_20 + CONTIGStable$HV_003_20 + CONTIGStable$HV_004_20 + CONTIGStable$HV_005_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_20,HV_002_20,HV_003_20,HV_004_20,HV_005_20 ))
 #P07 Right
-OTU_Stable$P07_RH <- OTU_Stable$HV_001_21 + OTU_Stable$HV_002_21 + OTU_Stable$HV_003_21 + OTU_Stable$HV_004_21 
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
+CONTIGStable$P07_RH <- CONTIGStable$HV_001_21 + CONTIGStable$HV_002_21 + CONTIGStable$HV_003_21 + CONTIGStable$HV_004_21 
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_21,HV_002_21,HV_003_21,HV_004_21 ))
 #P07 Scalp
-OTU_Stable$P07_SC <- OTU_Stable$HV_001_22 + OTU_Stable$HV_002_22 + OTU_Stable$HV_003_22 + OTU_Stable$HV_004_22 + OTU_Stable$HV_005_22
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
-
+CONTIGStable$P07_SC <- CONTIGStable$HV_001_22 + CONTIGStable$HV_002_22 + CONTIGStable$HV_003_22 + CONTIGStable$HV_004_22 + CONTIGStable$HV_005_22
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_001_22,HV_002_22,HV_003_22,HV_004_22,HV_005_22 ))
 
 #P08 Left
-OTU_Stable$P08_LH <- OTU_Stable$HV_006_01 + OTU_Stable$HV_007_01 + OTU_Stable$HV_008_01 + OTU_Stable$HV_009_01 + OTU_Stable$HV_010_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
+CONTIGStable$P08_LH <- CONTIGStable$HV_006_01 + CONTIGStable$HV_007_01 + CONTIGStable$HV_008_01 + CONTIGStable$HV_009_01 + CONTIGStable$HV_010_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_01,HV_007_01,HV_008_01,HV_009_01,HV_010_01))
 #P08 Right
-OTU_Stable$P08_RH <- OTU_Stable$HV_006_02 + OTU_Stable$HV_007_02 + OTU_Stable$HV_008_02 + OTU_Stable$HV_010_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
+CONTIGStable$P08_RH <- CONTIGStable$HV_006_02 + CONTIGStable$HV_007_02 + CONTIGStable$HV_008_02 + CONTIGStable$HV_010_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_02,HV_007_02,HV_008_02,HV_010_02))
 #P08 Scalp
-OTU_Stable$P08_SC <- OTU_Stable$HV_006_03 + OTU_Stable$HV_007_03 + OTU_Stable$HV_008_03 + OTU_Stable$HV_009_03 + OTU_Stable$HV_010_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
+CONTIGStable$P08_SC <- CONTIGStable$HV_006_03 + CONTIGStable$HV_007_03 + CONTIGStable$HV_008_03 + CONTIGStable$HV_009_03 + CONTIGStable$HV_010_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_03,HV_007_03,HV_008_03,HV_009_03,HV_010_03))
 
 #P09 Left
-OTU_Stable$P09_LH <- OTU_Stable$HV_006_04 + OTU_Stable$HV_007_04 + OTU_Stable$HV_008_04 + OTU_Stable$HV_009_04 + OTU_Stable$HV_010_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
+CONTIGStable$P09_LH <- CONTIGStable$HV_006_04 + CONTIGStable$HV_007_04 + CONTIGStable$HV_008_04 + CONTIGStable$HV_009_04 + CONTIGStable$HV_010_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_04,HV_007_04,HV_008_04,HV_009_04,HV_010_04))
 #P09 Right
-OTU_Stable$P09_RH <- OTU_Stable$HV_006_05 + OTU_Stable$HV_007_05 + OTU_Stable$HV_008_05 + OTU_Stable$HV_009_05 + OTU_Stable$HV_010_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
+CONTIGStable$P09_RH <- CONTIGStable$HV_006_05 + CONTIGStable$HV_007_05 + CONTIGStable$HV_008_05 + CONTIGStable$HV_009_05 + CONTIGStable$HV_010_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_05,HV_007_05,HV_008_05,HV_009_05,HV_010_05))
 #P09 Scalp
-OTU_Stable$P09_SC <- OTU_Stable$HV_006_06 + OTU_Stable$HV_007_06 + OTU_Stable$HV_008_06 + OTU_Stable$HV_009_06 + OTU_Stable$HV_010_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
+CONTIGStable$P09_SC <- CONTIGStable$HV_006_06 + CONTIGStable$HV_007_06 + CONTIGStable$HV_008_06 + CONTIGStable$HV_009_06 + CONTIGStable$HV_010_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_06,HV_007_06,HV_008_06,HV_009_06,HV_010_06))
 
 #P10 Left
-OTU_Stable$P10_LH <- OTU_Stable$HV_006_07 + OTU_Stable$HV_007_07 + OTU_Stable$HV_008_07 + OTU_Stable$HV_009_07 + OTU_Stable$HV_010_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
+CONTIGStable$P10_LH <- CONTIGStable$HV_006_07 + CONTIGStable$HV_007_07 + CONTIGStable$HV_008_07 + CONTIGStable$HV_009_07 + CONTIGStable$HV_010_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_07,HV_007_07,HV_008_07,HV_009_07,HV_010_07))
 #P10 Right
-OTU_Stable$P10_RH <- OTU_Stable$HV_006_08 + OTU_Stable$HV_007_08 + OTU_Stable$HV_008_08 + OTU_Stable$HV_009_08 + OTU_Stable$HV_010_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
+CONTIGStable$P10_RH <- CONTIGStable$HV_006_08 + CONTIGStable$HV_007_08 + CONTIGStable$HV_008_08 + CONTIGStable$HV_009_08 + CONTIGStable$HV_010_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_08,HV_007_08,HV_008_08,HV_009_08,HV_010_08))
 #P10 Scalp
-OTU_Stable$P10_SC <- OTU_Stable$HV_006_09 + OTU_Stable$HV_007_09 + OTU_Stable$HV_008_09 + OTU_Stable$HV_009_09 + OTU_Stable$HV_010_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
+CONTIGStable$P10_SC <- CONTIGStable$HV_006_09 + CONTIGStable$HV_007_09 + CONTIGStable$HV_008_09 + CONTIGStable$HV_009_09 + CONTIGStable$HV_010_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_09,HV_007_09,HV_008_09,HV_009_09,HV_010_09))
 
 #P11 Left
-OTU_Stable$P11_LH <- OTU_Stable$HV_006_10 + OTU_Stable$HV_007_10 + OTU_Stable$HV_008_10 + OTU_Stable$HV_009_10 + OTU_Stable$HV_010_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
+CONTIGStable$P11_LH <- CONTIGStable$HV_006_10 + CONTIGStable$HV_007_10 + CONTIGStable$HV_008_10 + CONTIGStable$HV_009_10 + CONTIGStable$HV_010_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_10,HV_007_10,HV_008_10,HV_009_10,HV_010_10))
 #P11 Right
-OTU_Stable$P11_RH <- OTU_Stable$HV_006_11 + OTU_Stable$HV_007_11 + OTU_Stable$HV_008_11 + OTU_Stable$HV_009_11 + OTU_Stable$HV_010_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
+CONTIGStable$P11_RH <- CONTIGStable$HV_006_11 + CONTIGStable$HV_007_11 + CONTIGStable$HV_008_11 + CONTIGStable$HV_009_11 + CONTIGStable$HV_010_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_11,HV_007_11,HV_008_11,HV_009_11,HV_010_11))
 #P11 Scalp
-OTU_Stable$P11_SC <- OTU_Stable$HV_006_12 + OTU_Stable$HV_007_12 + OTU_Stable$HV_008_12 + OTU_Stable$HV_009_12 + OTU_Stable$HV_010_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
+CONTIGStable$P11_SC <- CONTIGStable$HV_006_12 + CONTIGStable$HV_007_12 + CONTIGStable$HV_008_12 + CONTIGStable$HV_009_12 + CONTIGStable$HV_010_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_12,HV_007_12,HV_008_12,HV_009_12,HV_010_12))
 
 #P12 Left
-OTU_Stable$P12_LH <- OTU_Stable$HV_006_13 + OTU_Stable$HV_007_13 + OTU_Stable$HV_008_13 + OTU_Stable$HV_009_13 + OTU_Stable$HV_010_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
+CONTIGStable$P12_LH <- CONTIGStable$HV_006_13 + CONTIGStable$HV_007_13 + CONTIGStable$HV_008_13 + CONTIGStable$HV_009_13 + CONTIGStable$HV_010_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_13,HV_007_13,HV_008_13,HV_009_13,HV_010_13))
 #P12 Right
-OTU_Stable$P12_RH <- OTU_Stable$HV_006_14 + OTU_Stable$HV_007_14 + OTU_Stable$HV_008_14 + OTU_Stable$HV_009_14 + OTU_Stable$HV_010_14
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
+CONTIGStable$P12_RH <- CONTIGStable$HV_006_14 + CONTIGStable$HV_007_14 + CONTIGStable$HV_008_14 + CONTIGStable$HV_009_14 + CONTIGStable$HV_010_14
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_14,HV_007_14,HV_008_14,HV_009_14,HV_010_14))
 #P12 Scalp
-OTU_Stable$P12_SC <- OTU_Stable$HV_006_15 + OTU_Stable$HV_007_15 + OTU_Stable$HV_008_15 + OTU_Stable$HV_009_15 + OTU_Stable$HV_010_15
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
+CONTIGStable$P12_SC <- CONTIGStable$HV_006_15 + CONTIGStable$HV_007_15 + CONTIGStable$HV_008_15 + CONTIGStable$HV_009_15 + CONTIGStable$HV_010_15
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_15,HV_007_15,HV_008_15,HV_009_15,HV_010_15))
 
 #P13 Left
-OTU_Stable$P13_LH <- OTU_Stable$HV_006_16 + OTU_Stable$HV_007_16 + OTU_Stable$HV_008_16 + OTU_Stable$HV_009_16 + OTU_Stable$HV_010_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
+CONTIGStable$P13_LH <- CONTIGStable$HV_006_16 + CONTIGStable$HV_007_16 + CONTIGStable$HV_008_16 + CONTIGStable$HV_009_16 + CONTIGStable$HV_010_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_16,HV_007_16,HV_008_16,HV_009_16,HV_010_16))
 #P13 Right
-OTU_Stable$P13_RH <- OTU_Stable$HV_006_18 + OTU_Stable$HV_007_18 + OTU_Stable$HV_008_18 + OTU_Stable$HV_009_18 + OTU_Stable$HV_010_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
+CONTIGStable$P13_RH <- CONTIGStable$HV_006_18 + CONTIGStable$HV_007_18 + CONTIGStable$HV_008_18 + CONTIGStable$HV_009_18 + CONTIGStable$HV_010_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_18,HV_007_18,HV_008_18,HV_009_18,HV_010_18))
 #P13 Scalp
-OTU_Stable$P13_SC <- OTU_Stable$HV_006_19 + OTU_Stable$HV_007_19 + OTU_Stable$HV_008_19 + OTU_Stable$HV_009_19 + OTU_Stable$HV_010_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
+CONTIGStable$P13_SC <- CONTIGStable$HV_006_19 + CONTIGStable$HV_007_19 + CONTIGStable$HV_008_19 + CONTIGStable$HV_009_19 + CONTIGStable$HV_010_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_19,HV_007_19,HV_008_19,HV_009_19,HV_010_19))
 
 #P14 Left
-OTU_Stable$P14_LH <- OTU_Stable$HV_006_20 + OTU_Stable$HV_007_20 + OTU_Stable$HV_008_20 + OTU_Stable$HV_009_20 + OTU_Stable$HV_010_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
+CONTIGStable$P14_LH <- CONTIGStable$HV_006_20 + CONTIGStable$HV_007_20 + CONTIGStable$HV_008_20 + CONTIGStable$HV_009_20 + CONTIGStable$HV_010_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_20,HV_007_20,HV_008_20,HV_009_20,HV_010_20))
 #P14 Right
-OTU_Stable$P14_RH <- OTU_Stable$HV_006_21 + OTU_Stable$HV_007_21 + OTU_Stable$HV_008_21 + OTU_Stable$HV_009_21 + OTU_Stable$HV_010_21
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
+CONTIGStable$P14_RH <- CONTIGStable$HV_006_21 + CONTIGStable$HV_007_21 + CONTIGStable$HV_008_21 + CONTIGStable$HV_009_21 + CONTIGStable$HV_010_21
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_21,HV_007_21,HV_008_21,HV_009_21,HV_010_21))
 #P14 Scalp
-OTU_Stable$P14_SC <- OTU_Stable$HV_006_22 + OTU_Stable$HV_007_22 + OTU_Stable$HV_008_22 + OTU_Stable$HV_009_22 + OTU_Stable$HV_010_22
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
+CONTIGStable$P14_SC <- CONTIGStable$HV_006_22 + CONTIGStable$HV_007_22 + CONTIGStable$HV_008_22 + CONTIGStable$HV_009_22 + CONTIGStable$HV_010_22
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_006_22,HV_007_22,HV_008_22,HV_009_22,HV_010_22))
 
 #P15 Left
-OTU_Stable$P15_LH <- OTU_Stable$HV_011_01 + OTU_Stable$HV_012_01 + OTU_Stable$HV_013_01 + OTU_Stable$HV_014_01 + OTU_Stable$HV_015_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
+CONTIGStable$P15_LH <- CONTIGStable$HV_011_01 + CONTIGStable$HV_012_01 + CONTIGStable$HV_013_01 + CONTIGStable$HV_014_01 + CONTIGStable$HV_015_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_01,HV_012_01,HV_013_01,HV_014_01,HV_015_01))
 #P15 Right
-OTU_Stable$P15_RH <- OTU_Stable$HV_011_02 + OTU_Stable$HV_012_02 + OTU_Stable$HV_013_02 + OTU_Stable$HV_014_02 + OTU_Stable$HV_015_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
+CONTIGStable$P15_RH <- CONTIGStable$HV_011_02 + CONTIGStable$HV_012_02 + CONTIGStable$HV_013_02 + CONTIGStable$HV_014_02 + CONTIGStable$HV_015_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_02,HV_012_02,HV_013_02,HV_014_02,HV_015_02))
 #P15 Scalp
-OTU_Stable$P15_SC <- OTU_Stable$HV_011_03 + OTU_Stable$HV_012_03 + OTU_Stable$HV_013_03 + OTU_Stable$HV_014_03 + OTU_Stable$HV_015_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
+CONTIGStable$P15_SC <- CONTIGStable$HV_011_03 + CONTIGStable$HV_012_03 + CONTIGStable$HV_013_03 + CONTIGStable$HV_014_03 + CONTIGStable$HV_015_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_03,HV_012_03,HV_013_03,HV_014_03,HV_015_03))
 
 #P16 Left
-OTU_Stable$P16_LH <- OTU_Stable$HV_011_04 + OTU_Stable$HV_012_04 + OTU_Stable$HV_013_04 + OTU_Stable$HV_014_04 + OTU_Stable$HV_015_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
+CONTIGStable$P16_LH <- CONTIGStable$HV_011_04 + CONTIGStable$HV_012_04 + CONTIGStable$HV_013_04 + CONTIGStable$HV_014_04 + CONTIGStable$HV_015_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_04,HV_012_04,HV_013_04,HV_014_04,HV_015_04))
 #P16 Right
-OTU_Stable$P16_RH <- OTU_Stable$HV_011_05 + OTU_Stable$HV_012_05 + OTU_Stable$HV_013_05 + OTU_Stable$HV_014_05 + OTU_Stable$HV_015_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
+CONTIGStable$P16_RH <- CONTIGStable$HV_011_05 + CONTIGStable$HV_012_05 + CONTIGStable$HV_013_05 + CONTIGStable$HV_014_05 + CONTIGStable$HV_015_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_05,HV_012_05,HV_013_05,HV_014_05,HV_015_05))
 #P16 Scalp
-OTU_Stable$P16_SC <- OTU_Stable$HV_011_06 + OTU_Stable$HV_012_06 ++ OTU_Stable$HV_014_06 + OTU_Stable$HV_015_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
+CONTIGStable$P16_SC <- CONTIGStable$HV_011_06 + CONTIGStable$HV_012_06 ++ CONTIGStable$HV_014_06 + CONTIGStable$HV_015_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_06,HV_012_06,HV_014_06,HV_015_06))
 
 #P17 Left
-OTU_Stable$P17_LH <- OTU_Stable$HV_011_07 + OTU_Stable$HV_012_07 + OTU_Stable$HV_013_07 + OTU_Stable$HV_014_07 + OTU_Stable$HV_015_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
+CONTIGStable$P17_LH <- CONTIGStable$HV_011_07 + CONTIGStable$HV_012_07 + CONTIGStable$HV_013_07 + CONTIGStable$HV_014_07 + CONTIGStable$HV_015_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_07,HV_012_07,HV_013_07,HV_014_07,HV_015_07))
 #P17 Right
-OTU_Stable$P17_RH <- OTU_Stable$HV_011_08 + OTU_Stable$HV_012_08 + OTU_Stable$HV_013_08 + OTU_Stable$HV_014_08 + OTU_Stable$HV_015_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
+CONTIGStable$P17_RH <- CONTIGStable$HV_011_08 + CONTIGStable$HV_012_08 + CONTIGStable$HV_013_08 + CONTIGStable$HV_014_08 + CONTIGStable$HV_015_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_08,HV_012_08,HV_013_08,HV_014_08,HV_015_08))
 #P17 Scalp
-OTU_Stable$P17_SC <- OTU_Stable$HV_011_09 + OTU_Stable$HV_012_09 + OTU_Stable$HV_013_09 + OTU_Stable$HV_014_09 + OTU_Stable$HV_015_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
+CONTIGStable$P17_SC <- CONTIGStable$HV_011_09 + CONTIGStable$HV_012_09 + CONTIGStable$HV_013_09 + CONTIGStable$HV_014_09 + CONTIGStable$HV_015_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_09,HV_012_09,HV_013_09,HV_014_09,HV_015_09))
 
 #P18 Left
-OTU_Stable$P18_LH <- OTU_Stable$HV_011_10 + OTU_Stable$HV_012_10 + OTU_Stable$HV_013_10 + OTU_Stable$HV_014_10 + OTU_Stable$HV_015_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
+CONTIGStable$P18_LH <- CONTIGStable$HV_011_10 + CONTIGStable$HV_012_10 + CONTIGStable$HV_013_10 + CONTIGStable$HV_014_10 + CONTIGStable$HV_015_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_10,HV_012_10,HV_013_10,HV_014_10,HV_015_10))
 #P18 Right
-OTU_Stable$P18_RH <- OTU_Stable$HV_011_11 + OTU_Stable$HV_012_11 + OTU_Stable$HV_013_11 + OTU_Stable$HV_014_11 + OTU_Stable$HV_015_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
+CONTIGStable$P18_RH <- CONTIGStable$HV_011_11 + CONTIGStable$HV_012_11 + CONTIGStable$HV_013_11 + CONTIGStable$HV_014_11 + CONTIGStable$HV_015_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_11,HV_012_11,HV_013_11,HV_014_11,HV_015_11))
 #P18 Scalp
-OTU_Stable$P18_SC <- OTU_Stable$HV_011_12 + OTU_Stable$HV_012_12 + OTU_Stable$HV_013_12 + OTU_Stable$HV_014_12 + OTU_Stable$HV_015_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
+CONTIGStable$P18_SC <- CONTIGStable$HV_011_12 + CONTIGStable$HV_012_12 + CONTIGStable$HV_013_12 + CONTIGStable$HV_014_12 + CONTIGStable$HV_015_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_12,HV_012_12,HV_013_12,HV_014_12,HV_015_12))
 
 #P19 Left
-OTU_Stable$P19_LH <- OTU_Stable$HV_011_13 + OTU_Stable$HV_012_13 + OTU_Stable$HV_013_13 + OTU_Stable$HV_014_13 + OTU_Stable$HV_015_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
+CONTIGStable$P19_LH <- CONTIGStable$HV_011_13 + CONTIGStable$HV_012_13 + CONTIGStable$HV_013_13 + CONTIGStable$HV_014_13 + CONTIGStable$HV_015_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_13,HV_012_13,HV_013_13,HV_014_13,HV_015_13))
 #P19 Right
-OTU_Stable$P19_RH <- OTU_Stable$HV_011_14 + OTU_Stable$HV_012_14 + OTU_Stable$HV_013_14 + OTU_Stable$HV_014_14 + OTU_Stable$HV_015_14
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
+CONTIGStable$P19_RH <- CONTIGStable$HV_011_14 + CONTIGStable$HV_012_14 + CONTIGStable$HV_013_14 + CONTIGStable$HV_014_14 + CONTIGStable$HV_015_14
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_14,HV_012_14,HV_013_14,HV_014_14,HV_015_14))
 #P19 Scalp
-OTU_Stable$P19_SC <- OTU_Stable$HV_011_15 + OTU_Stable$HV_012_15 + OTU_Stable$HV_013_15 + OTU_Stable$HV_014_15 + OTU_Stable$HV_015_15
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
+CONTIGStable$P19_SC <- CONTIGStable$HV_011_15 + CONTIGStable$HV_012_15 + CONTIGStable$HV_013_15 + CONTIGStable$HV_014_15 + CONTIGStable$HV_015_15
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_15,HV_012_15,HV_013_15,HV_014_15,HV_015_15))
 
 #P20 Left
-OTU_Stable$P20_LH <- OTU_Stable$HV_011_16 + OTU_Stable$HV_012_16 + OTU_Stable$HV_013_16 + OTU_Stable$HV_014_16 + OTU_Stable$HV_015_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
+CONTIGStable$P20_LH <- CONTIGStable$HV_011_16 + CONTIGStable$HV_012_16 + CONTIGStable$HV_013_16 + CONTIGStable$HV_014_16 + CONTIGStable$HV_015_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_16,HV_012_16,HV_013_16,HV_014_16,HV_015_16))
 #P20 Right
-OTU_Stable$P20_RH <- OTU_Stable$HV_011_18 + OTU_Stable$HV_012_18 + OTU_Stable$HV_013_18 + OTU_Stable$HV_014_18 + OTU_Stable$HV_015_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
+CONTIGStable$P20_RH <- CONTIGStable$HV_011_18 + CONTIGStable$HV_012_18 + CONTIGStable$HV_013_18 + CONTIGStable$HV_014_18 + CONTIGStable$HV_015_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_18,HV_012_18,HV_013_18,HV_014_18,HV_015_18))
 #P20 Scalp
-OTU_Stable$P20_SC <- OTU_Stable$HV_011_19 + OTU_Stable$HV_012_19 + OTU_Stable$HV_013_19 + OTU_Stable$HV_014_19 + OTU_Stable$HV_015_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
+CONTIGStable$P20_SC <- CONTIGStable$HV_011_19 + CONTIGStable$HV_012_19 + CONTIGStable$HV_013_19 + CONTIGStable$HV_014_19 + CONTIGStable$HV_015_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_19,HV_012_19,HV_013_19,HV_014_19,HV_015_19))
 
 #P21 Left
-OTU_Stable$P21_LH <- OTU_Stable$HV_011_20 + OTU_Stable$HV_012_20 + OTU_Stable$HV_013_20 + OTU_Stable$HV_014_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
+CONTIGStable$P21_LH <- CONTIGStable$HV_011_20 + CONTIGStable$HV_012_20 + CONTIGStable$HV_013_20 + CONTIGStable$HV_014_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_20,HV_012_20,HV_013_20,HV_014_20))
 #P21 Right
-OTU_Stable$P21_RH <- OTU_Stable$HV_011_21 + OTU_Stable$HV_012_21 + OTU_Stable$HV_013_21 + OTU_Stable$HV_014_21
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
+CONTIGStable$P21_RH <- CONTIGStable$HV_011_21 + CONTIGStable$HV_012_21 + CONTIGStable$HV_013_21 + CONTIGStable$HV_014_21
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_21,HV_012_21,HV_013_21,HV_014_21))
 #P21 Scalp
-OTU_Stable$P21_SC <- OTU_Stable$HV_011_22 + OTU_Stable$HV_012_22 + OTU_Stable$HV_013_22 + OTU_Stable$HV_014_22
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
+CONTIGStable$P21_SC <- CONTIGStable$HV_011_22 + CONTIGStable$HV_012_22 + CONTIGStable$HV_013_22 + CONTIGStable$HV_014_22
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_011_22,HV_012_22,HV_013_22,HV_014_22))
 
 #P22 Left
-OTU_Stable$P22_LH <- OTU_Stable$HV_021_02 + OTU_Stable$HV_022_01 + OTU_Stable$HV_023_01 + OTU_Stable$HV_024_01 + OTU_Stable$HV_025_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
+CONTIGStable$P22_LH <- CONTIGStable$HV_021_02 + CONTIGStable$HV_022_01 + CONTIGStable$HV_023_01 + CONTIGStable$HV_024_01 + CONTIGStable$HV_025_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_02,HV_022_01,HV_023_01,HV_024_01,HV_025_02))
 #P22 Right
-OTU_Stable$P22_RH <- OTU_Stable$HV_026_01 + OTU_Stable$HV_027_08 + OTU_Stable$HV_028_01 + OTU_Stable$HV_029_01 + OTU_Stable$HV_030_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
+CONTIGStable$P22_RH <- CONTIGStable$HV_026_01 + CONTIGStable$HV_027_08 + CONTIGStable$HV_028_01 + CONTIGStable$HV_029_01 + CONTIGStable$HV_030_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_01,HV_027_08,HV_028_01,HV_029_01,HV_030_01))
 #P22 Scalp
-OTU_Stable$P22_SC <- OTU_Stable$HV_016_01 + OTU_Stable$HV_017_01 + OTU_Stable$HV_018_01 + OTU_Stable$HV_019_01 + OTU_Stable$HV_020_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
+CONTIGStable$P22_SC <- CONTIGStable$HV_016_01 + CONTIGStable$HV_017_01 + CONTIGStable$HV_018_01 + CONTIGStable$HV_019_01 + CONTIGStable$HV_020_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_01,HV_017_01,HV_018_01,HV_019_01,HV_020_01))
 
 #P23 Left
-OTU_Stable$P23_LH <- OTU_Stable$HV_021_03 + OTU_Stable$HV_022_02 + OTU_Stable$HV_023_02 + OTU_Stable$HV_024_02 + OTU_Stable$HV_025_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
+CONTIGStable$P23_LH <- CONTIGStable$HV_021_03 + CONTIGStable$HV_022_02 + CONTIGStable$HV_023_02 + CONTIGStable$HV_024_02 + CONTIGStable$HV_025_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_03,HV_022_02,HV_023_02,HV_024_02,HV_025_03))
 #P23 Right
-OTU_Stable$P23_RH <- OTU_Stable$HV_026_02 + OTU_Stable$HV_027_09 + OTU_Stable$HV_028_02 + OTU_Stable$HV_029_02 + OTU_Stable$HV_030_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
+CONTIGStable$P23_RH <- CONTIGStable$HV_026_02 + CONTIGStable$HV_027_09 + CONTIGStable$HV_028_02 + CONTIGStable$HV_029_02 + CONTIGStable$HV_030_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_02,HV_027_09,HV_028_02,HV_029_02,HV_030_02))
 #P23 Scalp
-OTU_Stable$P23_SC <- OTU_Stable$HV_016_02 + OTU_Stable$HV_017_02 + OTU_Stable$HV_018_02 + OTU_Stable$HV_019_02 + OTU_Stable$HV_020_02
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
+CONTIGStable$P23_SC <- CONTIGStable$HV_016_02 + CONTIGStable$HV_017_02 + CONTIGStable$HV_018_02 + CONTIGStable$HV_019_02 + CONTIGStable$HV_020_02
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_02,HV_017_02,HV_018_02,HV_019_02,HV_020_02))
 
 #P24 Left
-OTU_Stable$P24_LH <- OTU_Stable$HV_021_04 + OTU_Stable$HV_022_03 + OTU_Stable$HV_023_03 + OTU_Stable$HV_024_03 + OTU_Stable$HV_025_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
+CONTIGStable$P24_LH <- CONTIGStable$HV_021_04 + CONTIGStable$HV_022_03 + CONTIGStable$HV_023_03 + CONTIGStable$HV_024_03 + CONTIGStable$HV_025_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_04,HV_022_03,HV_023_03,HV_024_03,HV_025_04))
 #P24 Right
-OTU_Stable$P24_RH <- OTU_Stable$HV_026_03 + OTU_Stable$HV_027_10 + OTU_Stable$HV_028_03 + OTU_Stable$HV_029_03 + OTU_Stable$HV_030_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
+CONTIGStable$P24_RH <- CONTIGStable$HV_026_03 + CONTIGStable$HV_027_10 + CONTIGStable$HV_028_03 + CONTIGStable$HV_029_03 + CONTIGStable$HV_030_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_03,HV_027_10,HV_028_03,HV_029_03,HV_030_03))
 #P24 Scalp
-OTU_Stable$P24_SC <- OTU_Stable$HV_016_03 + OTU_Stable$HV_017_03 + OTU_Stable$HV_018_03 + OTU_Stable$HV_019_03 + OTU_Stable$HV_021_01
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
+CONTIGStable$P24_SC <- CONTIGStable$HV_016_03 + CONTIGStable$HV_017_03 + CONTIGStable$HV_018_03 + CONTIGStable$HV_019_03 + CONTIGStable$HV_021_01
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_03,HV_017_03,HV_018_03,HV_019_03,HV_021_01))
 
 #P25 Left
-OTU_Stable$P25_LH <- OTU_Stable$HV_021_05 + OTU_Stable$HV_022_04 + OTU_Stable$HV_023_04 + OTU_Stable$HV_024_04 + OTU_Stable$HV_025_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
+CONTIGStable$P25_LH <- CONTIGStable$HV_021_05 + CONTIGStable$HV_022_04 + CONTIGStable$HV_023_04 + CONTIGStable$HV_024_04 + CONTIGStable$HV_025_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_05,HV_022_04,HV_023_04,HV_024_04,HV_025_05))
 #P25 Right
-OTU_Stable$P25_RH <- OTU_Stable$HV_026_04 + OTU_Stable$HV_027_11 + OTU_Stable$HV_028_04 + OTU_Stable$HV_029_04 + OTU_Stable$HV_030_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
+CONTIGStable$P25_RH <- CONTIGStable$HV_026_04 + CONTIGStable$HV_027_11 + CONTIGStable$HV_028_04 + CONTIGStable$HV_029_04 + CONTIGStable$HV_030_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_04,HV_027_11,HV_028_04,HV_029_04,HV_030_04))
 #P25 Scalp
-OTU_Stable$P25_SC <- OTU_Stable$HV_016_04 + OTU_Stable$HV_017_04 + OTU_Stable$HV_018_04 + OTU_Stable$HV_019_04 + OTU_Stable$HV_020_03
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
+CONTIGStable$P25_SC <- CONTIGStable$HV_016_04 + CONTIGStable$HV_017_04 + CONTIGStable$HV_018_04 + CONTIGStable$HV_019_04 + CONTIGStable$HV_020_03
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_04,HV_017_04,HV_018_04,HV_019_04,HV_020_03))
 
 #P26 Left
-OTU_Stable$P26_LH <- OTU_Stable$HV_021_06 + OTU_Stable$HV_022_05 + OTU_Stable$HV_023_05 + OTU_Stable$HV_024_05 + OTU_Stable$HV_025_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
+CONTIGStable$P26_LH <- CONTIGStable$HV_021_06 + CONTIGStable$HV_022_05 + CONTIGStable$HV_023_05 + CONTIGStable$HV_024_05 + CONTIGStable$HV_025_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_06,HV_022_05,HV_023_05,HV_024_05,HV_025_06))
 #P26 Right
-OTU_Stable$P26_RH <- OTU_Stable$HV_026_05 + OTU_Stable$HV_027_12 + OTU_Stable$HV_028_05 + OTU_Stable$HV_029_05 + OTU_Stable$HV_030_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
+CONTIGStable$P26_RH <- CONTIGStable$HV_026_05 + CONTIGStable$HV_027_12 + CONTIGStable$HV_028_05 + CONTIGStable$HV_029_05 + CONTIGStable$HV_030_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_05,HV_027_12,HV_028_05,HV_029_05,HV_030_05))
 #P26 Scalp
-OTU_Stable$P26_SC <- OTU_Stable$HV_016_05 + OTU_Stable$HV_017_05 + OTU_Stable$HV_018_05 + OTU_Stable$HV_019_05 + OTU_Stable$HV_020_04
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
+CONTIGStable$P26_SC <- CONTIGStable$HV_016_05 + CONTIGStable$HV_017_05 + CONTIGStable$HV_018_05 + CONTIGStable$HV_019_05 + CONTIGStable$HV_020_04
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_05,HV_017_05,HV_018_05,HV_019_05,HV_020_04))
 
 #P27 Left
-OTU_Stable$P27_LH <- OTU_Stable$HV_021_07 + OTU_Stable$HV_022_06 + OTU_Stable$HV_023_06 + OTU_Stable$HV_024_06 + OTU_Stable$HV_025_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
+CONTIGStable$P27_LH <- CONTIGStable$HV_021_07 + CONTIGStable$HV_022_06 + CONTIGStable$HV_023_06 + CONTIGStable$HV_024_06 + CONTIGStable$HV_025_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_07,HV_022_06,HV_023_06,HV_024_06,HV_025_07))
 #P27 Right
-OTU_Stable$P27_RH <- OTU_Stable$HV_026_06 + OTU_Stable$HV_027_13 + OTU_Stable$HV_028_06 + OTU_Stable$HV_029_06 + OTU_Stable$HV_030_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
+CONTIGStable$P27_RH <- CONTIGStable$HV_026_06 + CONTIGStable$HV_027_13 + CONTIGStable$HV_028_06 + CONTIGStable$HV_029_06 + CONTIGStable$HV_030_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_06,HV_027_13,HV_028_06,HV_029_06,HV_030_06))
 #P27 Scalp
-OTU_Stable$P27_SC <- OTU_Stable$HV_016_06 + OTU_Stable$HV_017_06 + OTU_Stable$HV_018_06 + OTU_Stable$HV_019_06 + OTU_Stable$HV_020_05
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
+CONTIGStable$P27_SC <- CONTIGStable$HV_016_06 + CONTIGStable$HV_017_06 + CONTIGStable$HV_018_06 + CONTIGStable$HV_019_06 + CONTIGStable$HV_020_05
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_06,HV_017_06,HV_018_06,HV_019_06,HV_020_05))
 
 #P28 Left
-OTU_Stable$P28_LH <- OTU_Stable$HV_021_08 + OTU_Stable$HV_022_07 + OTU_Stable$HV_023_07 + OTU_Stable$HV_024_07 + OTU_Stable$HV_025_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
+CONTIGStable$P28_LH <- CONTIGStable$HV_021_08 + CONTIGStable$HV_022_07 + CONTIGStable$HV_023_07 + CONTIGStable$HV_024_07 + CONTIGStable$HV_025_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_08,HV_022_07,HV_023_07,HV_024_07,HV_025_08))
 #P28 Right
-OTU_Stable$P28_RH <- OTU_Stable$HV_026_07 + OTU_Stable$HV_027_14 + OTU_Stable$HV_028_07 + OTU_Stable$HV_029_07 + OTU_Stable$HV_030_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
+CONTIGStable$P28_RH <- CONTIGStable$HV_026_07 + CONTIGStable$HV_027_14 + CONTIGStable$HV_028_07 + CONTIGStable$HV_029_07 + CONTIGStable$HV_030_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_07,HV_027_14,HV_028_07,HV_029_07,HV_030_07))
 #P28 Scalp
-OTU_Stable$P28_SC <- OTU_Stable$HV_016_07 + OTU_Stable$HV_017_07 + OTU_Stable$HV_018_07 + OTU_Stable$HV_019_07 + OTU_Stable$HV_020_06
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
+CONTIGStable$P28_SC <- CONTIGStable$HV_016_07 + CONTIGStable$HV_017_07 + CONTIGStable$HV_018_07 + CONTIGStable$HV_019_07 + CONTIGStable$HV_020_06
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_07,HV_017_07,HV_018_07,HV_019_07,HV_020_06))
 
 #P29 Left
-OTU_Stable$P29_LH <- OTU_Stable$HV_021_09 + OTU_Stable$HV_022_08 + OTU_Stable$HV_023_08 + OTU_Stable$HV_024_08 + OTU_Stable$HV_025_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
+CONTIGStable$P29_LH <- CONTIGStable$HV_021_09 + CONTIGStable$HV_022_08 + CONTIGStable$HV_023_08 + CONTIGStable$HV_024_08 + CONTIGStable$HV_025_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_09,HV_022_08,HV_023_08,HV_024_08,HV_025_09))
 #P29 Right
-OTU_Stable$P29_RH <- OTU_Stable$HV_026_08 + OTU_Stable$HV_027_15 + OTU_Stable$HV_028_08 + OTU_Stable$HV_029_08 + OTU_Stable$HV_030_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
+CONTIGStable$P29_RH <- CONTIGStable$HV_026_08 + CONTIGStable$HV_027_15 + CONTIGStable$HV_028_08 + CONTIGStable$HV_029_08 + CONTIGStable$HV_030_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_08,HV_027_15,HV_028_08,HV_029_08,HV_030_08))
 #P29 Scalp
-OTU_Stable$P29_SC <- OTU_Stable$HV_016_08 + OTU_Stable$HV_017_08 + OTU_Stable$HV_018_08 + OTU_Stable$HV_019_08 + OTU_Stable$HV_020_07
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
+CONTIGStable$P29_SC <- CONTIGStable$HV_016_08 + CONTIGStable$HV_017_08 + CONTIGStable$HV_018_08 + CONTIGStable$HV_019_08 + CONTIGStable$HV_020_07
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_08,HV_017_08,HV_018_08,HV_019_08,HV_020_07))
 
 #P30 Left
-OTU_Stable$P30_LH <- OTU_Stable$HV_021_10 + OTU_Stable$HV_022_09 + OTU_Stable$HV_023_09 + OTU_Stable$HV_024_09 + OTU_Stable$HV_025_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
+CONTIGStable$P30_LH <- CONTIGStable$HV_021_10 + CONTIGStable$HV_022_09 + CONTIGStable$HV_023_09 + CONTIGStable$HV_024_09 + CONTIGStable$HV_025_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_10,HV_022_09,HV_023_09,HV_024_09,HV_025_10))
 #P30 Right
-OTU_Stable$P30_RH <- OTU_Stable$HV_026_09 + OTU_Stable$HV_027_16 + OTU_Stable$HV_028_09 + OTU_Stable$HV_029_09 + OTU_Stable$HV_030_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
+CONTIGStable$P30_RH <- CONTIGStable$HV_026_09 + CONTIGStable$HV_027_16 + CONTIGStable$HV_028_09 + CONTIGStable$HV_029_09 + CONTIGStable$HV_030_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_09,HV_027_16,HV_028_09,HV_029_09,HV_030_09))
 #P30 Scalp
-OTU_Stable$P30_SC <- OTU_Stable$HV_016_09 + OTU_Stable$HV_017_09 + OTU_Stable$HV_018_09 + OTU_Stable$HV_019_09 + OTU_Stable$HV_020_08
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
+CONTIGStable$P30_SC <- CONTIGStable$HV_016_09 + CONTIGStable$HV_017_09 + CONTIGStable$HV_018_09 + CONTIGStable$HV_019_09 + CONTIGStable$HV_020_08
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_09,HV_017_09,HV_018_09,HV_019_09,HV_020_08))
 
 #P31 Left
-OTU_Stable$P31_LH <- OTU_Stable$HV_021_11 + OTU_Stable$HV_022_10 + OTU_Stable$HV_023_10 + OTU_Stable$HV_024_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
+CONTIGStable$P31_LH <- CONTIGStable$HV_021_11 + CONTIGStable$HV_022_10 + CONTIGStable$HV_023_10 + CONTIGStable$HV_024_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_11,HV_022_10,HV_023_10,HV_024_10))
 #P31 Right
-OTU_Stable$P31_RH <- OTU_Stable$HV_026_10 + OTU_Stable$HV_027_18 + OTU_Stable$HV_028_10 + OTU_Stable$HV_029_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
+CONTIGStable$P31_RH <- CONTIGStable$HV_026_10 + CONTIGStable$HV_027_18 + CONTIGStable$HV_028_10 + CONTIGStable$HV_029_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_10,HV_027_18,HV_028_10,HV_029_10))
 #P31 Scalp
-OTU_Stable$P31_SC <- OTU_Stable$HV_016_10 + OTU_Stable$HV_017_10 + OTU_Stable$HV_018_10 + OTU_Stable$HV_019_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
+CONTIGStable$P31_SC <- CONTIGStable$HV_016_10 + CONTIGStable$HV_017_10 + CONTIGStable$HV_018_10 + CONTIGStable$HV_019_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_10,HV_017_10,HV_018_10,HV_019_10))
 
 #P32 Left
-OTU_Stable$P32_LH <- OTU_Stable$HV_021_12 + OTU_Stable$HV_022_11 + OTU_Stable$HV_023_11 + OTU_Stable$HV_024_11 + OTU_Stable$HV_025_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
+CONTIGStable$P32_LH <- CONTIGStable$HV_021_12 + CONTIGStable$HV_022_11 + CONTIGStable$HV_023_11 + CONTIGStable$HV_024_11 + CONTIGStable$HV_025_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_12,HV_022_11,HV_023_11,HV_024_11,HV_025_11))
 #P32 Right
-OTU_Stable$P32_RH <- OTU_Stable$HV_026_11 + OTU_Stable$HV_027_19 + OTU_Stable$HV_028_11 + OTU_Stable$HV_029_11 + OTU_Stable$HV_030_10
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
+CONTIGStable$P32_RH <- CONTIGStable$HV_026_11 + CONTIGStable$HV_027_19 + CONTIGStable$HV_028_11 + CONTIGStable$HV_029_11 + CONTIGStable$HV_030_10
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_11,HV_027_19,HV_028_11,HV_029_11,HV_030_10))
 #P32 Scalp
-OTU_Stable$P32_SC <- OTU_Stable$HV_016_11 + OTU_Stable$HV_017_11 + OTU_Stable$HV_018_11 + OTU_Stable$HV_019_11 + OTU_Stable$HV_020_09
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
+CONTIGStable$P32_SC <- CONTIGStable$HV_016_11 + CONTIGStable$HV_017_11 + CONTIGStable$HV_018_11 + CONTIGStable$HV_019_11 + CONTIGStable$HV_020_09
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_11,HV_017_11,HV_018_11,HV_019_11,HV_020_09))
 
 #P34 Left
-OTU_Stable$P34_LH <- OTU_Stable$HV_021_14 + OTU_Stable$HV_022_12 + OTU_Stable$HV_023_12 + OTU_Stable$HV_024_12 + OTU_Stable$HV_025_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
+CONTIGStable$P34_LH <- CONTIGStable$HV_021_14 + CONTIGStable$HV_022_12 + CONTIGStable$HV_023_12 + CONTIGStable$HV_024_12 + CONTIGStable$HV_025_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_14,HV_022_12,HV_023_12,HV_024_12,HV_025_12))
 #P34 Right
-OTU_Stable$P34_RH <- OTU_Stable$HV_026_12 + OTU_Stable$HV_027_20 + OTU_Stable$HV_028_12 + OTU_Stable$HV_029_12 + OTU_Stable$HV_030_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
+CONTIGStable$P34_RH <- CONTIGStable$HV_026_12 + CONTIGStable$HV_027_20 + CONTIGStable$HV_028_12 + CONTIGStable$HV_029_12 + CONTIGStable$HV_030_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_12,HV_027_20,HV_028_12,HV_029_12,HV_030_11))
 #P34 Scalp
-OTU_Stable$P34_SC <- OTU_Stable$HV_016_12 + OTU_Stable$HV_017_12 + OTU_Stable$HV_018_12 + OTU_Stable$HV_019_12 + OTU_Stable$HV_020_11
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
+CONTIGStable$P34_SC <- CONTIGStable$HV_016_12 + CONTIGStable$HV_017_12 + CONTIGStable$HV_018_12 + CONTIGStable$HV_019_12 + CONTIGStable$HV_020_11
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_12,HV_017_12,HV_018_12,HV_019_12,HV_020_11))
 
 #P35 Left
-OTU_Stable$P35_LH <- OTU_Stable$HV_021_15 + OTU_Stable$HV_022_13 + OTU_Stable$HV_023_13 + OTU_Stable$HV_024_13 + OTU_Stable$HV_025_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
+CONTIGStable$P35_LH <- CONTIGStable$HV_021_15 + CONTIGStable$HV_022_13 + CONTIGStable$HV_023_13 + CONTIGStable$HV_024_13 + CONTIGStable$HV_025_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_15,HV_022_13,HV_023_13,HV_024_13,HV_025_13))
 #P35 Right
-OTU_Stable$P35_RH <- OTU_Stable$HV_026_13 + OTU_Stable$HV_027_21 + OTU_Stable$HV_028_13 + OTU_Stable$HV_029_13 + OTU_Stable$HV_030_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
+CONTIGStable$P35_RH <- CONTIGStable$HV_026_13 + CONTIGStable$HV_027_21 + CONTIGStable$HV_028_13 + CONTIGStable$HV_029_13 + CONTIGStable$HV_030_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_13,HV_027_21,HV_028_13,HV_029_13,HV_030_12))
 #P35 Scalp
-OTU_Stable$P35_SC <- OTU_Stable$HV_016_13 + OTU_Stable$HV_017_13 + OTU_Stable$HV_018_13 + OTU_Stable$HV_019_13 + OTU_Stable$HV_020_12
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
+CONTIGStable$P35_SC <- CONTIGStable$HV_016_13 + CONTIGStable$HV_017_13 + CONTIGStable$HV_018_13 + CONTIGStable$HV_019_13 + CONTIGStable$HV_020_12
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_13,HV_017_13,HV_018_13,HV_019_13,HV_020_12))
 
 #P36 Left
-OTU_Stable$P36_LH <- OTU_Stable$HV_021_16 + OTU_Stable$HV_022_14 + OTU_Stable$HV_023_14 + OTU_Stable$HV_024_14 + OTU_Stable$HV_025_14
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
+CONTIGStable$P36_LH <- CONTIGStable$HV_021_16 + CONTIGStable$HV_022_14 + CONTIGStable$HV_023_14 + CONTIGStable$HV_024_14 + CONTIGStable$HV_025_14
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_16,HV_022_14,HV_023_14,HV_024_14,HV_025_14))
 #P36 Right
-OTU_Stable$P36_RH <- OTU_Stable$HV_026_14 + OTU_Stable$HV_027_22 + OTU_Stable$HV_028_14 + OTU_Stable$HV_029_14 + OTU_Stable$HV_030_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
+CONTIGStable$P36_RH <- CONTIGStable$HV_026_14 + CONTIGStable$HV_027_22 + CONTIGStable$HV_028_14 + CONTIGStable$HV_029_14 + CONTIGStable$HV_030_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_14,HV_027_22,HV_028_14,HV_029_14,HV_030_13))
 #P36 Scalp
-OTU_Stable$P36_SC <- OTU_Stable$HV_016_14 + OTU_Stable$HV_017_14 + OTU_Stable$HV_018_14 + OTU_Stable$HV_019_14 + OTU_Stable$HV_020_13
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
+CONTIGStable$P36_SC <- CONTIGStable$HV_016_14 + CONTIGStable$HV_017_14 + CONTIGStable$HV_018_14 + CONTIGStable$HV_019_14 + CONTIGStable$HV_020_13
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_14,HV_017_14,HV_018_14,HV_019_14,HV_020_13))
 
 #P37 Left
-OTU_Stable$P37_LH <- OTU_Stable$HV_021_18 + OTU_Stable$HV_022_15 + OTU_Stable$HV_023_15 + OTU_Stable$HV_024_15 + OTU_Stable$HV_025_15
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
+CONTIGStable$P37_LH <- CONTIGStable$HV_021_18 + CONTIGStable$HV_022_15 + CONTIGStable$HV_023_15 + CONTIGStable$HV_024_15 + CONTIGStable$HV_025_15
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_18,HV_022_15,HV_023_15,HV_024_15,HV_025_15))
 #P37 Right
-OTU_Stable$P37_RH <- OTU_Stable$HV_026_15 + OTU_Stable$HV_028_15 + OTU_Stable$HV_029_15 + OTU_Stable$HV_030_14 + OTU_Stable$HV_030_22
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
+CONTIGStable$P37_RH <- CONTIGStable$HV_026_15 + CONTIGStable$HV_028_15 + CONTIGStable$HV_029_15 + CONTIGStable$HV_030_14 + CONTIGStable$HV_030_22
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_15,HV_028_15,HV_029_15,HV_030_14,HV_030_22))
 #P37 Scalp
-OTU_Stable$P37_SC <- OTU_Stable$HV_016_15 + OTU_Stable$HV_017_15 + OTU_Stable$HV_018_15 + OTU_Stable$HV_019_15 + OTU_Stable$HV_020_14
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
+CONTIGStable$P37_SC <- CONTIGStable$HV_016_15 + CONTIGStable$HV_017_15 + CONTIGStable$HV_018_15 + CONTIGStable$HV_019_15 + CONTIGStable$HV_020_14
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_15,HV_017_15,HV_018_15,HV_019_15,HV_020_14))
 
 #P38 Left
-OTU_Stable$P38_LH <- OTU_Stable$HV_021_19 + OTU_Stable$HV_022_16 + OTU_Stable$HV_023_16 + OTU_Stable$HV_024_16 + OTU_Stable$HV_025_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
+CONTIGStable$P38_LH <- CONTIGStable$HV_021_19 + CONTIGStable$HV_022_16 + CONTIGStable$HV_023_16 + CONTIGStable$HV_024_16 + CONTIGStable$HV_025_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_19,HV_022_16,HV_023_16,HV_024_16,HV_025_16))
 #P38 Right
-OTU_Stable$P38_RH <- OTU_Stable$HV_026_16 + OTU_Stable$HV_028_16 + OTU_Stable$HV_029_16 + OTU_Stable$HV_030_15 
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
+CONTIGStable$P38_RH <- CONTIGStable$HV_026_16 + CONTIGStable$HV_028_16 + CONTIGStable$HV_029_16 + CONTIGStable$HV_030_15 
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_16,HV_028_16,HV_029_16,HV_030_15))
 #P38 Scalp
-OTU_Stable$P38_SC <- OTU_Stable$HV_016_16 + OTU_Stable$HV_017_16 + OTU_Stable$HV_018_16 + OTU_Stable$HV_019_16 + OTU_Stable$HV_020_15
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
+CONTIGStable$P38_SC <- CONTIGStable$HV_016_16 + CONTIGStable$HV_017_16 + CONTIGStable$HV_018_16 + CONTIGStable$HV_019_16 + CONTIGStable$HV_020_15
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_16,HV_017_16,HV_018_16,HV_019_16,HV_020_15))
 
 #P39 Left
-OTU_Stable$P39_LH <- OTU_Stable$HV_021_20 + OTU_Stable$HV_022_18 + OTU_Stable$HV_023_18 + OTU_Stable$HV_024_18 + OTU_Stable$HV_025_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
+CONTIGStable$P39_LH <- CONTIGStable$HV_021_20 + CONTIGStable$HV_022_18 + CONTIGStable$HV_023_18 + CONTIGStable$HV_024_18 + CONTIGStable$HV_025_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_20,HV_022_18,HV_023_18,HV_024_18,HV_025_18))
 #P39 Right
-OTU_Stable$P39_RH <- OTU_Stable$HV_026_18 + OTU_Stable$HV_028_18 + OTU_Stable$HV_029_18 + OTU_Stable$HV_030_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
+CONTIGStable$P39_RH <- CONTIGStable$HV_026_18 + CONTIGStable$HV_028_18 + CONTIGStable$HV_029_18 + CONTIGStable$HV_030_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_18,HV_028_18,HV_029_18,HV_030_16))
 #P39 Scalp
-OTU_Stable$P39_SC <- OTU_Stable$HV_016_18 + OTU_Stable$HV_017_18 + OTU_Stable$HV_018_18 + OTU_Stable$HV_019_18 + OTU_Stable$HV_020_16
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
+CONTIGStable$P39_SC <- CONTIGStable$HV_016_18 + CONTIGStable$HV_017_18 + CONTIGStable$HV_018_18 + CONTIGStable$HV_019_18 + CONTIGStable$HV_020_16
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_18,HV_017_18,HV_018_18,HV_019_18,HV_020_16))
 
 #P40 Left
-OTU_Stable$P40_LH <- OTU_Stable$HV_021_21 + OTU_Stable$HV_022_19 + OTU_Stable$HV_023_19 + OTU_Stable$HV_024_19 + OTU_Stable$HV_025_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
+CONTIGStable$P40_LH <- CONTIGStable$HV_021_21 + CONTIGStable$HV_022_19 + CONTIGStable$HV_023_19 + CONTIGStable$HV_024_19 + CONTIGStable$HV_025_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_21,HV_022_19,HV_023_19,HV_024_19,HV_025_19))
 #P40 Right
-OTU_Stable$P40_RH <- OTU_Stable$HV_026_19 + OTU_Stable$HV_028_19 + OTU_Stable$HV_029_19 + OTU_Stable$HV_030_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
+CONTIGStable$P40_RH <- CONTIGStable$HV_026_19 + CONTIGStable$HV_028_19 + CONTIGStable$HV_029_19 + CONTIGStable$HV_030_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_19,HV_028_19,HV_029_19,HV_030_18))
 #P40 Scalp
-OTU_Stable$P40_SC <- OTU_Stable$HV_016_19 + OTU_Stable$HV_017_19 + OTU_Stable$HV_018_19 + OTU_Stable$HV_019_19 + OTU_Stable$HV_020_18
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
+CONTIGStable$P40_SC <- CONTIGStable$HV_016_19 + CONTIGStable$HV_017_19 + CONTIGStable$HV_018_19 + CONTIGStable$HV_019_19 + CONTIGStable$HV_020_18
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_19,HV_017_19,HV_018_19,HV_019_19,HV_020_18))
 
 #P41 Left
-OTU_Stable$P41_LH <- OTU_Stable$HV_021_22 + OTU_Stable$HV_022_20 + OTU_Stable$HV_023_20 + OTU_Stable$HV_024_20 + OTU_Stable$HV_025_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
+CONTIGStable$P41_LH <- CONTIGStable$HV_021_22 + CONTIGStable$HV_022_20 + CONTIGStable$HV_023_20 + CONTIGStable$HV_024_20 + CONTIGStable$HV_025_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_021_22,HV_022_20,HV_023_20,HV_024_20,HV_025_20))
 #P41 Right
-OTU_Stable$P41_RH <- OTU_Stable$HV_026_20 + OTU_Stable$HV_028_20 + OTU_Stable$HV_029_20 + OTU_Stable$HV_030_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
+CONTIGStable$P41_RH <- CONTIGStable$HV_026_20 + CONTIGStable$HV_028_20 + CONTIGStable$HV_029_20 + CONTIGStable$HV_030_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_20,HV_028_20,HV_029_20,HV_030_19))
 #P41 Scalp
-OTU_Stable$P41_SC <- OTU_Stable$HV_016_20 + OTU_Stable$HV_017_20 + OTU_Stable$HV_018_20 + OTU_Stable$HV_019_20 + OTU_Stable$HV_020_19
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
+CONTIGStable$P41_SC <- CONTIGStable$HV_016_20 + CONTIGStable$HV_017_20 + CONTIGStable$HV_018_20 + CONTIGStable$HV_019_20 + CONTIGStable$HV_020_19
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_20,HV_017_20,HV_018_20,HV_019_20,HV_020_19))
 
 #P42 Left
-OTU_Stable$P42_LH <- OTU_Stable$HV_022_21 + OTU_Stable$HV_023_21 + OTU_Stable$HV_024_21 + OTU_Stable$HV_025_21 
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
+CONTIGStable$P42_LH <- CONTIGStable$HV_022_21 + CONTIGStable$HV_023_21 + CONTIGStable$HV_024_21 + CONTIGStable$HV_025_21 
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_022_21,HV_023_21,HV_024_21,HV_025_21))
 #P42 Right
-OTU_Stable$P42_RH <- OTU_Stable$HV_026_21 + OTU_Stable$HV_028_21 + OTU_Stable$HV_029_21 + OTU_Stable$HV_030_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
+CONTIGStable$P42_RH <- CONTIGStable$HV_026_21 + CONTIGStable$HV_028_21 + CONTIGStable$HV_029_21 + CONTIGStable$HV_030_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_21,HV_028_21,HV_029_21,HV_030_20))
 #P42 Scalp
-OTU_Stable$P42_SC <- OTU_Stable$HV_016_21 + OTU_Stable$HV_017_21 + OTU_Stable$HV_018_21 + OTU_Stable$HV_019_21 + OTU_Stable$HV_020_20
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
+CONTIGStable$P42_SC <- CONTIGStable$HV_016_21 + CONTIGStable$HV_017_21 + CONTIGStable$HV_018_21 + CONTIGStable$HV_019_21 + CONTIGStable$HV_020_20
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_21,HV_017_21,HV_018_21,HV_019_21,HV_020_20))
 
 #P43 Left
-OTU_Stable$P43_LH <- OTU_Stable$HV_022_22 + OTU_Stable$HV_023_22 + OTU_Stable$HV_024_22 + OTU_Stable$HV_025_01 + OTU_Stable$HV_025_22
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
+CONTIGStable$P43_LH <- CONTIGStable$HV_022_22 + CONTIGStable$HV_023_22 + CONTIGStable$HV_024_22 + CONTIGStable$HV_025_01 + CONTIGStable$HV_025_22
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_022_22,HV_023_22,HV_024_22,HV_025_01,HV_025_22))
 #P43 Right
-OTU_Stable$P43_RH <- OTU_Stable$HV_026_22 + OTU_Stable$HV_028_22 + OTU_Stable$HV_029_22 + OTU_Stable$HV_030_21
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
+CONTIGStable$P43_RH <- CONTIGStable$HV_026_22 + CONTIGStable$HV_028_22 + CONTIGStable$HV_029_22 + CONTIGStable$HV_030_21
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_026_22,HV_028_22,HV_029_22,HV_030_21))
 #P43 Scalp
-OTU_Stable$P43_SC <- OTU_Stable$HV_016_22 + OTU_Stable$HV_017_22 + OTU_Stable$HV_018_22 + OTU_Stable$HV_019_22 + OTU_Stable$HV_020_21
-OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
+CONTIGStable$P43_SC <- CONTIGStable$HV_016_22 + CONTIGStable$HV_017_22 + CONTIGStable$HV_018_22 + CONTIGStable$HV_019_22 + CONTIGStable$HV_020_21
+CONTIGStable <- subset(CONTIGStable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_019_22,HV_020_21))
 ```
 
-#LH
-```{r}
-OTU_LH <- subset(OTU_Stable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
-row.names(OTU_LH) <- OTU_LH$Species
-OTU_ALL_LH <- OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
-#OTU_ALL_LH <- OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 5))
-row.names(OTU_ALL_LH) <- OTU_ALL_LH$Species
-OTU_ALL_LH <- subset (OTU_ALL_LH, select = -c(Species))
-OTU_ALL_LH$Mean <- rowMeans(OTU_ALL_LH)
-OTU_ALL_LH$Species <- row.names(OTU_ALL_LH)
-OTU_Stable_LH <- OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
-row.names(OTU_Stable_LH) <- OTU_Stable_LH$Species
-OTU_Stable_LH <- subset (OTU_Stable_LH, select = -c(Species))
-OTU_Stable_LH$Mean_Stable <- rowMeans(OTU_Stable_LH)
-OTU_Stable_LH$Species <- row.names(OTU_Stable_LH)
-OTU_LH_Compare<- subset (OTU_Stable_LH, select = c(Mean_Stable,Species))
-OTU_LH_Compare<- merge(OTU_ALL_LH, OTU_LH_Compare, by= "Species")
-OTU_LH_Compare$Mean_temp <- OTU_LH_Compare$Mean - OTU_LH_Compare$Mean_Stable
-LH_Stable2 <- subset(OTU_LH_Compare, 0 < Mean_Stable)
-LH_Markers2 <- LH_Stable2$Species
-LH_Markers2
+## Set C Stable Left Hand Contigs
+Subset by left hand and identify contigs that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_OTU_LH <- subset(CONTIGStable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
+row.names(CONTIG_OTU_LH) <- CONTIG_OTU_LH$Species
+CONTIG_OTU_ALL_LH <- CONTIG_OTU_LH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CONTIG_OTU_ALL_LH) <- CONTIG_OTU_ALL_LH$Species
+CONTIG_OTU_ALL_LH <- subset (CONTIG_OTU_ALL_LH, select = -c(Species))
+CONTIG_OTU_ALL_LH$Mean <- rowMeans(CONTIG_OTU_ALL_LH)
+CONTIG_OTU_ALL_LH$Species <- row.names(CONTIG_OTU_ALL_LH)
+CONTIGStable_LH <- CONTIG_OTU_LH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CONTIGStable_LH) <- CONTIGStable_LH$Species
+CONTIGStable_LH <- subset (CONTIGStable_LH, select = -c(Species))
+CONTIGStable_LH$Mean_Stable <- rowMeans(CONTIGStable_LH)
+CONTIGStable_LH$Species <- row.names(CONTIGStable_LH)
+CONTIG_OTU_LH_Compare<- subset (CONTIGStable_LH, select = c(Mean_Stable,Species))
+CONTIG_OTU_LH_Compare<- merge(CONTIG_OTU_ALL_LH, CONTIG_OTU_LH_Compare, by= "Species")
+CONTIG_OTU_LH_Compare$Mean_temp <- CONTIG_OTU_LH_Compare$Mean - CONTIG_OTU_LH_Compare$Mean_Stable
+CONTIG_LH_Stable2 <- subset(CONTIG_OTU_LH_Compare, 0 < Mean_Stable)
+CONTIG_LH_Markers2 <- CONTIG_LH_Stable2$Species
 ```
-#RH
+Left hand contig markers that are stable over time 
 ```{r}
-OTU_RH <- subset(OTU_Stable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
-row.names(OTU_RH) <- OTU_RH$Species
-OTU_ALL_RH <- OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
-#OTU_ALL_RH <- OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 5))
-row.names(OTU_ALL_RH) <- OTU_ALL_RH$Species
-OTU_ALL_RH <- subset (OTU_ALL_RH, select = -c(Species))
-OTU_ALL_RH$Mean <- rowMeans(OTU_ALL_RH)
-OTU_ALL_RH$Species <- row.names(OTU_ALL_RH)
-OTU_Stable_RH <- OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
-row.names(OTU_Stable_RH) <- OTU_Stable_RH$Species
-OTU_Stable_RH <- subset (OTU_Stable_RH, select = -c(Species))
-OTU_Stable_RH$Mean_Stable <- rowMeans(OTU_Stable_RH)
-OTU_Stable_RH$Species <- row.names(OTU_Stable_RH)
-OTU_RH_Compare<- subset (OTU_Stable_RH, select = c(Mean_Stable,Species))
-OTU_RH_Compare<- merge(OTU_ALL_RH, OTU_RH_Compare, by= "Species")
-OTU_RH_Compare$Mean_temp <- OTU_RH_Compare$Mean - OTU_RH_Compare$Mean_Stable
-RH_Stable2 <- subset(OTU_RH_Compare, 0 < Mean_Stable)
-RH_Markers2 <- RH_Stable2$Species
-RH_Markers2
+CONTIG_LH_Markers2
 ```
-#SC
+
+## Set C Stable Right Hand Contigs
+Subset by right hand and identify contigs that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_OTU_RH <- subset(CONTIGStable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
+row.names(CONTIG_OTU_RH) <- CONTIG_OTU_RH$Species
+CONTIG_OTU_ALL_RH <- CONTIG_OTU_RH %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CONTIG_OTU_ALL_RH) <- CONTIG_OTU_ALL_RH$Species
+CONTIG_OTU_ALL_RH <- subset (CONTIG_OTU_ALL_RH, select = -c(Species))
+CONTIG_OTU_ALL_RH$Mean <- rowMeans(CONTIG_OTU_ALL_RH)
+CONTIG_OTU_ALL_RH$Species <- row.names(CONTIG_OTU_ALL_RH)
+CONTIGStable_RH <- CONTIG_OTU_RH %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CONTIGStable_RH) <- CONTIGStable_RH$Species
+CONTIGStable_RH <- subset (CONTIGStable_RH, select = -c(Species))
+CONTIGStable_RH$Mean_Stable <- rowMeans(CONTIGStable_RH)
+CONTIGStable_RH$Species <- row.names(CONTIGStable_RH)
+CONTIG_OTU_RH_Compare<- subset (CONTIGStable_RH, select = c(Mean_Stable,Species))
+CONTIG_OTU_RH_Compare<- merge(CONTIG_OTU_ALL_RH, CONTIG_OTU_RH_Compare, by= "Species")
+CONTIG_OTU_RH_Compare$Mean_temp <- CONTIG_OTU_RH_Compare$Mean - CONTIG_OTU_RH_Compare$Mean_Stable
+CONTIG_RH_Stable2 <- subset(CONTIG_OTU_RH_Compare, 0 < Mean_Stable)
+CONTIG_RH_Markers2 <- CONTIG_RH_Stable2$Species
+```
+Right hand contig markers that are stable over time 
 ```{r}
-OTU_SC <- subset(OTU_Stable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
-row.names(OTU_SC) <- OTU_SC$Species
-OTU_ALL_SC <- OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
-#OTU_ALL_SC <- OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 5))
-row.names(OTU_ALL_SC) <- OTU_ALL_SC$Species
-OTU_ALL_SC <- subset (OTU_ALL_SC, select = -c(Species))
-OTU_ALL_SC$Mean <- rowMeans(OTU_ALL_SC)
-OTU_ALL_SC$Species <- row.names(OTU_ALL_SC)
-OTU_Stable_SC <- OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
-row.names(OTU_Stable_SC) <- OTU_Stable_SC$Species
-OTU_Stable_SC <- subset (OTU_Stable_SC, select = -c(Species))
-OTU_Stable_SC$Mean_Stable <- rowMeans(OTU_Stable_SC)
-OTU_Stable_SC$Species <- row.names(OTU_Stable_SC)
-OTU_SC_Compare<- subset (OTU_Stable_SC, select = c(Mean_Stable,Species))
-OTU_SC_Compare<- merge(OTU_ALL_SC, OTU_SC_Compare, by= "Species")
-OTU_SC_Compare$Mean_temp <- OTU_SC_Compare$Mean - OTU_SC_Compare$Mean_Stable
-SC_Stable2 <- subset(OTU_SC_Compare, 0 < Mean_Stable)
-SC_Markers2 <- SC_Stable2$Species
-SC_Markers2
+CONTIG_RH_Markers2
 ```
-#Combined
+
+## Set C Stable Scalp Contigs
+Subset by scalp and identify contigs that are persistent across 4 out of the 5 time points by subject
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_OTU_SC <- subset(CONTIGStable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
+row.names(CONTIG_OTU_SC) <- CONTIG_OTU_SC$Species
+CONTIG_OTU_ALL_SC <- CONTIG_OTU_SC %>% mutate_if(is.numeric, ~1 * (. != 0))
+row.names(CONTIG_OTU_ALL_SC) <- CONTIG_OTU_ALL_SC$Species
+CONTIG_OTU_ALL_SC <- subset (CONTIG_OTU_ALL_SC, select = -c(Species))
+CONTIG_OTU_ALL_SC$Mean <- rowMeans(CONTIG_OTU_ALL_SC)
+CONTIG_OTU_ALL_SC$Species <- row.names(CONTIG_OTU_ALL_SC)
+CONTIGStable_SC <- CONTIG_OTU_SC %>% mutate_if(is.numeric, ~1 * (. > 3 ))
+row.names(CONTIGStable_SC) <- CONTIGStable_SC$Species
+CONTIGStable_SC <- subset (CONTIGStable_SC, select = -c(Species))
+CONTIGStable_SC$Mean_Stable <- rowMeans(CONTIGStable_SC)
+CONTIGStable_SC$Species <- row.names(CONTIGStable_SC)
+CONTIG_OTU_SC_Compare<- subset (CONTIGStable_SC, select = c(Mean_Stable,Species))
+CONTIG_OTU_SC_Compare<- merge(CONTIG_OTU_ALL_SC, CONTIG_OTU_SC_Compare, by= "Species")
+CONTIG_OTU_SC_Compare$Mean_temp <- CONTIG_OTU_SC_Compare$Mean - CONTIG_OTU_SC_Compare$Mean_Stable
+CONTIG_SC_Stable2 <- subset(CONTIG_OTU_SC_Compare, 0 < Mean_Stable)
+CONTIG_SC_Markers2 <- CONTIG_SC_Stable2$Species
+```
+Scalp contig markers that are stable over time 
 ```{r}
-Hand_Markers_Shared2 <- LH_Markers2[LH_Markers2 %in% RH_Markers2]
-Hand_Markers_Shared2
-All_Markers_Shared2 <- Hand_Markers_Shared2[Hand_Markers_Shared2 %in% SC_Markers2]
+CONTIG_SC_Markers2
 ```
+
+## Set C Stable Hand Contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_Hand_Markers_Shared2 <- CONTIG_LH_Markers2[CONTIG_LH_Markers2 %in% CONTIG_RH_Markers2]
+```
+Hand Stable Contig Markers
+```{r}
+CONTIG_Hand_Markers_Shared2
+```
+
+## Set B Stable Across All Locations Contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_All_Markers_Shared2 <- CONTIG_Hand_Markers_Shared2[CONTIG_Hand_Markers_Shared2 %in% CONTIG_SC_Markers2]
+```
+Overall Across All Locations Contig Markers
+```{r}
+CONTIG_All_Markers_Shared2
+```
+
+# Identify Unclassified Viral Contigs
+
+Make list of CheckV identified viral contigs to remove
+```{r,message=FALSE,warning=FALSE,results="hide"}
+tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+tax_ann$Contigs<-row.names(tax_ann)
+Checkv_contig_list<-tax_ann$Contig
+```
+Remove CheckV contigs from Set C stable left hand contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_LH_Markers2_final <- CONTIG_LH_Markers2[!(CONTIG_LH_Markers2 %in% Checkv_contig_list)]
+```
+Left Hand Stable Contigs (with Checkv contigs removed)
+```{r}
+CONTIG_LH_Markers2_final
+```
+
+Remove CheckV contigs from Set C stable right hand contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_RH_Markers2_final <- CONTIG_LH_Markers2[!(CONTIG_LH_Markers2 %in% Checkv_contig_list)]
+```
+Right Hand Stable Contigs (with Checkv contigs removed)
+```{r}
+CONTIG_RH_Markers2_final
+```
+
+Remove CheckV contigs from Set C stable scalp contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_SC_Markers2_final <- CONTIG_SC_Markers2[!(CONTIG_SC_Markers2 %in% Checkv_contig_list)]
+```
+Scalp Stable Contigs (with Checkv contigs removed)
+```{r}
+CONTIG_SC_Markers2_final
+```
+
+Remove CheckV contigs from Set C stable Hand contigs 
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_Hand_Markers_Shared2_final <- CONTIG_Hand_Markers_Shared2[!(CONTIG_Hand_Markers_Shared2 %in% Checkv_contig_list)]
+```
+Hand Stable Contigs (with Checkv contigs removed)
+```{r}
+CONTIG_Hand_Markers_Shared2_final
+```
+
+Remove CheckV contigs from Set C overall across all locations contigs
+```{r,message=FALSE,warning=FALSE,results="hide"}
+CONTIG_All_Markers_Shared2_final <- CONTIG_All_Markers_Shared2[!(CONTIG_All_Markers_Shared2 %in% Checkv_contig_list)]
+```
+Overall across all locations contigs (with Checkv contigs removed)
+```{r}
+CONTIG_All_Markers_Shared2_final
+```
+
+For all of the identified contigs from CONTIG_LH_Markers2_final, CONTIG_RH_Markers2_final, CONTIG_SC_Markers2_final, CONTIG_Hand_Markers_Shared2_final, and CONTIG_All_Markers_Shared2_final their sequences were obtained from unmapped_1000_contigs.fa and then run through Blast using the BlastN algarithum.
+Contigs containing <70% identity to a known organism or contigs with no synteny to prokaryotic or eukaryotic genomes were considered to be putative viral sequences although viral origin could not be fully confirmed and thus retained in Set C.
