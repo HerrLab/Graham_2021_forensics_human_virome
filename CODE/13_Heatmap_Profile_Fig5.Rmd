@@ -31,7 +31,7 @@ Overall_markers_Hands<-c("Autographa californica multiple nucleopolyhedrovirus",
 Overall_markers_All<-c("Autographa californica multiple nucleopolyhedrovirus","Autographa californica nucleopolyhedrovirus","Staphylococcus phage St 134","Unclassified Caudovirales","Unclassified Homo sapiens like virus","Unclassified Siphoviridae","Uncultured Caudovirales phage")
 ```
 Set B Markers
-```
+```{r}
 Papilloma_markers_LH<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapapillomavirus 1","Gammapapillomavirus 12","Gammapapillomavirus 13","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8")
 Papilloma_markers_RH<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Betapapillomavirus 5","Gammapapillomavirus 10","Gammapapillomavirus 12","Gammapapillomavirus 15","Gammapapillomavirus 22","Gammapapillomavirus 7","Gammapapillomavirus 8","Gammapapillomavirus 9")
 Papilloma_markers_SC<-c("Alphapapillomavirus 5","Betapapillomavirus 1","Betapapillomavirus 2","Betapapillomavirus 3","Gammapaptillomavirus 12","Gammapapillomavirus 15","Gammapapillomavirus 22","Gammapapillomavirus 23","Gammapapillomavirus 7","Gammapapillomavirus 8")
