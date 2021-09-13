@@ -9,13 +9,22 @@
 ############################################
 
 #Input Notes:
-#caudovirales.fasta
+#Reference genome sequences (i.e., caudovirales.fasta,papilloma.fasta, etc.) were obtained from NCBI's nucleotide data and contain all (full genome) sequences that are available for genomes that are taxonomically classified as either Caudovirales, Papillomaviridae, Genomoviridae, and Baculoviridae.
+#These Reference fasta files were accessed and downloaded on May 24th, 2021.
+#Need QC trimmed and contamination removed reads generated in 02_Virome_Assembly.sh, located in Human_Remove_Trimmed/
+  #Trimmed reads were used to prevent mapping of reference reads to host or phix contamination within the sequences
+    #This was also done with just mapping to raw reads and the same results were observed (not reported)
 
 #Output Notes:
+#This pipeline will generate a read abundance tables for each reference type that can be used for input into Phyloseq in R (counts2_CAUDO.txt, PAPcounts.txt, counts2_genomovir.txt, counts2_baculo.txt)
+#The generated read abundance tables were then opened on my desktop and saved as .csv files for easier import into R. 
+#The next step of the pipeline is 10_Set_B.Rmd
 
 #General Notes:
 #This pipeline is designed to be run using the Holland Computing Center at the University of Nebraska. Some tool commands may differ depending on installation of the tool. Please refer to the listed Githubs for each tool used as mentioned in script for further information if issues arise 
 #Some file locations may differ from yours so this needs to be changed accordingly. This script is designed to be run all in one folder
+#For the steps indicated make sure to repeat the pipeline so that all non-negative control samples are run through the pipeline. Examples were given for one sample at each step (HV_001_01)
+
 
 ############################################
 ## -------------------------------------- ##
@@ -40,9 +49,9 @@ bowtie2-build -f caudovirales.fasta CAUDOVIRALES_DB
 ## -------------------------------------- ##
 ############################################
 
-#Mapping was performed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
+#Mapping was performed for each sample (not for negative controls) so repeat this step for each QC trimmed individual sample. Here we use the example of using sample HV_001_01
 
-bowtie2 --end-to-end -x CAUDOVIRALES_DB -1 ../Raw_Reads/HV_001_001_forward.fq.gz -2 ../Raw_Reads/HV_001_01_reverse.fq.gz | samtools view -F 4 -o HV_001_01.bam
+bowtie2 --end-to-end -x CAUDOVIRALES_DB -1 ../Human_Remove_Trimmed/HV_001_01_final_R1.fastq -2 ../Human_Remove_Trimmed/HV_001_01_final_R2.fastq | samtools view -F 4 -o HV_001_01.bam
 
 #Samtools was used for subsiquent manipluation of the sam file output from bowtie2
 #Samtools can be found at: https://github.com/samtools/samtools
@@ -96,7 +105,7 @@ bowtie2-build -f papillomaviridae.fasta PAPILLOMA_DB
 
 #Mapping was performed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
 
-bowtie2 --end-to-end -x PAPILLOMA_DB -1 ../Raw_Reads/HV_001_001_forward.fq.gz -2 ../Raw_Reads/HV_001_01_reverse.fq.gz | samtools view -F 4 -o HV_001_01.bam
+bowtie2 --end-to-end -x PAPILLOMA_DB -1 ../Human_Remove_Trimmed/HV_001_01_final_R1.fastq -2 ../Human_Remove_Trimmed/HV_001_01_final_R2.fastq | samtools view -F 4 -o HV_001_01.bam
 
 samtools sort -O BAM -o HV_001_01.sorted.bam HV_001_01.bam 
 samtools index HV_001_01.sorted.bam
@@ -145,7 +154,7 @@ bowtie2-build -f genomoviridae.fasta GENOMO_DB
 
 #Mapping was performed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
 
-bowtie2 --end-to-end -x GENOMO_DB -1 ../Raw_Reads/HV_001_001_forward.fq.gz -2 ../Raw_Reads/HV_001_01_reverse.fq.gz | samtools view -F 4 -o HV_001_01.bam
+bowtie2 --end-to-end -x GENOMO_DB -1 ../Human_Remove_Trimmed/HV_001_01_final_R1.fastq -2 ../Human_Remove_Trimmed/HV_001_01_final_R2.fastq | samtools view -F 4 -o HV_001_01.bam
 
 samtools sort -O BAM -o HV_001_01.sorted.bam HV_001_01.bam 
 samtools index HV_001_01.sorted.bam
@@ -198,7 +207,7 @@ bowtie2-build -f papillomaviridae.fasta BACULO_DB
 
 #Mapping was performed for each sample (not for negative controls) so repeat this step for each individual sample. Here we use the example of using sample HV_001_01
 
-bowtie2 --end-to-end -x BACULO_DB -1 ../Raw_Reads/HV_001_001_forward.fq.gz -2 ../Raw_Reads/HV_001_01_reverse.fq.gz | samtools view -F 4 -o HV_001_01.bam
+bowtie2 --end-to-end -x BACULO_DB -1 ../Human_Remove_Trimmed/HV_001_01_final_R1.fastq -2 ../Human_Remove_Trimmed/HV_001_01_final_R2.fastq | samtools view -F 4 -o HV_001_01.bam
 
 samtools sort -O BAM -o HV_001_01.sorted.bam HV_001_01.bam 
 samtools index HV_001_01.sorted.bam
