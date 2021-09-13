@@ -9,9 +9,18 @@ For Questions Email: ema.graham@huskers.unl.edu
 
 Input Notes: 
 Will need the following files:
-- PAPcounts.csv ()
+- counts2_CAUDO.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- CAUDO_tax.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- PAPcounts.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- papilloma_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- counts2_genomovir_edited.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- genomovir_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- counts2_baculo_edited.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- baculo_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
 
 Output Notes: 
+Will identify stable NCBI mapped reference species for marker Set B
+The viral families and order Caudovirales were chosen based on their family stability as determined using script 07_Stable_Families_Fig3.Rmd (description in manuscript)
 
 ```{r setup,message=FALSE}
 library(readr)
