@@ -9,8 +9,12 @@ For Questions Email: ema.graham@huskers.unl.edu
 
 Input Notes: 
 Will need the following files:
+- counts2_bowtie.csv (generated in 03_Virome_Contig_Mapping.sh)
+- vc_tax.csv (generated in 04_Contig_Annotation.sh)
 
 Output Notes: 
+Will identify stable viral species (by location) that were identified from checkv identified and annotated viral contigs.
+This is Set A (description in table 1 and methods section of manuscript). 
 
 ```{r setup,message=FALSE}
 library(readr)
@@ -22,18 +26,25 @@ library(ggplot2)
 
 ## Determine Stable Viral Species by Location for Set A
 
+Merge the identified viral contigs taxonomy file and the count abundance table of reads mapped to the assembly
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Row.names,length))
+```
+Subset by species and sum across species for each sample to get the total abundance of each identified viral family per sample
+```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
 OTU_SUMS<-ddply(OTU_SUMS,"Species",numcolwise(sum))
 OTU_SUMS<- subset (OTU_SUMS, select = -c(HV_001_27,HV_004_27,HV_005_27,HV_006_27,HV_007_27,HV_008_27,HV_009_27,HV_010_27,HV_011_27,HV_012_27,HV_013_27,HV_014_27,HV_015_20,HV_015_27,HV_016_27,HV_017_27,HV_018_27,HV_019_27,HV_020_10,HV_020_22,HV_020_27,HV_021_13,HV_021_27,HV_022_27,HV_023_27,HV_024_27,HV_025_27,HV_026_27,HV_027_01,HV_027_02,HV_027_05,HV_027_06,HV_027_07,HV_027_27,HV_028_27,HV_029_27,HV_030_27,HV_015_21,HV_027_03,HV_027_04))
 OTU_SUMS -> OTU_Stable 
-# Turn into binary presence/absance data
+```
+Convert abundance into binary presence/absence 
+```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_Stable <- OTU_Stable %>% mutate_if(is.numeric, ~1 * (. != 0))
 ```
+Determine viral species prevalence over the five time points by location within a subject
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 #P01 Left
 OTU_Stable$P01_LH <- OTU_Stable$HV_001_01 + OTU_Stable$HV_002_01 + OTU_Stable$HV_003_01 + OTU_Stable$HV_004_01 + OTU_Stable$HV_005_01
@@ -417,7 +428,7 @@ OTU_Stable <- subset(OTU_Stable, select = -c(HV_016_22,HV_017_22,HV_018_22,HV_01
 ```
 
 ## Set A Stable Left Hand Viral Species
-
+Subset by left hand and identify viral species that are persistent across 4 out of the 5 time points by subject
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_LH <- subset(OTU_Stable, select = c(P01_LH,P02_LH,P03_LH,P04_LH,P05_LH,P06_LH,P07_LH,P08_LH,P09_LH,P10_LH,P11_LH,P12_LH,P13_LH,P14_LH,P15_LH,P16_LH, P17_LH,P18_LH,P19_LH,P20_LH,P21_LH,P22_LH,P23_LH,P24_LH,P25_LH,P26_LH,P27_LH,P28_LH,P29_LH,P30_LH,P31_LH,P32_LH,P34_LH,P35_LH,P36_LH,P37_LH,P38_LH,P39_LH,P40_LH,P41_LH,P42_LH,P43_LH,Species))
 row.names(OTU_LH) <- OTU_LH$Species
@@ -443,7 +454,7 @@ LH_Markers
 ```
 
 ## Set A Stable Right Hand Viral Species
-
+Subset by right hand and identify viral species that are persistent across 4 out of the 5 time points by subject
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_RH <- subset(OTU_Stable, select = c(P01_RH,P02_RH,P03_RH,P04_RH,P05_RH,P06_RH,P07_RH,P08_RH,P09_RH,P10_RH,P11_RH,P12_RH,P13_RH,P14_RH,P15_RH,P16_RH, P17_RH,P18_RH,P19_RH,P20_RH,P21_RH,P22_RH,P23_RH,P24_RH,P25_RH,P26_RH,P27_RH,P28_RH,P29_RH,P30_RH,P31_RH,P32_RH,P34_RH,P35_RH,P36_RH,P37_RH,P38_RH,P39_RH,P40_RH,P41_RH,P42_RH,P43_RH,Species))
 row.names(OTU_RH) <- OTU_RH$Species
@@ -469,7 +480,7 @@ RH_Markers
 ```
 
 ## Set A Stable Scalp Viral Species
-
+Subset by scalp and identify viral species that are persistent across 4 out of the 5 time points by subject
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_SC <- subset(OTU_Stable, select = c(P01_SC,P02_SC,P03_SC,P04_SC,P05_SC,P06_SC,P07_SC,P08_SC,P09_SC,P10_SC,P11_SC,P12_SC,P13_SC,P14_SC,P15_SC,P16_SC, P17_SC,P18_SC,P19_SC,P20_SC,P21_SC,P22_SC,P23_SC,P24_SC,P25_SC,P26_SC,P27_SC,P28_SC,P29_SC,P30_SC,P31_SC,P32_SC,P34_SC,P35_SC,P36_SC,P37_SC,P38_SC,P39_SC,P40_SC,P41_SC,P42_SC,P43_SC,Species))
 row.names(OTU_SC) <- OTU_SC$Species
