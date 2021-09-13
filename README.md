@@ -14,5 +14,5 @@ __FUNDING__
 This work was completed using the [Holland Computing Center](https://hcc.unl.edu/) of the University of Nebraska, which receives support from the Nebraska Research Initiative. This work was supported by the Department of Justice [grant numbers 2017-IJ-CX-0025 and 2019-R2-CX-0048]. All of the funding agencies had no role in study design, data collection and interpretation, or the decision to submit the work for publication.
 
 More info:
-[Herr Lab Website](http://herrlab.com/)
+[Herr Lab Website](http://herrlab.com/);
 [Fernando Lab Website](https://fernandolab.unl.edu/)
