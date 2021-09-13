@@ -17,6 +17,6 @@ More info:
 [Herr Lab Website](http://herrlab.com/);
 [Fernando Lab Website](https://fernandolab.unl.edu/)
 
-## DATA DIRECTORY##
+## DATA DIRECTORY ##
 
 This directory contains data files and datasets that were produced in this study. At the beginning of each script it will indicate which of these data files will be needed in order to exicute the script. All raw sequencing data has been deposited in the NCBI Short Read Archive (SRA) under the accession [PRJNA754140](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA754140/). 
