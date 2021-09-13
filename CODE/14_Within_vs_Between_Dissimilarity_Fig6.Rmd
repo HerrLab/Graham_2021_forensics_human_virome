@@ -9,9 +9,21 @@ For Questions Email: ema.graham@huskers.unl.edu
 
 Input Notes: 
 Will need the following files:
-- 
+- Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
+- counts2_bowtie.csv (generated in 03_Virome_Contig_Mapping.sh)
+- vc_tax.csv (generated in 04_Contig_Annotation.sh)
+- counts2_CAUDO.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- CAUDO_tax.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- PAPcounts.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- papilloma_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- counts2_genomovir_edited.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- genomovir_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- counts2_baculo_edited.csv (generated using 09_NCBI_Genomes_Mapping_SetB.sh)
+- baculo_taxa.csv (generated using the associated NCBI taxonomy information for each Accession number; was made and edited in excel)
+- Jaccard_bw_win.csv (will generate in excel using this script)
   
 Output Notes: 
+Will statistically compare the Jaccard dissimilarity distances within subject samples over time and between all other subject samples to assess stability within samples as compared to standard diversity across subjects. Will generate box plots for Figure 6.
 
 ```{r setup,message=FALSE}
 library(readr)
@@ -25,7 +37,7 @@ library(phyloseq)
 
 Metadata for all Phyloseq objects produced in this script
 ```{r}
-Metadata2 <- read_csv("~/Desktop/Current_work/OTU_Builber/Sequencing_Data_Info_Sheet3.csv")
+Metadata2 <- read_csv("Sequencing_Data_Info_Sheet3.csv")
 Metadata3 <- Metadata2
 Metadata3$Time <- Metadata3$Time_Collected
 Metadata3$Time[which(Metadata3$Time == "T_0")] <- "00_Weeks"
@@ -88,8 +100,8 @@ CAUDO_PHY <- phyloseq(CAUDO_OTU, CAUDO_tax, META)
 
 Make Phyloseq object for stable Set B Papillomaviridae Makers 
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-PAP_counts <- read.csv("papilloma/PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_counts <- read.csv("PAPcounts.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+PAP_tax <- read.csv("papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
 PAP_OTU <- merge(PAP_tax, PAP_counts, by.x="row.names", by.y="row.names")
 PAP_OTU<- subset (PAP_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
@@ -99,7 +111,7 @@ PAP_OTU<-ddply(PAP_OTU,"Species",numcolwise(sum))
 row.names(PAP_OTU)<-PAP_OTU$Species
 PAP_OTU<- subset (PAP_OTU, select = -c(Species))
 PAP_OTU <- otu_table(PAP_OTU, taxa_are_rows = TRUE)
-PAP_tax <- read.csv("papilloma/papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+PAP_tax <- read.csv("papilloma_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
 PAP_tax <- subset(PAP_tax, select = -c(Serotype,Isolate))
 PAP_tax<-subset(PAP_tax, Species %in% PAP_spec)
 PAP_tax<- subset (PAP_tax, select = -c(ContigID))
@@ -114,8 +126,8 @@ PAP_PHY <- phyloseq(PAP_OTU, PAP_tax, META)
 
 Make Phyloseq object for stable Set B Baculoviridae Makers 
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-BAC_counts <- read.csv("baculo/counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_counts <- read.csv("counts2_baculo_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 BAC_tax <- subset(BAC_tax, select = -c(Isolate))
 BAC_OTU <- merge(BAC_tax, BAC_counts, by.x="row.names", by.y="row.names")
 BAC_OTU<- subset (BAC_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
@@ -125,7 +137,7 @@ BAC_OTU<-ddply(BAC_OTU,"Species",numcolwise(sum))
 row.names(BAC_OTU)<-BAC_OTU$Species
 BAC_OTU<- subset (BAC_OTU, select = -c(Species))
 BAC_OTU <- otu_table(BAC_OTU, taxa_are_rows = TRUE)
-BAC_tax <- read.csv("baculo/baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+BAC_tax <- read.csv("baculo_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 BAC_tax <- subset(BAC_tax, select = -c(Isolate))
 BAC_tax<-subset(BAC_tax, Species %in% BAC_spec)
 BAC_tax<-unique(BAC_tax)
@@ -137,8 +149,8 @@ BAC_PHY <- phyloseq(BAC_OTU, BAC_tax, META)
 
 Make Phyloseq object for stable Set B Genomoviridae Makers 
 ```{r,message=FALSE,warning=FALSE,results="hide"}
-GEN_counts <- read.csv("genomovir/counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
-GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_counts <- read.csv("counts2_genomovir_edited.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 GEN_tax <- subset(GEN_tax, select = -c(Isolate))
 GEN_OTU <- merge(GEN_tax, GEN_counts, by.x="row.names", by.y="row.names")
 GEN_OTU<- subset (GEN_OTU, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Family, Subfamily, Genus))
@@ -148,7 +160,7 @@ GEN_OTU<-ddply(GEN_OTU,"Species",numcolwise(sum))
 row.names(GEN_OTU)<-GEN_OTU$Species
 GEN_OTU<- subset (GEN_OTU, select = -c(Species))
 GEN_OTU <- otu_table(GEN_OTU, taxa_are_rows = TRUE)
-GEN_tax <- read.csv("genomovir/genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
+GEN_tax <- read.csv("genomovir_taxa.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 GEN_tax <- subset(GEN_tax, select = -c(Isolate))
 GEN_tax<-subset(GEN_tax, Species %in% GEN_spec)
 GEN_tax<-unique(GEN_tax)
