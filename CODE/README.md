@@ -17,7 +17,8 @@ More info:
 [Herr Lab Website](http://herrlab.com/);
 [Fernando Lab Website](https://fernandolab.unl.edu/)
 
-__CODE DIRECTORY__
+ ## CODE DIRECTORY ##
+
 This directory contains all scripts used in this study. At the beginning of each script is a description of what files are needed for input to execute the script, a brief general description of the script, and a description of all expected outputs. For any issues or questions or issues experienced in scripts please contact Ema Graham (ema.graham@huskers.unl.edu). All R-markdown scripts were designed to be run using R v.3.6.3. 
 
 __ORDER OF SCRIPTS__
