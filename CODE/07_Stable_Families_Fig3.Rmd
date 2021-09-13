@@ -33,7 +33,7 @@ tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = 
 OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Row.names,length))
 ```
-Subset by species and sum across families for each sample to get the total abundance of each identified viral family per sample
+Subset by family and sum across families for each sample to get the total abundance of each identified viral family per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 OTU_SUMS<- subset (OTU_SUMS, select = -c(Superkingdom, Realm, Kingdom, Phylum, Class, Order, Subfamily, Genus, Species))
 OTU_SUMS<-ddply(OTU_SUMS,"Family",numcolwise(sum))
