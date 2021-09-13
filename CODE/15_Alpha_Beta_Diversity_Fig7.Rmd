@@ -309,6 +309,6 @@ p
 Adonis statistical evaluation of clustering based on Subject
 ```{r}
 metadata <- as(sample_data(norm_groups), "data.frame")
-adonis(phyloseq::distance(norm_groups, method="jaccard", binary = TRUE) ~  Subject+Subject:Time_Collected,
+adonis(phyloseq::distance(norm_groups, method="jaccard", binary = TRUE) ~  Subject,
        data = metadata)
 ```
