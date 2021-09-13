@@ -12,6 +12,9 @@ Will need the following files:
 - Stable species and contigs for each set generated in 08_Set_A.Rmd, 09_Set_B.Rmd, 10_Set_C.Rmd
   
 Output Notes: 
+Will generate upset plots showing how many unique markers were identified by location grouping for each set and an overall all three sets combined. 
+The red highlighted bar is the number of makers identified as being stable across all three locations and are thus retained as putative stable markers.
+A full list of all markers is listed in List_of_All_Markers.csv
 
 ```{r setup,message=FALSE}
 library(readr)
