@@ -21,7 +21,7 @@ More info:
 
 This directory contains all scripts used in this study. At the beginning of each script is a description of what files are needed for input to execute the script, a brief general description of the script, and a description of all expected outputs. For any issues or questions or issues experienced in scripts please contact Ema Graham (ema.graham@huskers.unl.edu). All R-markdown scripts were designed to be run using R v.3.6.3. 
 
-__ORDER OF SCRIPTS__
+__ORDER TO RUN SCRIPTS__
 
 1. Obtain Virome Data (01_Obtain_Virome_Data.sh)
 2. Virome Assembly (02_Virome_Assembly.sh)
