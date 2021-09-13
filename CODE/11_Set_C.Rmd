@@ -9,8 +9,13 @@ For Questions Email: ema.graham@huskers.unl.edu
 
 Input Notes: 
 Will need the following files:
+- counts2_bowtie.csv (generated in 03_Virome_Contig_Mapping.sh)
 
 Output Notes: 
+Will identify putative viral contigs that are stable over time to be used as Set C. 
+These contig's genomic origin is not known but are assumed to potentially be of viral origin however, using current databases their origin is not able to be determined.
+For all of the identified contigs from CONTIG_LH_Markers2_final, CONTIG_RH_Markers2_final, CONTIG_SC_Markers2_final, CONTIG_Hand_Markers_Shared2_final, and CONTIG_All_Markers_Shared2_final their sequences were obtained from unmapped_1000_contigs.fa and then run through Blast using the BlastN algarithum.
+Contigs containing <70% identity to a known organism or contigs with no synteny to prokaryotic or eukaryotic genomes were considered to be putative viral sequences although viral origin could not be fully confirmed and thus retained in Set C.
 
 ```{r setup,message=FALSE}
 library(readr)
