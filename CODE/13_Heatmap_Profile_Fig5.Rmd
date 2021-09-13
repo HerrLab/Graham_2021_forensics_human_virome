@@ -9,9 +9,12 @@ For Questions Email: ema.graham@huskers.unl.edu
 
 Input Notes: 
 Will need the following files:
-- 
+- Stable species and contigs for each set generated in 08_Set_A.Rmd, 09_Set_B.Rmd, 10_Set_C.Rmd
   
 Output Notes: 
+Will generate a heatmap that displays prevalence across the 5 time points for each identified viral marker.
+The heatmap was split up by location and subject and clustered biased on marker overall prevalence across the population. 
+Addition of text titles and moving of legend to center was done in Adobe Illustrator.
 
 ```{r setup,message=FALSE}
 library(readr)
