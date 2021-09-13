@@ -39,12 +39,13 @@ __ORDER OF SCRIPTS__
 15. Alpha and Beta Diversity of the Overall Marker Set 15_Alpha_Beta_Diversity_Fig7.Rmd
 
 __SCRIPTS USED TO MAKE MANUSCRIPT FIGURES__
-1. Figure 1: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
-2. Figure 2: 06_Relative_Abundance_Fig2.Rmd
-3. Figure 3: 07_Stable_Families_Fig3.Rmd
-4. Figure 4: 12_Upset_Plots_Fig4.Rmd
-5. Figure 5: 13_Heatmap_Profile_Fig5.Rmd
-6. Figure 6: 14_Within_vs_Between_Dissimilarity_Fig6.Rmd
-7. Figure 7: 15_Alpha_Beta_Diversity_Fig7.Rmd
-8. Supplementary Figure 2: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
-9. Supplementary Figure 3: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
+
+- Figure 1: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
+- Figure 2: 06_Relative_Abundance_Fig2.Rmd
+- Figure 3: 07_Stable_Families_Fig3.Rmd
+- Figure 4: 12_Upset_Plots_Fig4.Rmd
+- Figure 5: 13_Heatmap_Profile_Fig5.Rmd
+- Figure 6: 14_Within_vs_Between_Dissimilarity_Fig6.Rmd
+- Figure 7: 15_Alpha_Beta_Diversity_Fig7.Rmd
+- Supplementary Figure 2: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
+- Supplementary Figure 3: 05_Phyloseq_Overall_Taxonomy_Fig1.Rmd
