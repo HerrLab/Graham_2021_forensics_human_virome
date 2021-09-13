@@ -31,6 +31,7 @@ Merge the identified viral contigs taxonomy file and the count abundance table o
 OTU <- read.csv("counts2_bowtie.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 tax_ann <- read.csv("vc_tax.csv", quote = "", header = TRUE, stringsAsFactors = FALSE, row.names = 1)
 OTU_SUMS <- merge(tax_ann, OTU, by.x = "row.names", by.y = "row.names")
+OTU_SUMS<- subset (OTU_SUMS, select = -c(Row.names,length))
 ```
 Subset by species and sum across families for each sample to get the total abundance of each identified viral family per sample
 ```{r,message=FALSE,warning=FALSE,results="hide"}
