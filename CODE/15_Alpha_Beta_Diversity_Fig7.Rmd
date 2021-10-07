@@ -67,8 +67,6 @@ tax_ann<-unique(tax_ann)
 remv<-c("4","70")
 tax_ann<-subset(tax_ann, !row.names(tax_ann) %in% remv)
 row.names(tax_ann)<-tax_ann$Species
-CHeckV_tax <-as.matrix(tax_ann)
-CHeckV_tax <- tax_table(CHeckV_tax)
 CHeckV_tax <-as.matrix(CHeckV_tax)
 CHeckV_tax <- tax_table(CHeckV_tax)
 CHeckV_PHY <- phyloseq(CHeckV_OTU, CHeckV_tax, META)
