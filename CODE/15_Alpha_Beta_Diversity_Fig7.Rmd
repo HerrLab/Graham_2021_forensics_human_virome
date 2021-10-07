@@ -30,6 +30,7 @@ library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(phyloseq)
+library(cowplot)
 ```
 ## Phyloseq Object Generation for Diversity Analysis
 This is the same phyloseq object titled Profile that was generated in the 14_Within_vs_Between_Dissimilarity_Fig6.Rmd script
