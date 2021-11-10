@@ -102,11 +102,22 @@ HM_CAUDOStable_ALL <- subset(HM_CAUDOStable, rownames(HM_CAUDOStable) %in% Caudo
 ```
 ## Generate profile heatmap
 
+To include set information column indicating which row in heatmap came from which set
+```{r,message=FALSE,warning=FALSE,results="hide"}
+annotation_profile_setA<-HM_OVERALL_Stable_ALL
+annotation_profile_setA$Set<-"Set A"
+annotation_profile_setB<-rbind(HM_GENStable_ALL,HM_BACStable_ALL,HM_PAPStable_ALL,HM_CAUDOStable_ALL)
+annotation_profile_setB$Set<-"Set B"
+annotation_profile_setC<-HM_Contig_Stable_ALL
+annotation_profile_setC$Set<-"Set C"
+annotation_profile<-rbind(annotation_profile_setA,annotation_profile_setB,annotation_profile_setC)
+annotation_profile<-subset(annotation_profile, select =c(Set))
+```
 The heatmap will be saved as a pdf titled "Heatmap.pdf" in the working directory and can be viewed there
 ```{r,message=FALSE,warning=FALSE,results="hide"}
 profile <- rbind(HM_GENStable_ALL,HM_OVERALL_Stable_ALL,HM_BACStable_ALL,HM_Contig_Stable_ALL,HM_PAPStable_ALL,HM_CAUDOStable_ALL)
 profile2<-as.matrix(profile)
-pheatmaps.obj<-pheatmap(profile2, cluster_cols = FALSE,cellheight = 11,cellwidth = 11,fontsize = 12,gaps_col = c(3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90,93,96,99,102,105,108,111,114,117,120,123) ,filename = "Heatmap.pdf")
+pheatmaps.obj<-pheatmap(profile2, cluster_cols = FALSE,cellheight = 11,cellwidth = 11,fontsize = 12,gaps_col = c(3,6,9,12,15,18,21,24,27,30,33,36,39,42,45,48,51,54,57,60,63,66,69,72,75,78,81,84,87,90,93,96,99,102,105,108,111,114,117,120,123), annotation_row=annotation_profile, filename = "Heatmap.pdf")
 ```
 Then in Adobe Illustrator:
 - Column cluster titles by subject were added
