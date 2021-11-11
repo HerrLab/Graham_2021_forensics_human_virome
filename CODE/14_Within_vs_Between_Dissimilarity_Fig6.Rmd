@@ -278,17 +278,17 @@ P43<-c("HV_016_22", "HV_017_22", "HV_018_22", "HV_019_22", "HV_020_21", "HV_022_
 
 ## Overall All Sets Binary Jaccard Dissimilairty Matrix
 
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
-norm_groups <- transform_Overallmple_counts(Profile, function(x) x / sum(x) )
+```{r,message=FALSE,warning=FALSE,results="hide"}
+norm_groups <- transform_sample_counts(Profile, function(x) x / sum(x) )
 mea<-phyloseq::distance(norm_groups, method="jaccard", binary = TRUE)
 df <- melt(as.matrix(mea), varnames = c("row", "col"))
 ```
 Overall All Sets Subject P01
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P01)
 df_between<-subset(df_P, !row %in% P01)
 df_within<-subset(df_P, row %in% P01)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -302,11 +302,11 @@ Overall_P01_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P02
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P02)
 df_between<-subset(df_P, !row %in% P02)
 df_within<-subset(df_P, row %in% P02)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -320,11 +320,11 @@ Overall_P02_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P03
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P03)
 df_between<-subset(df_P, !row %in% P03)
 df_within<-subset(df_P, row %in% P03)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -338,11 +338,11 @@ Overall_P03_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P04
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P04)
 df_between<-subset(df_P, !row %in% P04)
 df_within<-subset(df_P, row %in% P04)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -356,11 +356,11 @@ Overall_P04_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P05
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P05)
 df_between<-subset(df_P, !row %in% P05)
 df_within<-subset(df_P, row %in% P05)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -374,11 +374,11 @@ Overall_P05_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P06
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P06)
 df_between<-subset(df_P, !row %in% P06)
 df_within<-subset(df_P, row %in% P06)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -392,11 +392,11 @@ Overall_P06_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P07
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P07)
 df_between<-subset(df_P, !row %in% P07)
 df_within<-subset(df_P, row %in% P07)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -410,11 +410,11 @@ Overall_P07_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P08
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P08)
 df_between<-subset(df_P, !row %in% P08)
 df_within<-subset(df_P, row %in% P08)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -428,11 +428,11 @@ Overall_P08_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P09
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P09)
 df_between<-subset(df_P, !row %in% P09)
 df_within<-subset(df_P, row %in% P09)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -446,11 +446,11 @@ Overall_P09_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P10
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P10)
 df_between<-subset(df_P, !row %in% P10)
 df_within<-subset(df_P, row %in% P10)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -464,11 +464,11 @@ Overall_P10_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P11
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P11)
 df_between<-subset(df_P, !row %in% P11)
 df_within<-subset(df_P, row %in% P11)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -482,11 +482,11 @@ Overall_P11_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P12
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P12)
 df_between<-subset(df_P, !row %in% P12)
 df_within<-subset(df_P, row %in% P12)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -500,11 +500,11 @@ Overall_P12_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P13
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P13)
 df_between<-subset(df_P, !row %in% P13)
 df_within<-subset(df_P, row %in% P13)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -518,11 +518,11 @@ Overall_P13_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P14
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P14)
 df_between<-subset(df_P, !row %in% P14)
 df_within<-subset(df_P, row %in% P14)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -536,11 +536,11 @@ Overall_P14_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P15
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P15)
 df_between<-subset(df_P, !row %in% P15)
 df_within<-subset(df_P, row %in% P15)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -554,11 +554,11 @@ Overall_P15_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P16
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P16)
 df_between<-subset(df_P, !row %in% P16)
 df_within<-subset(df_P, row %in% P16)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -572,11 +572,11 @@ Overall_P16_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P17
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P17)
 df_between<-subset(df_P, !row %in% P17)
 df_within<-subset(df_P, row %in% P17)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -590,11 +590,11 @@ Overall_P17_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P18
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P18)
 df_between<-subset(df_P, !row %in% P18)
 df_within<-subset(df_P, row %in% P18)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -608,11 +608,11 @@ Overall_P18_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P19
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P19)
 df_between<-subset(df_P, !row %in% P19)
 df_within<-subset(df_P, row %in% P19)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -626,11 +626,11 @@ Overall_P19_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P20
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P20)
 df_between<-subset(df_P, !row %in% P20)
 df_within<-subset(df_P, row %in% P20)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -644,11 +644,11 @@ Overall_P20_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P21
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P21)
 df_between<-subset(df_P, !row %in% P21)
 df_within<-subset(df_P, row %in% P21)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -662,11 +662,11 @@ Overall_P21_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P22
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P22)
 df_between<-subset(df_P, !row %in% P22)
 df_within<-subset(df_P, row %in% P22)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -680,11 +680,11 @@ Overall_P22_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P23
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P23)
 df_between<-subset(df_P, !row %in% P23)
 df_within<-subset(df_P, row %in% P23)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -698,11 +698,11 @@ Overall_P23_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P24
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P24)
 df_between<-subset(df_P, !row %in% P24)
 df_within<-subset(df_P, row %in% P24)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -716,11 +716,11 @@ Overall_P24_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P25
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P25)
 df_between<-subset(df_P, !row %in% P25)
 df_within<-subset(df_P, row %in% P25)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -734,11 +734,11 @@ Overall_P25_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P26
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P26)
 df_between<-subset(df_P, !row %in% P26)
 df_within<-subset(df_P, row %in% P26)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -752,11 +752,11 @@ Overall_P26_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P27
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P27)
 df_between<-subset(df_P, !row %in% P27)
 df_within<-subset(df_P, row %in% P27)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -770,11 +770,11 @@ Overall_P27_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P28
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P28)
 df_between<-subset(df_P, !row %in% P28)
 df_within<-subset(df_P, row %in% P28)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -788,11 +788,11 @@ Overall_P28_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P29
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P29)
 df_between<-subset(df_P, !row %in% P29)
 df_within<-subset(df_P, row %in% P29)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -806,11 +806,11 @@ Overall_P29_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P30
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P30)
 df_between<-subset(df_P, !row %in% P30)
 df_within<-subset(df_P, row %in% P30)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -824,11 +824,11 @@ Overall_P30_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P31
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P31)
 df_between<-subset(df_P, !row %in% P31)
 df_within<-subset(df_P, row %in% P31)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -842,11 +842,11 @@ Overall_P31_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P32
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P32)
 df_between<-subset(df_P, !row %in% P32)
 df_within<-subset(df_P, row %in% P32)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -860,11 +860,11 @@ Overall_P32_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P34
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P34)
 df_between<-subset(df_P, !row %in% P34)
 df_within<-subset(df_P, row %in% P34)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -878,11 +878,11 @@ Overall_P34_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P35
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P35)
 df_between<-subset(df_P, !row %in% P35)
 df_within<-subset(df_P, row %in% P35)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -896,11 +896,11 @@ Overall_P35_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P36
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P36)
 df_between<-subset(df_P, !row %in% P36)
 df_within<-subset(df_P, row %in% P36)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -914,11 +914,11 @@ Overall_P36_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P37
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P37)
 df_between<-subset(df_P, !row %in% P37)
 df_within<-subset(df_P, row %in% P37)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -932,11 +932,11 @@ Overall_P37_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P38
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P38)
 df_between<-subset(df_P, !row %in% P38)
 df_within<-subset(df_P, row %in% P38)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -950,11 +950,11 @@ Overall_P38_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P39
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P39)
 df_between<-subset(df_P, !row %in% P39)
 df_within<-subset(df_P, row %in% P39)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -968,11 +968,11 @@ Overall_P39_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P40
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P40)
 df_between<-subset(df_P, !row %in% P40)
 df_within<-subset(df_P, row %in% P40)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -986,11 +986,11 @@ Overall_P40_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P41
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P41)
 df_between<-subset(df_P, !row %in% P41)
 df_within<-subset(df_P, row %in% P41)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -1004,11 +1004,11 @@ Overall_P41_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P42
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P42)
 df_between<-subset(df_P, !row %in% P42)
 df_within<-subset(df_P, row %in% P42)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
@@ -1022,11 +1022,11 @@ Overall_P42_both
 # The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
 ```
 Overall All Sets Subject P43
-```{r,mesOverallge=FALSE,warning=FALSE,results="hide"}
+```{r,message=FALSE,warning=FALSE,results="hide"}
 df_P<-subset(df, col %in% P43)
 df_between<-subset(df_P, !row %in% P43)
 df_within<-subset(df_P, row %in% P43)
-#remove Overallme Overallmple comparisons
+#remove same sample comparisons
 df_within2 <- df_within[df_within$row != df_within$col,]
 #mean betwen
 mean(df_between$value)
