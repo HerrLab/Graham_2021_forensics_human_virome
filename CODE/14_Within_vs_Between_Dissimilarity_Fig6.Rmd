@@ -33,7 +33,7 @@ library(ggplot2)
 library(ggsignif)
 library(cowplot)
 library(phyloseq)
-library(rematch2)
+library(reshape2)
 ```
 
 Metadata for all Phyloseq objects produced in this script
