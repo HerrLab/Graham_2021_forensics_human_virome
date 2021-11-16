@@ -12,9 +12,11 @@ Will need the following files:
 - Sequencing_Data_Info_Sheet3.csv (Metadata, provided on Github)
 - counts2_bowtie.csv (generated in 03_Virome_Contig_Mapping.sh)
 - vc_tax.csv (generated in 04_Contig_Annotation.sh)
+- Bray_bw_win.csv (will generate in excel using this script)
 
 Output Notes: 
-Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location
+Will generate a relative abundance plot (Figure 2) for the top then most abundant viral family taxonomy per subject by location.
+Will statistically compare the Bray dissimilarity distances within subject location top ten most abundant viral familes between all other subject location viral family abundance profiles. Will generate box plots for Supplementary Figure 4.
 
 ```{r setup,message=FALSE}
 library(readr)
@@ -22,6 +24,9 @@ library(dplyr)
 library(tidyr)
 library(phyloseq)
 library(ggplot2)
+library(ggsignif)
+library(cowplot)
+library(reshape2)
 ```
 
 ## Make Phyloseq Object
@@ -452,4 +457,680 @@ ggsave(plot=relativeabund,"Figures/RelativeAbundanceFIGURE.pdf",dpi = 500, width
 Relative abundance of the top ten most abundant identified viral families per subject by location
 ```{r}
 relativeabund
+```
+
+## Statistically compare relative abundance of the top ten most abundant identified viral families per subject by location profiles
+
+```{r}
+sample_names(glom_RH)<- gsub('P', 'RH_P', sample_names(glom_RH))
+sample_names(glom_LH)<- gsub('P', 'LH_P', sample_names(glom_LH))
+sample_names(glom_SC)<- gsub('P', 'SC_P', sample_names(glom_SC))
+total_glom<-merge_phyloseq(glom_RH,glom_LH,glom_SC )
+mea_glom<-phyloseq::distance(total_glom, method="bray")
+df_glom <- melt(as.matrix(mea_glom), varnames = c("row", "col"))
+```
+Overall Bray Within Subject Location vs Between Subject P01
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P01_df<-c("LH_P01","RH_P01","SC_P01")
+P01_df_glom<-subset(df_glom, col %in% P01_df)
+df_between<-subset(P01_df_glom, !row %in% P01_df)
+df_within<-subset(P01_df_glom, row %in% P01_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P01_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P01_both
+```
+Overall Bray Within Subject Location vs Between Subject P02
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P02_df<-c("LH_P02","RH_P02","SC_P02")
+P02_df_glom<-subset(df_glom, col %in% P02_df)
+df_between<-subset(P02_df_glom, !row %in% P02_df)
+df_within<-subset(P02_df_glom, row %in% P02_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P02_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P02_both
+```
+Overall Bray Within Subject Location vs Between Subject P03
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P03_df<-c("LH_P03","RH_P03","SC_P03")
+P03_df_glom<-subset(df_glom, col %in% P03_df)
+df_between<-subset(P03_df_glom, !row %in% P03_df)
+df_within<-subset(P03_df_glom, row %in% P03_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P03_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P03_both
+```
+Overall Bray Within Subject Location vs Between Subject P04
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P04_df<-c("LH_P04","RH_P04","SC_P04")
+P04_df_glom<-subset(df_glom, col %in% P04_df)
+df_between<-subset(P04_df_glom, !row %in% P04_df)
+df_within<-subset(P04_df_glom, row %in% P04_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P04_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P04_both
+```
+Overall Bray Within Subject Location vs Between Subject P05
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P05_df<-c("LH_P05","RH_P05","SC_P05")
+P05_df_glom<-subset(df_glom, col %in% P05_df)
+df_between<-subset(P05_df_glom, !row %in% P05_df)
+df_within<-subset(P05_df_glom, row %in% P05_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P05_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P05_both
+```
+Overall Bray Within Subject Location vs Between Subject P06
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P06_df<-c("LH_P06","RH_P06","SC_P06")
+P06_df_glom<-subset(df_glom, col %in% P06_df)
+df_between<-subset(P06_df_glom, !row %in% P06_df)
+df_within<-subset(P06_df_glom, row %in% P06_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P06_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P06_both
+```
+Overall Bray Within Subject Location vs Between Subject P07
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P07_df<-c("LH_P07","RH_P07","SC_P07")
+P07_df_glom<-subset(df_glom, col %in% P07_df)
+df_between<-subset(P07_df_glom, !row %in% P07_df)
+df_within<-subset(P07_df_glom, row %in% P07_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P07_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P07_both
+```
+Overall Bray Within Subject Location vs Between Subject P08
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P08_df<-c("LH_P08","RH_P08","SC_P08")
+P08_df_glom<-subset(df_glom, col %in% P08_df)
+df_between<-subset(P08_df_glom, !row %in% P08_df)
+df_within<-subset(P08_df_glom, row %in% P08_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P08_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P08_both
+```
+Overall Bray Within Subject Location vs Between Subject P09
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P09_df<-c("LH_P09","RH_P09","SC_P09")
+P09_df_glom<-subset(df_glom, col %in% P09_df)
+df_between<-subset(P09_df_glom, !row %in% P09_df)
+df_within<-subset(P09_df_glom, row %in% P09_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P09_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P09_both
+```
+Overall Bray Within Subject Location vs Between Subject P10
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P10_df<-c("LH_P10","RH_P10","SC_P10")
+P10_df_glom<-subset(df_glom, col %in% P10_df)
+df_between<-subset(P10_df_glom, !row %in% P10_df)
+df_within<-subset(P10_df_glom, row %in% P10_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P10_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P10_both
+```
+Overall Bray Within Subject Location vs Between Subject P11
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P11_df<-c("LH_P11","RH_P11","SC_P11")
+P11_df_glom<-subset(df_glom, col %in% P11_df)
+df_between<-subset(P11_df_glom, !row %in% P11_df)
+df_within<-subset(P11_df_glom, row %in% P11_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P11_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P11_both
+```
+Overall Bray Within Subject Location vs Between Subject P12
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P12_df<-c("LH_P12","RH_P12","SC_P12")
+P12_df_glom<-subset(df_glom, col %in% P12_df)
+df_between<-subset(P12_df_glom, !row %in% P12_df)
+df_within<-subset(P12_df_glom, row %in% P12_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P12_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P12_both
+```
+Overall Bray Within Subject Location vs Between Subject P13
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P13_df<-c("LH_P13","RH_P13","SC_P13")
+P13_df_glom<-subset(df_glom, col %in% P13_df)
+df_between<-subset(P13_df_glom, !row %in% P13_df)
+df_within<-subset(P13_df_glom, row %in% P13_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P13_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P13_both
+```
+Overall Bray Within Subject Location vs Between Subject P14
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P14_df<-c("LH_P14","RH_P14","SC_P14")
+P14_df_glom<-subset(df_glom, col %in% P14_df)
+df_between<-subset(P14_df_glom, !row %in% P14_df)
+df_within<-subset(P14_df_glom, row %in% P14_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P14_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P14_both
+```
+Overall Bray Within Subject Location vs Between Subject P15
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P15_df<-c("LH_P15","RH_P15","SC_P15")
+P15_df_glom<-subset(df_glom, col %in% P15_df)
+df_between<-subset(P15_df_glom, !row %in% P15_df)
+df_within<-subset(P15_df_glom, row %in% P15_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P15_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P15_both
+```
+Overall Bray Within Subject Location vs Between Subject P16
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P16_df<-c("LH_P16","RH_P16","SC_P16")
+P16_df_glom<-subset(df_glom, col %in% P16_df)
+df_between<-subset(P16_df_glom, !row %in% P16_df)
+df_within<-subset(P16_df_glom, row %in% P16_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P16_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P16_both
+```
+Overall Bray Within Subject Location vs Between Subject P17
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P17_df<-c("LH_P17","RH_P17","SC_P17")
+P17_df_glom<-subset(df_glom, col %in% P17_df)
+df_between<-subset(P17_df_glom, !row %in% P17_df)
+df_within<-subset(P17_df_glom, row %in% P17_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P17_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P17_both
+```
+Overall Bray Within Subject Location vs Between Subject P18
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P18_df<-c("LH_P18","RH_P18","SC_P18")
+P18_df_glom<-subset(df_glom, col %in% P18_df)
+df_between<-subset(P18_df_glom, !row %in% P18_df)
+df_within<-subset(P18_df_glom, row %in% P18_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P18_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P18_both
+```
+Overall Bray Within Subject Location vs Between Subject P19
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P19_df<-c("LH_P19","RH_P19","SC_P19")
+P19_df_glom<-subset(df_glom, col %in% P19_df)
+df_between<-subset(P19_df_glom, !row %in% P19_df)
+df_within<-subset(P19_df_glom, row %in% P19_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P19_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P19_both
+```
+Overall Bray Within Subject Location vs Between Subject P20
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P20_df<-c("LH_P20","RH_P20","SC_P20")
+P20_df_glom<-subset(df_glom, col %in% P20_df)
+df_between<-subset(P20_df_glom, !row %in% P20_df)
+df_within<-subset(P20_df_glom, row %in% P20_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P20_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P20_both
+```
+Overall Bray Within Subject Location vs Between Subject P21
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P21_df<-c("LH_P21","RH_P21","SC_P21")
+P21_df_glom<-subset(df_glom, col %in% P21_df)
+df_between<-subset(P21_df_glom, !row %in% P21_df)
+df_within<-subset(P21_df_glom, row %in% P21_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P21_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P21_both
+```
+Overall Bray Within Subject Location vs Between Subject P22
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P22_df<-c("LH_P22","RH_P22","SC_P22")
+P22_df_glom<-subset(df_glom, col %in% P22_df)
+df_between<-subset(P22_df_glom, !row %in% P22_df)
+df_within<-subset(P22_df_glom, row %in% P22_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P22_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P22_both
+```
+Overall Bray Within Subject Location vs Between Subject P23
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P23_df<-c("LH_P23","RH_P23","SC_P23")
+P23_df_glom<-subset(df_glom, col %in% P23_df)
+df_between<-subset(P23_df_glom, !row %in% P23_df)
+df_within<-subset(P23_df_glom, row %in% P23_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P23_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P23_both
+```
+Overall Bray Within Subject Location vs Between Subject P24
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P24_df<-c("LH_P24","RH_P24","SC_P24")
+P24_df_glom<-subset(df_glom, col %in% P24_df)
+df_between<-subset(P24_df_glom, !row %in% P24_df)
+df_within<-subset(P24_df_glom, row %in% P24_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P24_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P24_both
+```
+Overall Bray Within Subject Location vs Between Subject P25
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P25_df<-c("LH_P25","RH_P25","SC_P25")
+P25_df_glom<-subset(df_glom, col %in% P25_df)
+df_between<-subset(P25_df_glom, !row %in% P25_df)
+df_within<-subset(P25_df_glom, row %in% P25_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P25_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P25_both
+```
+Overall Bray Within Subject Location vs Between Subject P26
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P26_df<-c("LH_P26","RH_P26","SC_P26")
+P26_df_glom<-subset(df_glom, col %in% P26_df)
+df_between<-subset(P26_df_glom, !row %in% P26_df)
+df_within<-subset(P26_df_glom, row %in% P26_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P26_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P26_both
+```
+Overall Bray Within Subject Location vs Between Subject P27
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P27_df<-c("LH_P27","RH_P27","SC_P27")
+P27_df_glom<-subset(df_glom, col %in% P27_df)
+df_between<-subset(P27_df_glom, !row %in% P27_df)
+df_within<-subset(P27_df_glom, row %in% P27_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P27_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P27_both
+```
+Overall Bray Within Subject Location vs Between Subject P28
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P28_df<-c("LH_P28","RH_P28","SC_P28")
+P28_df_glom<-subset(df_glom, col %in% P28_df)
+df_between<-subset(P28_df_glom, !row %in% P28_df)
+df_within<-subset(P28_df_glom, row %in% P28_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P28_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P28_both
+```
+Overall Bray Within Subject Location vs Between Subject P29
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P29_df<-c("LH_P29","RH_P29","SC_P29")
+P29_df_glom<-subset(df_glom, col %in% P29_df)
+df_between<-subset(P29_df_glom, !row %in% P29_df)
+df_within<-subset(P29_df_glom, row %in% P29_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P29_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P29_both
+```
+Overall Bray Within Subject Location vs Between Subject P30
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P30_df<-c("LH_P30","RH_P30","SC_P30")
+P30_df_glom<-subset(df_glom, col %in% P30_df)
+df_between<-subset(P30_df_glom, !row %in% P30_df)
+df_within<-subset(P30_df_glom, row %in% P30_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P30_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P30_both
+```
+Overall Bray Within Subject Location vs Between Subject P31
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P31_df<-c("LH_P31","RH_P31","SC_P31")
+P31_df_glom<-subset(df_glom, col %in% P31_df)
+df_between<-subset(P31_df_glom, !row %in% P31_df)
+df_within<-subset(P31_df_glom, row %in% P31_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P31_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P31_both
+```
+Overall Bray Within Subject Location vs Between Subject P32
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P32_df<-c("LH_P32","RH_P32","SC_P32")
+P32_df_glom<-subset(df_glom, col %in% P32_df)
+df_between<-subset(P32_df_glom, !row %in% P32_df)
+df_within<-subset(P32_df_glom, row %in% P32_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P32_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P32_both
+```
+Overall Bray Within Subject Location vs Between Subject P34
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P34_df<-c("LH_P34","RH_P34","SC_P34")
+P34_df_glom<-subset(df_glom, col %in% P34_df)
+df_between<-subset(P34_df_glom, !row %in% P34_df)
+df_within<-subset(P34_df_glom, row %in% P34_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P34_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P34_both
+```
+Overall Bray Within Subject Location vs Between Subject P35
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P35_df<-c("LH_P35","RH_P35","SC_P35")
+P35_df_glom<-subset(df_glom, col %in% P35_df)
+df_between<-subset(P35_df_glom, !row %in% P35_df)
+df_within<-subset(P35_df_glom, row %in% P35_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P35_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P35_both
+```
+Overall Bray Within Subject Location vs Between Subject P36
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P36_df<-c("LH_P36","RH_P36","SC_P36")
+P36_df_glom<-subset(df_glom, col %in% P36_df)
+df_between<-subset(P36_df_glom, !row %in% P36_df)
+df_within<-subset(P36_df_glom, row %in% P36_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P36_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P36_both
+```
+Overall Bray Within Subject Location vs Between Subject P37
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P37_df<-c("LH_P37","RH_P37","SC_P37")
+P37_df_glom<-subset(df_glom, col %in% P37_df)
+df_between<-subset(P37_df_glom, !row %in% P37_df)
+df_within<-subset(P37_df_glom, row %in% P37_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P37_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P37_both
+```
+Overall Bray Within Subject Location vs Between Subject P38
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P38_df<-c("LH_P38","RH_P38","SC_P38")
+P38_df_glom<-subset(df_glom, col %in% P38_df)
+df_between<-subset(P38_df_glom, !row %in% P38_df)
+df_within<-subset(P38_df_glom, row %in% P38_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P38_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P38_both
+```
+Overall Bray Within Subject Location vs Between Subject P39
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P39_df<-c("LH_P39","RH_P39","SC_P39")
+P39_df_glom<-subset(df_glom, col %in% P39_df)
+df_between<-subset(P39_df_glom, !row %in% P39_df)
+df_within<-subset(P39_df_glom, row %in% P39_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P39_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P39_both
+```
+Overall Bray Within Subject Location vs Between Subject P40
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P40_df<-c("LH_P40","RH_P40","SC_P40")
+P40_df_glom<-subset(df_glom, col %in% P40_df)
+df_between<-subset(P40_df_glom, !row %in% P40_df)
+df_within<-subset(P40_df_glom, row %in% P40_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P40_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P40_both
+```
+Overall Bray Within Subject Location vs Between Subject P41
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P41_df<-c("LH_P41","RH_P41","SC_P41")
+P41_df_glom<-subset(df_glom, col %in% P41_df)
+df_between<-subset(P41_df_glom, !row %in% P41_df)
+df_within<-subset(P41_df_glom, row %in% P41_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P41_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P41_both
+```
+Overall Bray Within Subject Location vs Between Subject P42
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P42_df<-c("LH_P42","RH_P42","SC_P42")
+P42_df_glom<-subset(df_glom, col %in% P42_df)
+df_between<-subset(P42_df_glom, !row %in% P42_df)
+df_within<-subset(P42_df_glom, row %in% P42_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P42_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P42_both
+```
+Overall Bray Within Subject Location vs Between Subject P43
+```{r,message=FALSE,warning=FALSE,results="hide"}
+P43_df<-c("LH_P43","RH_P43","SC_P43")
+P43_df_glom<-subset(df_glom, col %in% P43_df)
+df_between<-subset(P43_df_glom, !row %in% P43_df)
+df_within<-subset(P43_df_glom, row %in% P43_df)
+#remove same sample comparisons
+df_within2 <- df_within[df_within$row != df_within$col,]
+#mean betwen
+mean(df_between$value)
+#mean within
+mean(df_within2$value)
+Overall_P43_both<-c(mean(df_between$value),mean(df_within2$value))
+Overall_P43_both
+```
+# Results were stored in an excel file named Bray_bw_win.csv (avalible on Github)
+# The first output value is the average between dissimilarity index and the second value is the average within dissimilarity index
+
+## Make Box Plots with Wilcoxon Test to Compare Between Subject and Within Subject Bray Curtis Dissimilarity
+
+```{r,message=FALSE,warning=FALSE,results="hide"}
+bray_plot<-read.csv("Bray_bw_win.csv", quote = "", header = TRUE, stringsAsFactors = FALSE)
+my_comparisons <- list( c("Between", "Within")) 
+symnum.args = list(cutpoints = c(0, 0.0001, 0.001, 0.01, 0.05, 1), symbols = c("****", "***", "**", "*", "ns"))
+```
+```{r,message=FALSE,warning=FALSE,results="hide"}
+p_Overall<-ggplot(bray_plot, aes(Comparison,Distance))+
+  geom_boxplot(alpha=0.5)+
+  ylab("Dissimilarity")+
+  theme(legend.position="none", axis.text.x=element_text(angle=45,hjust=1,vjust=1,size=12),axis.title.x=element_blank())+
+  stat_compare_means(method = "wilcox.test",comparisons = my_comparisons)+
+  theme_half_open()
+```
+```{r,message=FALSE,warning=FALSE,results="hide"}
+p_Overall2<-ggplot(bray_plot, aes(Comparison,Distance))+
+  geom_boxplot(alpha=0.5)+
+  ylab("Dissimilarity")+
+  theme(legend.position="none", axis.text.x=element_text(angle=45,hjust=1,vjust=1,size=12),axis.title.x=element_blank())+
+  stat_compare_means(method = "wilcox.test",comparisons = my_comparisons,  symnum.args = symnum.args)+
+  theme_half_open()
+```
+```{r}
+p_Overall
+```
+```{r}
+p_Overall2
+```
+```{r}
+ggsave("bray_fig.pdf", p_Overall2,  width = 6, height = 4, units = "in",dpi = 300, pointsize=12)
 ```
