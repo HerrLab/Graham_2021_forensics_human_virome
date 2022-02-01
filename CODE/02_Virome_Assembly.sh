@@ -62,7 +62,7 @@ bbduk.sh in=Raw_Reads/HV_001_01_reverse.fq out=Phi_Remove/HV_001_01_filt_reverse
 #Phix removed data files were trimmed to remove low quality reads and short reads and return matching paired end reads using the Sickle
 #Sickle is available at https://github.com/najoshi/sickle
 
-mkdir Phi_Remove/
+mkdir Phi_Remove_Trimmed/
 
 sickle pe -t sanger -f Phi_Remove/HV_001_01_filt_forward.fq -r Phi_Remove/HV_001_01_filt_reverse.fq -o Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R1.fastq -p Phi_Remove_Trimmed/HV_001_01_S4_trimmed_pair_R2.fastq -s Phi_Remove_Trimmed/HV_001_01_S4_trimmed_single.fastq -q 30 -l 75
 
