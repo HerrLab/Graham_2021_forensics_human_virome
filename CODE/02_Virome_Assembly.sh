@@ -50,7 +50,7 @@ fastqc Raw_Reads/HV_001_01_reverse.fq
 #BBmap can be found at: https://github.com/BioInfoTools/BBMap
 #BBmap guide is available at https://jgi.doe.gov/data-and-tools/bbtools/bb-tools-user-guide/bbmap-guide/ 
 
-mkdir Phi_Remove_Trimmed/
+mkdir Phi_Remove/
 
 bbduk.sh in=Raw_Reads/HV_001_01_forward.fq out=Phi_Remove/HV_001_01_filt_forward.fq k=31 ref=artifacts,phix ordered cardinality
 bbduk.sh in=Raw_Reads/HV_001_01_reverse.fq out=Phi_Remove/HV_001_01_filt_reverse.fq k=31 ref=artifacts,phix ordered cardinality
